@@ -1,26 +1,6 @@
 <?php
 function filtro($text)
 {
-    if (file_exists("../bibliotecas/Faker-master/src/autoload.php")) {
-        require "../bibliotecas/Faker-master/src/autoload.php";
-    }else {
-        require "bibliotecas/Faker-master/src/autoload.php";
-    }
-    $f = Faker\Factory::create("pt_BR");
-
-    $text = filter_var($text, 513);
-
-    if (str_contains($text,"=texto:")) {
-        $text = str_replace("=texto:",$f->text(),$text);
-    }
-    if (str_contains($text,"=email:")) {
-        $text = str_replace("=email:",$f->email,$text);
-    }
-    if ($text == "=terminar_s:" && false) {
-        unset($_SESSION['id_user']);
-        session_destroy();
-        header("location: ./");
-    }
     return $text;
 }
 
