@@ -1,3 +1,5 @@
 # Ignorar tudo dentro do diretório
 src/userFile/*
+
+vendor/
 ignorar/*
