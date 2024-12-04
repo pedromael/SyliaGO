@@ -1,64 +1,109 @@
-# Diretório de Testes (`teste/`)
+# 📂 Diretório de Testes (`teste/`)
 
-Este diretório contém scripts para testes e geração de dados fictícios, usados para simular o funcionamento da rede social. Ele utiliza a biblioteca **Faker** para criar dados de usuários, publicações e outros elementos da aplicação.
+Este diretório contém scripts para **testes** e **geração de dados fictícios**, usados para simular o funcionamento da aplicação de rede social. Ele utiliza a biblioteca [Faker](https://fakerphp.github.io/) para criar dados como usuários, publicações e outros elementos do sistema.
 
 ---
 
-## 📂 Estrutura do Diretório
+## 🗂️ Estrutura do Diretório
 
 ```plaintext
 teste/
 ├── criar_dados.php        # Script para gerar dados fictícios
 ├── README.md              # Documentação do diretório
+```
 
-🔧 Pré-requisitos
-O projeto principal deve estar configurado corretamente, com as dependências já instaladas.
-Este diretório depende do autoload do Composer (vendor/autoload.php) da raiz do projeto.
+---
 
-🚀 Como Usar
-Navegue até o diretório principal do projeto da rede social.
+## 🔧 Pré-requisitos
 
-cd /caminho/para/o/projeto
-Execute o script diretamente:
+1. Certifique-se de que o **projeto principal** está configurado corretamente.
+2. Instale as dependências do projeto com o Composer.
+3. Este diretório depende do autoload do Composer (localizado em `vendor/autoload.php`) na raiz do projeto.
 
-php teste/criar_dados.php
-🖥️ Funcionalidades
-criar_dados.php
-Este script realiza os seguintes testes:
+---
 
-Gera 50 usuários fictícios:
+## 🚀 Como Usar
 
-Nome.
-E-mail.
-Localização fictícia.
-Cria publicações aleatórias para cada usuário:
+1. Navegue até o diretório principal do projeto:
 
-Entre 1 e 10 publicações por usuário.
-Simula uploads de imagens de perfil para 2 usuários.
+   ```bash
+   cd /caminho/para/o/projeto
+   ```
 
-Saída Esperada
-O script exibirá no console algo como:
+2. Execute o script diretamente:
 
-João Silva - joao.silva@example.com - postes: 5
-Maria Oliveira - maria.oliveira@example.com - postes: 3
+   ```bash
+   php teste/criar_dados.php
+   ```
+
+---
+
+## 🖥️ Funcionalidades
+
+### `criar_dados.php`
+O script realiza as seguintes tarefas:
+
+1. **Gera 50 usuários fictícios**, com:
+   - Nome.
+   - E-mail.
+   - Localização fictícia.
+2. **Cria publicações aleatórias para cada usuário**:
+   - Entre 1 e 10 publicações por usuário.
+3. **Simula uploads de imagens de perfil** para 2 usuários.
+
+---
+
+## 📝 Saída Esperada
+
+Ao executar o script, você verá uma saída no console semelhante a esta:
+
+```plaintext
+João Silva - joao.silva@example.com - publicações: 5
+Maria Oliveira - maria.oliveira@example.com - publicações: 3
 ...
-🛠️ Personalização
-Número de usuários a serem gerados: Altere a variável $i no loop principal:
+```
 
-for ($i = 1; $i <= 50; $i++) { // Altere o 50 para o valor desejado.
-Quantidade de postagens por usuário: Ajuste o intervalo gerado por rand():
+---
 
-$vezes_de_pbl = rand(1, 10); // Altere para (1, valor_desejado).
-⚠️ Observações
-Dependências: Certifique-se de que o diretório raiz do projeto contém as dependências instaladas com o Composer.
+## ⚙️ Personalização
 
-Validação de Dados: Este script é destinado apenas para testes e simulações. Não utilize os dados gerados diretamente em produção.
+Você pode ajustar o comportamento do script alterando os seguintes parâmetros:
 
-🤝 Contribuição
-Se quiser melhorar este diretório ou adicionar novos testes:
+- **Número de usuários**:  
+  Modifique o valor da variável no loop principal:  
 
-Faça um fork do repositório principal.
-Adicione ou edite os arquivos no diretório teste/.
-Submeta suas alterações via Pull Request no repositório principal.
-📄 Licença
+  ```php
+  for ($i = 1; $i <= 50; $i++) { // Altere o 50 para o valor desejado.
+  ```
+
+- **Quantidade de publicações por usuário**:  
+  Ajuste o intervalo gerado pela função `rand()`:
+
+  ```php
+  $vezes_de_pbl = rand(1, 10); // Altere para (1, valor_desejado).
+  ```
+
+---
+
+## ⚠️ Observações
+
+- **Dependências**: Certifique-se de que as dependências estão instaladas via Composer na raiz do projeto.
+- **Validação de Dados**: Este script é **destinado apenas para testes**. Não utilize os dados gerados diretamente em produção.
+
+---
+
+## 🤝 Contribuição
+
+Contribuições são bem-vindas! Para contribuir:
+
+1. Faça um **fork** do repositório principal.
+2. Adicione ou edite os arquivos no diretório `teste/`.
+3. Submeta suas alterações via **Pull Request** no repositório principal.
+
+---
+
+## 📄 Licença
+
 Consulte o arquivo de licença do projeto principal para informações detalhadas.
+
+---
