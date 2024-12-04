@@ -1,56 +1,41 @@
 <?php
- require "../algoritimos/atalho.php";
- require "../algoritimos/seguranca.php";
+require "../algoritimos/atalho.php";
+require "../algoritimos/seguranca.php";
 
- $c = new process;
- $cmdd = new comunidade;
+$c = new process;
 
- $_SESSION['visualizado'] = array();
- if (!isset($_SESSION["id_user"])) {
-    #header("location: ../login/");
-    ?>
-        <script>
-            document.location.href = "../login/"
-        </script>
-    <?php
- }else {
-  $id_user = $_SESSION["id_user"];
-  $user = $c->usuario($id_user);
-  $imagen = pegar_foto_perfil("perfil",$id_user);
- }
- if (isset($_GET['cmndd'])) {
-    $id_comunidade = descriptografar($_GET['cmndd']);
-    $id_user = $_SESSION['id_user'];
- } else {
-    #header("location: lista.php");
-    ?>
-        <script>
-            document.location.href = "lista.php"
-        </script>
-    <?php
- }
- $sql = $cmdd->comunidade($id_comunidade);
- $lider_da_comunidade = $sql['id_user'];
- $privado = mysqli_query(conn(), "SELECT count(*) AS valor FROM $bdnome2.privado 
- WHERE id=$id_comunidade AND tipo='comunidade'");
- $privado = mysqli_fetch_assoc($privado);
-
- if ($privado['valor'] >= 1) {
-    $privado = true;
- }else {
-    $privado = false;
- }
-
-$sqll = mysqli_query(conn(), "SELECT count(*) as valor FROM $bdnome2.comunidade_integrante WHERE id_comunidade = $id_comunidade AND id_user=$id_user");
-$sqll = mysqli_fetch_assoc($sqll);
-if ($sqll['valor'] >= 1) {
-    $membro = true;
-}else {
-    $membro = false;
+$_SESSION['visualizado'] = array();
+if (!isset($_SESSION["id_user"])) {
+  ?>
+      <script>
+          document.location.href = "../login/"
+      </script>
+  <?php
 }
-if ($sql['id_user'] == $_SESSION['id_user']) {
-    $membro = 1;
+
+$imagen = pegar_foto_perfil("perfil",$_SESSION["id_user"]);
+
+if (isset($_GET['cmndd'])) {
+  $id_comunidade = descriptografar($_GET['cmndd']);
+  $cmdd = new comunidade($id_comunidade);
+} else {
+  ?>
+      <script>
+          document.location.href = "lista.php"
+      </script>
+  <?php
 }
+
+$sql = $cmdd->comunidade();
+$lider_da_comunidade = $sql['id_user'];
+$privado = mysqli_query(conn(), "SELECT count(*) AS valor FROM $bdnome2.privado 
+WHERE id=$id_comunidade AND tipo='comunidade'");
+$privado = mysqli_fetch_assoc($privado);
+
+$privado =  ($privado['valor'] >= 1) ? true : false;
+
+$menbro = $cmdd->pertence_a_comunidade();
+
 if (isset($_FILES['img']) && $_SESSION['id_user'] == $sql['id_user']) {
   if (carregar_img($_FILES['img'],"cmdd",$id_comunidade)) {
     ?>
@@ -77,68 +62,8 @@ if (isset($_FILES['img']) && $_SESSION['id_user'] == $sql['id_user']) {
 </head>
 <body>
   <script>var indereco = "../"</script>
-    <nav id="metade_da_nav" onclick="abri_fecha('#segunda_nav')">
-        <img src="../bibliotecas/bootstrap/icones/border-width.svg">
-    </nav>
-    <nav class="px-3 py-2">
-      <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-
-          <ul class="nav col-12 justify-content-center my-md-0 text-small">
-            <li>
-              <a href="../" class="nav-link text-secondary">
-                <img src="../bibliotecas/bootstrap/icones/house.svg">
-              </a>
-            </li>
-            <li>
-              <a href="./" class="nav-link text-white">
-                <img src="../bibliotecas/bootstrap/icones/people.svg">
-              </a>
-            </li>
-            <li>
-              <a href="../coder.php" class="nav-link text-white">
-                <a href="../coder/" id="coder"><button>CODER</button></a>
-              </a>
-            </li>
-            <li>
-                <a href="../mensagens/" class="nav-link text-white">
-                    <img src="../bibliotecas/bootstrap/icones/chat-left-dots.svg"/>    
-                    <?php
-                    if($c->verificar_qtd("chat",$id_user) > 0){
-                        ?>
-                        <div class="info_qtd_c info_qtd_chat actualizar"><?=$c->verificar_qtd("chat",$id_user)?></div>
-                        <?php
-                    }else {
-                        ?>
-                        <div class="info_qtd_chat actualizar"></div>
-                        <?php
-                    }
-                    ?>            
-                </a>
-            </li>
-            <li>
-              <a href="../notific.php" class="nav-link text-white">
-                <img src="../bibliotecas/bootstrap/icones/bell.svg"/>
-                <?php
-                if($c->verificar_qtd("notificacao",$id_user) > 0){
-                    ?>
-                    <div class="info_qtd_n info_qtd_notific actualizar"><?=$c->verificar_qtd("notificacao",$id_user)?></div>
-                    <?php
-                }else {
-                    ?>
-                    <div class="info_qtd_notific actualizar"></div>
-                    <?php
-                }
-                ?>  
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
     <?php
-    $abrir_nav = "segundo";
-    require "../include/nav.php";
+      require "../include/nav.php";
     ?>
     <?php
       if (true) {

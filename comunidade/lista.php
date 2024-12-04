@@ -1,38 +1,31 @@
 <?php
- require "../algoritimos/atalho.php";
- require "../algoritimos/seguranca.php";
+require "../algoritimos/atalho.php";
+require "../algoritimos/seguranca.php";
 
- $c = new process;
- $cmdd = new comunidade;
+$c = new process;
+$cmdd = new comunidade;
 
- if (!isset($_SESSION["id_user"])) {
+if (!isset($_SESSION["id_user"])) {
     ?>
     <script>
         document.location.href = "../login/"
     </script>
     <?php
- }else {
-    $id_user = $_SESSION["id_user"];
-    $user = mysqli_query(conn(), "SELECT * FROM usuarios WHERE id_user=$id_user");
-    $user = mysqli_fetch_assoc($user);
-    $imagen = pegar_foto_perfil("perfil",$id_user);
-   }
- $id_user = $_SESSION['id_user'];
+}
 
- if (isset($_GET['abrir'])) {
+$imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
+
+if (isset($_GET['abrir'])) {
     if ($_GET['abrir'] == "pdd") {
         $novos = "pdd";
-    }
-    if ($_GET['abrir'] == "nova") {
+    }else if ($_GET['abrir'] == "nova") {
         $novos = "nova";
-    }
-    if ($_GET['abrir'] == "") {
+    }else if ($_GET['abrir'] == "") {
         $novos = false;
     }
- }
- if (!isset($novos)) {
+}else{
     $novos = false;
- }
+}
 ?>
 <html lang="pt">
 <head>
@@ -81,7 +74,7 @@
             </div>
             
         </div>
-        <div class="container  d-flex justify-content-center align-items-center">
+        <div class="container  d-flex justify-content-center align-items-center p-1
             <a href="lista.php?abrir=nova">
                 <div class="ops_nova_comunidade btn bg-sec">Criar nova comunidade</div>
             </a>

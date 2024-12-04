@@ -1,0 +1,206 @@
+/* Estilizando a navegação principal */
+body nav {
+    background-color: var(--cor_pri);
+    padding: 8px;
+    border: none;
+    position: fixed;
+    width: calc(100% - 34px);
+    top: 0;
+    left: 34px;
+    height: 56px;
+    z-index: 5;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nw-100 {
+    width: 100%;
+    left: 0;
+}
+
+#metade_da_nav {
+    position: fixed;
+    left: 0;
+    width: 40px;
+    height: 60px;
+    top: 0;
+    background: var(--cor_pri);
+    border: none;
+    z-index: 6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+#metade_da_nav:hover {
+    width: 50px;
+    height: 50px;
+}
+
+#metade_da_nav img {
+    width: 25px;
+    height: 35.5px;
+    border-radius: 0%;
+}
+
+/* Estilo para os botões */
+button#coder {
+    color: var(--cor_sec);
+    background-color: transparent;
+    border: 2px solid var(--cor_sec);
+    font-size: 14pt;
+    font-family: 'Arial';
+    width: max-content;
+    max-width: 120px;
+    height: 35px;
+    margin: 0;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+button#coder:hover {
+    background-color: var(--cor_sec);
+    color: var(--cor_pri);
+    font-weight: bold;
+    font-size: 16pt;
+}
+
+/* Estilizando os itens da navegação */
+nav ul {
+    max-width: 450px;
+    left: 0;
+    display: flex;
+    justify-content: space-evenly;
+    margin-left: 10px;
+}
+
+nav ul li img {
+    width: 25px;
+    height: 25px;
+    transition: transform 0.3s ease;
+}
+
+nav ul li:hover img {
+    transform: scale(1.2);
+}
+
+/* Campo de pesquisa */
+nav .pesquisar{
+    width: calc(100% - 550px);
+    max-width: 400px;
+    position: absolute;
+    right: 50px;
+    bottom: 0;
+    height: 43px;
+    margin-bottom: 6px;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 20px;
+    border-color: var(--cor_terc);
+}
+.pesquisar input{
+    width: calc(100% - 50px);
+    height: 100%;
+    border-radius: 20px;
+    border: none;
+    text-indent: 10px;
+}
+.pesquisar button{
+    width: 45px;
+    height: calc(100%);
+    border-radius: 20px;
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    right: 0;
+    background-size: 60%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+@media (max-width: 750px) {
+    .pesquisar{
+        display: none;
+    }
+}
+
+/* Estilo para a segunda navegação (menu lateral) */
+#segunda_nav {
+    position: fixed;
+    top: 62px;
+    left: -280px; /* Fica oculto inicialmente */
+    width: 280px;
+    height: calc(100% - 60px - 40px);
+    background-color: var(--cor_pri);
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    animation: abrir 0.7s ease forwards;
+    z-index: 1040;
+    padding: 20px 10px;
+    border-radius: 5px;
+}
+
+#segunda_nav a {
+    color: var(--char_terc);
+    text-decoration: none;
+}
+
+#segunda_nav .container {
+    padding: 0;
+}
+
+#segunda_nav .d-flex {
+    margin-bottom: 20px;
+}
+
+#segunda_nav img {
+    border-radius: 50%;
+}
+#segunda_nav ul li{
+    display: inline-block;
+}
+#segunda_nav .list-unstyled li a {
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+#segunda_nav .list-unstyled li a:hover {
+    background-color: var(--cor_sec);
+    border-radius: 5px;
+}
+
+@keyframes abrir {
+    0% {
+        left: -300px;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+.mt-auto {
+    margin-top: auto;
+}
+
+.btn-danger {
+    background-color: var(--cor_terc);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: var(--cor_sec);
+    transform: scale(1.05);
+}

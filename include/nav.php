@@ -1,68 +1,70 @@
+<link rel="stylesheet" href="/src/css/nav.css">
 <nav id="metade_da_nav" onclick="abri_fecha('#segunda_nav')">
     <img src="/bibliotecas/bootstrap/icones/border-width.svg">
 </nav>
 <nav class="px-3 py-2">
     <div class="container_nav">
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <ul class="nav col-12 justify-content-center my-md-0 text-small">
-        <li>
-            <a href="/./" class="nav-link text-secondary">
-            <img src="/bibliotecas/bootstrap/icones/house.svg">
-            </a>
-        </li>
-        <li>
-            <a href="/comunidade/" class="nav-link text-white">
-            <img src="/bibliotecas/bootstrap/icones/people.svg">
-            </a>
-        </li>
-        <li>
-            <a href="/coder/" class="nav-link text-white">
-            <a href="/coder/" id="coder"><button>CODER</button></a>
-            </a>
-        </li>
-        <li>
-            <a href="/mensagens/" class="nav-link text-white">
-                <img src="/bibliotecas/bootstrap/icones/chat-left-dots.svg"/> 
-                <?php
-                if($c->verificar_qtd("chat",$id_user) > 0){
-                    ?>
-                    <div class="info_qtd_c info_qtd_chat actualizar"><?=$c->verificar_qtd("chat",$id_user)?></div>
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <ul class="nav col-12 justify-content-center my-md-0 text-small">
+            <li>
+                <a href="/./" class="nav-link text-secondary">
+                <img src="/bibliotecas/bootstrap/icones/house.svg">
+                </a>
+            </li>
+            <li>
+                <a href="/comunidade/" class="nav-link text-white">
+                <img src="/bibliotecas/bootstrap/icones/people.svg">
+                </a>
+            </li>
+            <li>
+                <a href="/coder/" class="nav-link text-white">
+                    <button id="coder">GO</button>
+                </a>
+            </li>
+
+            <li>
+                <a href="/mensagens/" class="nav-link text-white">
+                    <img src="/bibliotecas/bootstrap/icones/chat-left-dots.svg"/> 
                     <?php
-                }else {
-                    ?>
-                    <div class="info_qtd_chat actualizar"></div>
+                    if($c->verificar_qtd("chat",$_SESSION['id_user']) > 0){
+                        ?>
+                        <div class="info_qtd_c info_qtd_chat actualizar"><?=$c->verificar_qtd("chat",$_SESSION['id_user'])?></div>
+                        <?php
+                    }else {
+                        ?>
+                        <div class="info_qtd_chat actualizar"></div>
+                        <?php
+                    }
+                    ?>          
+                </a>
+            </li>
+            <li>
+                <a href="/./notific.php" class="nav-link text-white">
+                    <img src="/bibliotecas/bootstrap/icones/bell.svg"/>
                     <?php
-                }
-                ?>          
-            </a>
-        </li>
-        <li>
-            <a href="/./notific.php" class="nav-link text-white">
-            <img src="/bibliotecas/bootstrap/icones/bell.svg"/>
-            <?php
-            if($c->verificar_qtd("notificacao",$id_user) > 0){
-                ?>
-                <div class="info_qtd_n info_qtd_notific actualizar"><?=$c->verificar_qtd("notificacao",$id_user)?></div>
-                <?php
-            }else {
-                ?>
-                <div class="info_qtd_notific actualizar"></div>
-                <?php
-            }
-            ?>   
-            </a>
-        </li>
-        </ul>
-        <div class="pesquisar">
-        <form action="/./search.php" method="GET">
-            <input type="search" name="valor" placeholder="em que esta pensando">
-            <button name="btn" style="background-image: url(/bibliotecas/bootstrap/icones/search.svg);"></button>
-        </form>
+                    if($c->verificar_qtd("notificacao",$_SESSION['id_user']) > 0){
+                        ?>
+                        <div class="info_qtd_n info_qtd_notific actualizar"><?=$c->verificar_qtd("notificacao",$_SESSION['id_user'])?></div>
+                        <?php
+                    }else {
+                        ?>
+                        <div class="info_qtd_notific actualizar"></div>
+                        <?php
+                    }
+                    ?>   
+                </a>
+            </li>
+            </ul>
+            <div class="pesquisar">
+                <form action="/./search.php" method="GET">
+                    <input type="search" name="valor" placeholder="em que esta pensando">
+                    <button name="btn" style="background-image: url(/bibliotecas/bootstrap/icones/search.svg);"></button>
+                </form>
+            </div>
         </div>
     </div>
-    </div>
 </nav>
-<div id="segunda_nav" class="remover bg-light position-fixed h-100 shadow-lg" style="width: 280px; z-index: 1050;">
+<div id="segunda_nav" class="remover bg-light position-fixed shadow-lg" style="width: 280px; z-index: 1050;">
     <div class="container py-3 d-flex flex-column h-100">
         <!-- Perfil -->
         <div class="d-flex align-items-center mb-4">

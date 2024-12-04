@@ -331,25 +331,20 @@ class process extends informacoes_usuario{
         }
     }
     public function deletar_conta($id_user){
-        if ($id_user == 0) {
-            $id_user = $_SESSION['id_user'];
+        $id_user = $_SESSION['id_user'];
 
-            $sql = $this->pdo->prepare("SELECT * FROM pbl WHERE id_user = :user");
+        $sql = $this->pdo->prepare("SELECT  FROM id_pbl WHERE id_user = :user");
+        $sql->bindValue(":user", $id_user);
+        $sql->execute();
+        $dados = $sql->fetchAll();
+
+        if ($this->eliminar_pbl($dados['id_pbl'])) {
+            $sql = $this->pdo->prepare("DELETE FROM usuarios WHERE id_user = :user");
             $sql->bindValue(":user", $id_user);
-            $sql->execute();
-            $dados = $sql->fetch();
-
-            if ($this->eliminar_pbl($dados['id_pbl'])) {
-                $sql = $this->pdo->prepare("DELETE FROM usuarios WHERE id_user = :user");
-                $sql->bindValue(":user", $id_user);
-                if ($sql->execute()) {
-                    return true;
-                }
+            if ($sql->execute()) {
+                return true;
             }
-        }else {
-            
         }
-        
     }
     public function solicitar_contacto($id){
         $sql = $this->pdo->prepare("SELECT * FROM contacto WHERE (id_user = :id
@@ -411,7 +406,8 @@ class process extends informacoes_usuario{
         }
         
     }
-    public function enviar_mensagem($texto,$id_dest,$id_doc){
+    public function enviar_mensagem($texto,$id_dest,$id_doc)
+    {
         $sql = $this->pdo->prepare("INSERT INTO chat(id_user,id_user_dest,id_doc,texto,data)
             VALUES (:1,:2,:3,:4,now())");
         $sql->bindValue(":1", $_SESSION['id_user']);

@@ -2,12 +2,17 @@
 class comunidade extends conexao
 {
     private $process;
+    private $id_comunidade;
     public $indereco;
-    public function __construct(){
+    public function __construct($id_comunidade = null){
         parent::__construct();
+        $this->id_comunidade = $id_comunidade;
         $this->process = new process;
     }
-    public function comunidade($id){
+    public function comunidade($id = NULL)
+    {
+        $id = ($id==NULL) ? $this->id_comunidade : $id;
+
         $sql = $this->pdo->prepare("SELECT * FROM comunidade
         WHERE id_comunidade = :id");   
         $sql->bindValue(":id", $id);
@@ -20,42 +25,39 @@ class comunidade extends conexao
         if ($caso == "minhas") {
             ?>
         <div class="card mb-3">
-    <div class="row g-0 align-items-center">
-        <!-- Imagem da Comunidade -->
-        <div class="col-auto">
-            <div class="rounded-circle" 
-                 style="width: 60px; height: 60px; background-image: url('<?=$imagen?>'); background-size: cover; background-position: center;">
-            </div>
-        </div>
-
-        <!-- Informações da Comunidade e Botão -->
-        <div class="col">
-            <div class="card-body p-2 d-flex justify-content-between align-items-center">
-                <!-- Informações -->
-                <div>
-                    <h5 class="card-title mb-1">
-                        <a href="/comunidade/?cmndd=<?=criptografar($id_comunidade)?>" class="text-decoration-none text-dark">
-                            <?=$row['nome']?>
-                        </a>
-                    </h5>
-                    <div class="d-flex gap-3">
-                        <span class="text-muted">seguindo: <strong>1</strong></span>
-                        <span class="text-muted">Gostos: <strong>1</strong></span>
+            <div class="row g-0 align-items-center">
+                <!-- Imagem da Comunidade -->
+                <div class="col-auto">
+                    <div class="rounded-circle" 
+                        style="width: 60px; height: 60px; background-image: url('<?=$imagen?>'); background-size: cover; background-position: center;">
                     </div>
                 </div>
-                <!-- Botão -->
-                <div>
-                    <a href="/comunidade/?cmndd=<?=criptografar($id_comunidade)?>" class="btn btn-primary">
-                        Visualizar
-                    </a>
+
+                <!-- Informações da Comunidade e Botão -->
+                <div class="col">
+                    <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                        <!-- Informações -->
+                        <div>
+                            <h5 class="card-title mb-1">
+                                <a href="/comunidade/?cmndd=<?=criptografar($id_comunidade)?>" class="text-decoration-none text-dark">
+                                    <?=$row['nome']?>
+                                </a>
+                            </h5>
+                            <div class="d-flex gap-3">
+                                <span class="text-muted">seguindo: <strong>1</strong></span>
+                                <span class="text-muted">Gostos: <strong>1</strong></span>
+                            </div>
+                        </div>
+                        <!-- Botão -->
+                        <div>
+                            <a href="/comunidade/?cmndd=<?=criptografar($id_comunidade)?>" class="btn btn-primary">
+                                Visualizar
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-
-
         <?php
         }else {
             ?>
@@ -171,21 +173,24 @@ class comunidade extends conexao
             return false;
         }
     }
-    public function pertence_a_comunidade($id_comunidade,$id_user = NULL){
-        if (empty($id_user)) {
-            $id_user = $_SESSION['id_user'];
-        }
+    public function pertence_a_comunidade($id_user = NULL): bool|int
+    {
+        $id_user = ($id_user == NULL) ? $_SESSION['id_user'] : $id_user;
+
         $comunidade = $this->pdo->prepare("SELECT * FROM $this->bdnome2.comunidade_integrante 
-        WHERE id_user=$id_user AND id_comunidade=$id_comunidade");
+        WHERE id_user=$id_user AND id_comunidade= :id");
+        $comunidade->bindParam(":id", $this->id_comunidade);
         $comunidade->execute();
         if ($comunidade->rowCount() > 0) {
             return true;
-        }else {
+        }else 
+        {
             $comunidade = $this->pdo->prepare("SELECT * FROM comunidade 
-            WHERE id_user=$id_user AND id_comunidade=$id_comunidade");
+            WHERE id_user=$id_user AND id_comunidade = :id");
+            $comunidade->bindParam(":id", $this->id_comunidade);
             $comunidade->execute();
             if ($comunidade->rowCount() > 0) {
-                return true;
+                return 1;
             } else {
                 return false;
             }
