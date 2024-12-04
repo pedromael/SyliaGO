@@ -27,7 +27,7 @@ teste/
 1. Navegue até o diretório principal do projeto:
 
    ```bash
-   cd /caminho/para/o/projeto
+   cd ./
    ```
 
 2. Execute o script diretamente:
