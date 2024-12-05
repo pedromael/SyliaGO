@@ -2,16 +2,14 @@
 class selecionar_feed 
 {
     private $postes;
-    public $codigos;
     public $id;
     public $postes_encotrados;
-    public $quantidade_de_postes = 2;
-    private $numero_maximo_de_codigos = 1;
+    public $quantidade_de_postes = 5;
+
     public function __construct(){
         $this->postes = new postes;
-        //$this->codigos = new codigos; 
     }
-    public function selecionar_poste($tipo_de_feed){
+    public function selecionar_poste($tipo_de_feed = null){
         if ($tipo_de_feed == "perfil") {
             $this->postes->para = "perfil";
             $this->postes->oque = $this->id;
@@ -34,17 +32,8 @@ class selecionar_feed
                 }
                 //$a++;
             }
-        }elseif($tipo_de_feed == "codigos"){
-            // $a = 0;
-            // while ($a <= $this->quantidade_de_postes) {
-            //     if ($this->codigos->pegar_codigo_para_poste() == 404) {
-            //         break;
-            //     }
-            //     // $a++;
-            // }
         }else {
             $a = 0;
-            //$divisao = round($this->quantidade_de_postes / 2)-1;
             $this->postes->para = "pagina_inicial";
             $this->postes->oque = "pbl";
             while ($a <= $this->quantidade_de_postes) {
@@ -53,19 +42,6 @@ class selecionar_feed
                     return 404;
                 }
                 $this->postes->procurar();
-                // if ($a == 1) {
-                //     if ($this->codigos->pegar_codigo_para_poste() == 404) { 
-                //         if ($this->postes->procurar() == 404) {
-                //             break;
-                //         }
-                //     }
-                // }else {
-                //     if ($this->postes->procurar() == 404) {
-                //         if ($this->codigos->pegar_codigo_para_poste() == 404) {
-                //            break;
-                //         }
-                //     }
-                // }
                 $a++;
             }
             return true;

@@ -272,7 +272,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                     } 
                 }
                 $s->quantidade_de_postes = 0;
-                $s->selecionar_poste("");
+                $s->selecionar_poste();
                 ?>
             </div>
             <?php

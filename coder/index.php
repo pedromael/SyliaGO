@@ -2,8 +2,9 @@
 require "../algoritimos/atalho.php";
 require "../algoritimos/seguranca.php";
 $c = new process;
-$n=0;
+$r = new repositorio();
 
+$n=0;
 
 if (!isset($_SESSION['id_user'])) {
     ?>
@@ -47,29 +48,42 @@ $user = mysqli_fetch_assoc($user);
           <div id="pbl_abrir" onmouseover="personalizar('#pbl_abrir')" onclick="publicar('novo repositorio')">
               <button>novo repositorio</button>
           </div>
-          <div id="codigo_insert" class="conteiner_pbl remover">
-              <form action="" method="post" enctype="multipart/form-data">
-                  <div class="pbl1">
-                    <input type="text" name="titulo" class="form-control" placeholder="digite aqui o titulo de seu codigo">
-                  </div>
-                  <p></p>
-                  <div id="pbl1" class="descricao">
-                      <textarea placeholder="aqui vai a descricao do codigo" name="descricao" id=""></textarea>
-                  </div>
-                  <div id="pbl1">
-                      <div><button name="btn_repositorio">Criar</button></div>
-                  </div>
-              </form>
-          </div>
-          <div class="codigos">
-              <?php
-              require "../sent.php";
-              $_SESSION['visualizado'] = array();
-              $_SESSION['code_visualizado'] = array();
-              $s = new selecionar_feed();
-              $s->selecionar_poste("codigos");
-              ?>
-          </div>
+          <div class="container mt-5 conteiner_pbl remover">
+            <div class="card">
+                <div class="card-body">
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="repoName">Nome do Repositório</label>
+                            <input type="text" class="form-control" id="repNome" name="nome" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="repoDesc">Descrição</label>
+                            <textarea class="form-control" id="repoDesc" name="desc" rows="3" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="repoPrivacy">Privacidade</label>
+                            <select class="form-control" id="repoPrivacy" name="privacidade" required>
+                                <option value="publico">Público</option>
+                                <option value="privado">Privado</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn mt-2 btn-primary btn-block" name="btn_repositorio">Criar Repositório</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="codigos">
+            <?php
+            require "../sent.php";
+            $_SESSION['visualizado'] = array();
+            $_SESSION['code_visualizado'] = array();
+            $s = new selecionar_feed();
+            $s->selecionar_poste("codigos");
+            ?>
+        </div>
       </div>
       <div class="corpo2 crp"></div>
     </div>

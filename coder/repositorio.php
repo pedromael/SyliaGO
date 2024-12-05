@@ -1,16 +1,22 @@
 <?php
- require "../algoritimos/atalho.php";
- require "../algoritimos/seguranca.php";
+require "../algoritimos/atalho.php";
+require "../algoritimos/seguranca.php";
 
- $_SESSION['visualizado'] = array();
- if (!isset($_SESSION["id_user"])) {
-    #header("location: ../login/");
-    ?>
-        <script>
-            document.location.href = "../login/"
-        </script>
-    <?php
- }
+$r = new repositorio(1);
+
+if (!isset($_SESSION['dir'])) {
+    $_SESSION['dir'] = $r->diretotio;
+}
+
+$_SESSION['visualizado'] = array();
+
+if (!isset($_SESSION["id_user"])) {
+?>
+    <script>
+        document.location.href = "../login/"
+    </script>
+<?php
+}
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +74,20 @@
     <div class="container-fluid flex-grow-1 d-flex">
         <!-- Coluna de 10% -->
         <div class="menu-lateral col-1 d-flex">
-            Menu Lateral
+            <h2>Menu Lateral</h2>
+            <div class="container">
+                <ul>
+                    <?php
+                    foreach (scandir($r->diretotio) as $dados) {
+                        if ($dados != '.' && $dados != '..') {
+                            ?>
+                            <li><?=$dados?></li>
+                            <?php
+                        }
+                    }
+                    ?>
+                </ul>
+            </div>
         </div>
 
         <!-- Coluna de 90% -->

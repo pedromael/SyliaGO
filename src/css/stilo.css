@@ -428,8 +428,8 @@ a{
 
 .item{
     position: relative; 
-    width: 190px;
-    height: 135px;
+    width: 200px;
+    height: 140px;
     border: 2px solid white;
     text-shadow: 1px 1px 4px black;
     border-radius: 15px;
@@ -438,6 +438,12 @@ a{
     white-space: nowrap;
     background-size: cover;
     background-position: center;
+    transition: all 0.7s;
+}
+.item:hover{
+    box-shadow: 2px 2px 4px #373636;
+    padding: 10px;
+    opacity: 100%;
 }
 .numero_de_storie{
     display: flex;
@@ -474,16 +480,12 @@ a{
     font-weight: bold;
     font-size: 11pt;
 }
-.item:hover{
-    border-color: transparent;
-    opacity: 100%;
-}
 .carregar_storie{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 165px;
-    height: 120px;
+    width: 170px;
+    height: 125px;
     margin-top: 10px;
 }
 .carregar_storie p{

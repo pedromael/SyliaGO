@@ -206,6 +206,19 @@ if (isset($_GET['eliminar_pbl'])) {
     }
 }
 if (isset($_POST['btn_repositorio'])) {
-
+    if (!empty($_POST['desc']) && !empty($_POST['nome']) && !empty($_POST['privacidade'])) {
+        $dados = [
+            'desc' => $_POST['desc'],
+            'nome' => $_POST['nome'],
+            'privacidade' => $_POST['privacidade']
+        ];
+        if($id = $r->criar($dados)){
+            ?>
+            <script type="text/javascript">
+                window.location.href= "repositorio.php?rep="+<?=criptografar($id)?>;
+            </script>
+            <?php    
+        }
+    }
 }
 ?>

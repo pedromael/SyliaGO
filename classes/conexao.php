@@ -8,7 +8,7 @@ class conexao
     public $bdpass = "543216+";
     public $bduser = "pedmanue";
     public $bdnome2 = "pro_start_outros";
-    public $bdrepositorio = "pro_start_repositorios";
+    public $bdrepositorio = "sylia_repositorios";
 
     public function __construct()
     {
