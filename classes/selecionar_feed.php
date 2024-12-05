@@ -38,9 +38,6 @@ class selecionar_feed
             $this->postes->oque = "pbl";
             while ($a <= $this->quantidade_de_postes) {
                 $this->postes_encotrados = $a;
-                if ($this->quantidade_de_postes <= $a) {
-                    return 404;
-                }
                 $this->postes->procurar();
                 $a++;
             }

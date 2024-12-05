@@ -262,10 +262,10 @@ class postes extends process
             LEFT JOIN $this->bdnome2.contacto_aceite AS aa ON (aa.id_contacto = a.id_contacto)
             LEFT JOIN $this->bdnome2.comunidade_integrante AS ci ON (ci.id_comunidade = pbl.id_comunidade AND ci.id_user = :id)
             LEFT JOIN comunidade as c ON (c.id_comunidade = pbl.id_comunidade)
-            WHERE (a.id_contacto = aa.id_contacto OR a.id_user_dest = pbl.id_user  AND a.id_user = :id)
-            OR (pbl.id_comunidade > 0 AND (ci.id_user = :id OR c.id_user = :id))
+            WHERE ((a.id_contacto = aa.id_contacto OR a.id_user_dest = pbl.id_user  AND a.id_user = :id) AND pbl.id_comunidade <= 0)
+            OR (ci.id_integrante > 0 OR c.id_user = :id)
             ORDER BY RAND() DESC");  
-            $sql->bindValue(":id", $this->user['id_user']);
+            $sql->bindValue(":id", $_SESSION['id_user']);
         }elseif($this->oque > 0 && $this->para == "comunidade"){
             $sql = $this->pdo->prepare("SELECT pbl.*,p.id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl
             LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
