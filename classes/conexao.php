@@ -5,8 +5,8 @@ class conexao
     public $erro;
     public $bdnome = "pro_start";
     public $bdhost = "localhost";
-    public $bdpass = "543216+";
-    public $bduser = "pedmanue";
+    public $bdpass = "";
+    public $bduser = "root";
     public $bdnome2 = "pro_start_outros";
     public $bdrepositorio = "pro_start_repositorios";
 
