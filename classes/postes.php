@@ -260,8 +260,10 @@ class postes extends process
             OR (a.id_user_dest = pbl.id_user AND a.id_user = :id))
             LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
             LEFT JOIN $this->bdnome2.contacto_aceite AS aa ON (aa.id_contacto = a.id_contacto)
+            LEFT JOIN $this->bdnome2.comunidade_integrante AS ci ON (ci.id_comunidade = pbl.id_comunidade AND ci.id_user = :id)
+            LEFT JOIN comunidade as c ON (c.id_comunidade = pbl.id_comunidade)
             WHERE (a.id_contacto = aa.id_contacto OR a.id_user_dest = pbl.id_user  AND a.id_user = :id)
-            OR pbl.id_comunidade > 0
+            OR (pbl.id_comunidade > 0 AND (ci.id_user = :id OR c.id_user = :id))
             ORDER BY RAND() DESC");  
             $sql->bindValue(":id", $this->user['id_user']);
         }elseif($this->oque > 0 && $this->para == "comunidade"){
@@ -272,19 +274,8 @@ class postes extends process
         }   
         $sql->execute();
         foreach ($sql->fetchAll() AS $row) {
-            $id_pbl = $row['id_pbl'];
-            $ligacao = true;
-            if ($row['id_comunidade'] > 0) {
-                $ligacao = $this->comunidade->pertence_a_comunidade($row['id_comunidade'],$this->user['id_user']);
-            }
-            foreach ($_SESSION['visualizado'] as $valor) {
-                if ($id_pbl == $valor) {
-                    $ligacao = false;
-                    break;
-                }
-            }
-            if ($ligacao) {
-               return  $this->mostrar($row);
+            if (!in_array($row['id_pbl'], $_SESSION['visualizado'])) {
+                return  $this->mostrar($row);
             }
         }
         return 404;
@@ -385,7 +376,7 @@ class postes extends process
             return $this->procura_aleatoria();
         }
     }
-    public function verificar_se_partilha($id_pbl){
+    public function e_partilha($id_pbl){
         $partilha = $this->pdo->prepare("SELECT id2 FROM $this->bdnome2.partilha WHERE id1 = :id");
         $partilha->bindValue(":id", $id_pbl);
         $partilha->execute();

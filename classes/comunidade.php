@@ -173,13 +173,14 @@ class comunidade extends conexao
             return false;
         }
     }
-    public function pertence_a_comunidade($id_user = NULL): bool|int
+    public function pertence_a_comunidade($id_user = NULL, $id_comunidade = null): bool|int
     {
+        $id_comunidade = $id_comunidade == NULL ? $this->id_comunidade : $id_comunidade;
         $id_user = ($id_user == NULL) ? $_SESSION['id_user'] : $id_user;
 
         $comunidade = $this->pdo->prepare("SELECT * FROM $this->bdnome2.comunidade_integrante 
         WHERE id_user=$id_user AND id_comunidade= :id");
-        $comunidade->bindParam(":id", $this->id_comunidade);
+        $comunidade->bindParam(":id", $id_comunidade);
         $comunidade->execute();
         if ($comunidade->rowCount() > 0) {
             return true;
@@ -187,7 +188,7 @@ class comunidade extends conexao
         {
             $comunidade = $this->pdo->prepare("SELECT * FROM comunidade 
             WHERE id_user=$id_user AND id_comunidade = :id");
-            $comunidade->bindParam(":id", $this->id_comunidade);
+            $comunidade->bindParam(":id", $id_comunidade);
             $comunidade->execute();
             if ($comunidade->rowCount() > 0) {
                 return 1;
