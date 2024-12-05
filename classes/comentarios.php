@@ -5,42 +5,43 @@ class comentarios extends informacoes_usuario
     public $id_cmt = false;
     public $indereco;
 
-    public function mostrar($dados){
+    public function mostrar($dados) {
         $user = $this->usuario($dados['id_user']);
         ?>
-        <div id="cmt" class="">
-            <div id="img_cmt">
-                <a href=""><img src="<?=pegar_foto_perfil("perfil",$dados['id_user'])?>" alt=""></a>
+        <div class="d-flex border p-3 rounded mb-3">
+            <div class="me-3">
+                <a href="">
+                    <img src="<?= pegar_foto_perfil("perfil", $dados['id_user']) ?>" alt="Foto de perfil" class="rounded-circle" style="width: 50px; height: 50px;">
+                </a>
             </div>
-            <div class="conteudo">
-                <table>
-                    <tr>
-                        <td id="nome" colspan="3"><a href="/perfil/?user=<?=criptografar($dados['id_user'])?>"><?=$user['nome']?></a></td>
-                    </tr>
-                    <tr id="txt_cmt">
-                        <td colspan="5"><p class="text"><?=$dados['texto']?></p></td>
-                    </tr>
-                    <tr id="reac">
-                        <td><a href="cmt.php?cmt=<?=criptografar($dados['id_cmt'])?>">responder <span><?=qtd_cmt_respostas($dados['id_cmt'])?></span></a></td>
-                        <?php
-                        if ($dados['id_user'] == $_SESSION['id_user']) {
-                            ?>
-                            <td><a href="editar.php?id_cmt=<?=criptografar($dados['id_cmt'])?>"></a></td>
-                            <td><a href="eliminar">eliminar</a></td>
-                            <?php
-                        }else {
-                            ?>
-                            <td><div>guardar</div></td>
-                            <?php
-                        }
-                        ?>
-                        <td id="data"><?=resumir_data($dados['data'])?></td>
-                    </tr>
-                </table>
+            <div class="flex-grow-1">
+                <div>
+                    <a href="/perfil/?user=<?= criptografar($dados['id_user']) ?>" class="fw-bold text-dark text-decoration-none">
+                        <?= $user['nome'] ?>
+                    </a>
+                </div>
+                <div class="mt-2">
+                    <p class="text-break mb-1"><?= $dados['texto'] ?></p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <div>
+                        <a href="cmt.php?cmt=<?= criptografar($dados['id_cmt']) ?>" class="text-muted me-3">
+                            Responder <span class="badge bg-primary"><?= qtd_cmt_respostas($dados['id_cmt']) ?></span>
+                        </a>
+                        <?php if ($dados['id_user'] == $_SESSION['id_user']) { ?>
+                            <a href="editar.php?id_cmt=<?= criptografar($dados['id_cmt']) ?>" class="text-muted me-3">Editar</a>
+                            <a href="eliminar" class="text-danger me-3">Eliminar</a>
+                        <?php } else { ?>
+                            <a href="#" class="text-muted me-3">Guardar</a>
+                        <?php } ?>
+                    </div>
+                    <div class="text-muted small"><?= resumir_data($dados['data']) ?></div>
+                </div>
             </div>
         </div>
         <?php
     }
+    
     public function comentar($id,$texto,$cmt_res,$tipo){
         $sql = $this->pdo->prepare("INSERT INTO cmt(id_user,id,tipo,texto,id_cmt_res,data)
         VALUES(:user,:id,:tipo,:t,:cmt,NOW())");

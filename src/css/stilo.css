@@ -259,14 +259,14 @@ a{
     width: 50%;
     height: calc(100% - 40px);
     bottom: 0;
+    margin: 8px;
+    width: calc(50% - 16px);
+    height: calc(100% - 40px - 16px);
 }
 .corpo_metade1{
     left: 0;
     background-color: var(--cor_pri);
     border-radius: var(--border);
-    margin: 8px;
-    width: calc(50% - 16px);
-    height: calc(100% - 40px - 16px);
 }
 .corpo_metade2{
     right: 0;
@@ -281,9 +281,6 @@ a{
     .corpo_metade1,.corpo_metade2{
         height: calc(100% - 80px);
     }
-}
-.corpo_metade1 h1:hover,.corpo_metade2 h1:hover{
-    background-image: linear-gradient(90deg,rgba(137, 43, 226, 0.5),white);
 }
 #corpo{
     background-color: transparent;
@@ -686,19 +683,6 @@ a{
     height: 48px;
     border-radius: 50%;
 }
-#img_cmt{
-    position: relative;
-}
-#img_cmt img{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: center;
-}
 
 /*publicacoes*/
 #pbl{
@@ -913,57 +897,6 @@ a{
     }
 }
 
-#cmt{
-    position: relative;
-    margin: 6px;
-    margin-bottom: 20px;
-    padding: 2px;
-    border-top: 2px solid rgba(255, 255, 255, 0.02);
-}
-#cmt #img_cmt{
-    position: absolute;
-    top: 0;
-    width: 62px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-#cmt .conteudo{
-    width: calc(100% - 64px);
-    margin-left: 62px;
-}
-#cmt table{
-    width: 100%;
-}
-
-#cmt #reac td{
-    text-align: right;
-    font-size: 8pt;
-}
-#cmt #reac a{
-    font-size: 10pt;
-    color: var(--char_terc);
-}
-#img_cmt img{
-    margin-top: 5px;
-}
-#cmt #txt_cmt td p.text{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    text-indent: 10px;
-    font-size: 11pt;
-    padding: 0;
-    margin: 5px;
-    color: var(--char_pri);
-}
-#cmt #nome{
-    border-left: none;
-    white-space: nowrap;
-}
-#cmt #nome a{
-    font-size: 11pt;
-    color: var(--char_terc);
-}
 .comentarios.resposta #cmt{
     margin-left: 35px;
     border-left: 2px solid #ddd;

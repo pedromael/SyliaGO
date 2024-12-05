@@ -61,21 +61,39 @@ class comunidade extends conexao
         <?php
         }else {
             ?>
-            <div class="sms">
-                <div id="img_user" class="c1 cp1" style=" background-image: url(<?=$this->indereco?>media/img/<?=$imagen?>);"></div>
-                <div class="c1 cp2">
-                    <div class="c2 nome"><a href="./?cmndd=<?=criptografar($id_comunidade)?>"><?=$row['nome']?></a></div>
-                    <a href="">
-                        <div class="c2 cont">
-                            <div>...</div>
+            <div class="card mb-3">
+                <div class="row g-0 align-items-center">
+                    <!-- Imagem da Comunidade -->
+                    <div class="col-auto">
+                        <div class="rounded-circle" 
+                            style="width: 60px; height: 60px; background-image: url('<?=$imagen?>'); background-size: cover; background-position: center;">
                         </div>
-                    </a>
-                    <a href="/comunidade/lista.php?abrir=pdd&cmndd=<?=criptografar($id_comunidade)?>">
-                        <div class="c2 cont btn-pri">
-                            <div>entrar</div>
+                    </div>
+
+                    <!-- Informações da Comunidade e Botão -->
+                    <div class="col">
+                        <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                            <!-- Informações -->
+                            <div>
+                                <h5 class="card-title mb-1">
+                                    <a href="/comunidade/?cmndd=<?=criptografar($id_comunidade)?>" class="text-decoration-none text-dark">
+                                        <?=$row['nome']?>
+                                    </a>
+                                </h5>
+                                <div class="d-flex gap-3">
+                                    <span class="text-muted">seguindo: <strong>1</strong></span>
+                                    <span class="text-muted">Gostos: <strong>1</strong></span>
+                                </div>
+                            </div>
+                            <!-- Botão -->
+                            <div>
+                                <a class="btn btn-primary" href="/comunidade/lista.php?abrir=pdd&cmndd=<?=criptografar($id_comunidade)?>">
+                                    entrar
+                                </a>
+                            </div>
                         </div>
-                    </a>
-                </div>  
+                    </div>
+                </div>
             </div>
         <?php
         }

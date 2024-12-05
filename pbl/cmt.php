@@ -37,8 +37,8 @@
         <a href="../" class="link">pagina inicial</a>
     </nav>
     <div class="corpos">
+        <div class="corpo3 crp"></div>
         <div id="corpo" class="crp">
-            <div class="corpo3 crp"></div>
             <div class="corpo_diminuido">
                 <div class="ver_info">
                     <a href="./?pbl=<?=criptografar($sql['id'])?>">ver publicacao</a>

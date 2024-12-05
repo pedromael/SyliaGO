@@ -38,7 +38,7 @@ class selecionar_feed
             $this->postes->oque = "pbl";
             while ($a <= $this->quantidade_de_postes) {
                 $this->postes_encotrados = $a;
-                $this->postes->procurar();
+                $this->postes->procurar(NULL);
                 $a++;
             }
             return true;

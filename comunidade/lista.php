@@ -47,9 +47,9 @@ if (isset($_GET['abrir'])) {
     ?>
     <div class="corpos">
         <div id="aps" class="">
-            <div class="container p-5">
-                <a href="lista.php?abrir=nova" class="text-center btn_simples2">criar comunidade</a>
-            </div>
+            <a href="lista.php?abrir=nova" class="text-center btn_simples2">
+                <div class="container p-5">Criar Comunidade</div>
+            </a>
             <div class="block">
                 <div class="inline">
                 <a href="./lista.php" class="btn_simples 
@@ -74,7 +74,7 @@ if (isset($_GET['abrir'])) {
             </div>
             
         </div>
-        <div class="container  d-flex justify-content-center align-items-center p-1
+        <div class="container  d-flex justify-content-center align-items-center p-1">
             <a href="lista.php?abrir=nova">
                 <div class="ops_nova_comunidade btn bg-sec">Criar nova comunidade</div>
             </a>
