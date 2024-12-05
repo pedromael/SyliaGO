@@ -289,9 +289,10 @@ class postes extends process
                 OR (a.id_user_dest = pbl.id_user AND a.id_user = :user))
                 LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
                 LEFT JOIN $this->bdnome2.contacto_aceite AS aa ON (aa.id_contacto = a.id_contacto)
-                
-                WHERE (a.id_contacto = aa.id_contacto OR a.id_user_dest = pbl.id_user  AND a.id_user = :user)
-                OR (pbl.id_comunidade > 0 OR pbl.id_user = :user)
+                LEFT JOIN $this->bdnome2.comunidade_integrante AS ci ON (ci.id_comunidade = pbl.id_comunidade AND ci.id_user = :user)
+                LEFT JOIN comunidade as c ON (c.id_comunidade = pbl.id_comunidade)
+                WHERE ((a.id_contacto = aa.id_contacto OR a.id_user_dest = pbl.id_user  AND a.id_user = :user) AND pbl.id_comunidade <= 0)
+                OR (ci.id_integrante > 0 OR c.id_user = :user)
                 ORDER BY id_pbl DESC");  
             }else {
                 $sql = $this->pdo->prepare("SELECT pbl.*,id2 AS id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl 
@@ -315,80 +316,36 @@ class postes extends process
             $sql->bindValue(":id", $this->oque);
         } 
         $sql->execute();
-        if ($tipo != "global") {
-            foreach ($sql->fetchAll() AS $row) {
-                $id_pbl = $row['id_pbl'];
-                $ligacao = true;
-                if ($tipo != "global") {
-                    if ($row['id_comunidade'] > 0) {
-                        $ligacao = $this->comunidade->pertence_a_comunidade($row['id_comunidade'],$this->user['id_user']);
-                    }
-                }
-                foreach ($_SESSION['visualizado'] as $valor) {
-                    if ($id_pbl == $valor) {
-                        $ligacao = false;
-                        break;
-                    }
-                }
-                if ($ligacao && !$this->qtd_vistos($id_pbl,"pbl",$this->user['id_user'])) {
-                   return  $this->mostrar($row);
-                }
-            }
+        if ($tipo != "global") 
+        {
+            $postes = $sql->fetchAll();
         }else {
-            if ($this->para != "perfil") {
+            if ($this->para != "perfil") // na seccao comunidade e index, se faz um filtro para ordenar os postes por interesse
+            {
                 $publicacoes_verificadas =  array();
-                $ligacao = 1;
+
                 foreach ($sql->fetchAll() AS $row) {
                     if (Verificar_pontuacao($row,$this->user['id_user']) >= 0) {
                         $row['pontuacao'] = Verificar_pontuacao($row,$this->user['id_user']);
                         array_push($publicacoes_verificadas,$row);
                     }
                 }
+
                 usort($publicacoes_verificadas,'verificar_peso');
-                foreach ($publicacoes_verificadas as $publicacoes_verificada) {
-                    foreach ($_SESSION['visualizado'] as $valor) {
-                        if ($publicacoes_verificada['id_pbl'] == $valor) {
-                            $ligacao = false;
-                            break;
-                        }
-                    }
-                    if ($ligacao) {
-                        return $this->mostrar($publicacoes_verificada);   
-                    }
-                    $ligacao = 1;
-                }
+                $postes = $publicacoes_verificadas;
             }else {
-                foreach ($sql->fetchAll() AS $row) {
-                    $ligacao = true;
-                    foreach ($_SESSION['visualizado'] as $valor) {
-                        if ($row['id_pbl'] == $valor) {
-                            $ligacao = false;
-                            break;
-                        }
-                    }
-                    if ($ligacao) {
-                        return $this->mostrar($row);
-                    }
-                }
+                $postes = $sql->fetchAll();
             }
         }
+
+        foreach ($postes AS $row) {
+            if (!in_array($row['id_pbl'], $_SESSION['visualizado'])) {
+                return  $this->mostrar($row);
+            }
+        }
+
         if ($this->para != "perfil") {
             return $this->procura_aleatoria();
-        }
-    }
-    public function e_partilha($id_pbl){
-        $partilha = $this->pdo->prepare("SELECT id2 FROM $this->bdnome2.partilha WHERE id1 = :id");
-        $partilha->bindValue(":id", $id_pbl);
-        $partilha->execute();
-        if ($partilha->rowCount() >= 1) {
-            $partilha = $partilha->fetch();
-            $id_pbl_partilha = $partilha['id2'];
-            $partilha = $this->pdo->prepare("SELECT * FROM pbl WHERE id_pbl =:id");
-            $partilha->bindValue(":id", $id_pbl_partilha);
-            $partilha->execute();
-            return $partilha->fetch();
-        }else{
-            return false;
         }
     }
 }
