@@ -3,11 +3,11 @@ class conexao
 {
     public $pdo;
     public $erro;
-    public $bdnome = "pro_start";
+    public $bdnome = "sylia";
     public $bdhost = "localhost";
     public $bdpass = "";
     public $bduser = "root";
-    public $bdnome2 = "pro_start_outros";
+    public $bdnome2 = "sylia_outros";
     public $bdrepositorio = "sylia_repositorios";
 
     public function __construct()

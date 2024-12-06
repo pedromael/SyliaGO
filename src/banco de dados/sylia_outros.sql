@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/11/2024 às 16:49
+-- Tempo de geração: 06/12/2024 às 04:05
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -17,24 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Banco de dados: `pro_start_outros`
---
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `areas_programacao`
---
-CREATE DATABASE IF NOT EXISTS `pro_start_outros` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `pro_start_outros`;
-
-CREATE TABLE `areas_programacao` (
-  `id_area` int(11) NOT NULL,
-  `nome` varchar(75) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS `sylia_outros` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `sylia_outros`;
 
 --
 -- Estrutura para tabela `cmt_mencionar`
@@ -101,46 +85,6 @@ CREATE TABLE `denucias` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `escolha_conteudo`
---
-
-CREATE TABLE `escolha_conteudo` (
-  `id_e_conteudo` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `positivo` tinyint(1) NOT NULL,
-  `nivel` int(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `gosto`
---
-
-CREATE TABLE `gosto` (
-  `id_gosto` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id` int(11) NOT NULL,
-  `tipo` varchar(20) NOT NULL,
-  `positivo` varchar(20) NOT NULL,
-  `data` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `gostos_do_usuario`
---
-
-CREATE TABLE `gostos_do_usuario` (
-  `id_GDU` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_jogo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estrutura para tabela `historico`
 --
 
@@ -148,27 +92,10 @@ CREATE TABLE `historico` (
   `id_historico` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `id` int(11) NOT NULL,
-  `tipo` varchar(50) NOT NULL,
+  `tipo` enum('reacao','comentario','rejeitado','comfirmado') NOT NULL,
+  `de` enum('poste','comentario','repositorio','perfil','comunidade') NOT NULL,
   `data` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `historico_id`
---
-
-CREATE TABLE `historico_id` (
-  `id_historico` int(11) NOT NULL,
-  `id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `historico_id`
---
-
-INSERT INTO `historico_id` (`id_historico`, `id`) VALUES
-(11, 5);
 
 -- --------------------------------------------------------
 
@@ -179,20 +106,7 @@ INSERT INTO `historico_id` (`id_historico`, `id`) VALUES
 CREATE TABLE `lido` (
   `id_lido` int(11) NOT NULL,
   `id_visto` int(11) NOT NULL,
-  `data` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `linguagens_programacao`
---
-
-CREATE TABLE `linguagens_programacao` (
-  `id_linguagem` int(11) NOT NULL,
-  `nome` varchar(15) NOT NULL,
-  `nivel` varchar(15) NOT NULL
+  `data` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -208,22 +122,6 @@ CREATE TABLE `lista_de_conteudo` (
   `tipo` varchar(10) NOT NULL,
   `descricao` varchar(10) NOT NULL,
   `data` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `localizacao_usuarios`
---
-
-CREATE TABLE `localizacao_usuarios` (
-  `id_localizacao` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `latitude` int(11) NOT NULL,
-  `altitude` int(11) NOT NULL,
-  `pais` varchar(50) NOT NULL,
-  `cidade` varchar(50) NOT NULL,
-  `localizacao_exata` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -524,7 +422,7 @@ CREATE TABLE `partilha` (
   `id_partilha` int(11) NOT NULL,
   `id1` int(11) NOT NULL,
   `id2` int(11) NOT NULL,
-  `tipo` varchar(20) NOT NULL
+  `tipo` enum('poste_poste','mensagen_poste','poste_perfil','mensagen_perfil','poste_comunidade','mensagen_comunidade') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -557,42 +455,6 @@ CREATE TABLE `pbl_mencionar` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `preferencias_usuarios`
---
-
-CREATE TABLE `preferencias_usuarios` (
-  `id_preferencia` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_tema` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `preferencia_area`
---
-
-CREATE TABLE `preferencia_area` (
-  `id_preferencia` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_area` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `preferencia_lp`
---
-
-CREATE TABLE `preferencia_lp` (
-  `id_preferencia` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_linguagem` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estrutura para tabela `privado`
 --
 
@@ -605,29 +467,16 @@ CREATE TABLE `privado` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `registro_cripto`
+-- Estrutura para tabela `reacao`
 --
 
-CREATE TABLE `registro_cripto` (
-  `id_registro` int(11) NOT NULL,
-  `id_cripto` int(11) NOT NULL,
-  `id_cripto2` int(12) NOT NULL,
-  `descricao` varchar(200) NOT NULL,
-  `qtd` decimal(10,0) NOT NULL,
-  `caso` varchar(10) NOT NULL,
-  `data` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `temas`
---
-
-CREATE TABLE `temas` (
-  `id_tema` int(11) NOT NULL,
+CREATE TABLE `reacao` (
+  `id_reacao` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `nome` varchar(20) NOT NULL
+  `id` int(11) NOT NULL,
+  `tipo` enum('gosto','desgosto','estrela','admiracao') NOT NULL,
+  `para` enum('poste','repositorio','perfil','comunidade','comentario') NOT NULL,
+  `data` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -644,19 +493,6 @@ CREATE TABLE `tipo_de_conteudo` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `versoes_codigos`
---
-
-CREATE TABLE `versoes_codigos` (
-  `id_versao` int(11) NOT NULL,
-  `id_code` int(11) NOT NULL,
-  `descricao` varchar(5000) NOT NULL,
-  `data` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estrutura para tabela `visto`
 --
 
@@ -667,7 +503,6 @@ CREATE TABLE `visto` (
   `tipo` varchar(10) NOT NULL,
   `data` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 
 --
 -- Índices para tabelas despejadas
@@ -704,18 +539,6 @@ ALTER TABLE `denucias`
   ADD PRIMARY KEY (`id_denuncia`);
 
 --
--- Índices de tabela `escolha_conteudo`
---
-ALTER TABLE `escolha_conteudo`
-  ADD PRIMARY KEY (`id_e_conteudo`);
-
---
--- Índices de tabela `gosto`
---
-ALTER TABLE `gosto`
-  ADD PRIMARY KEY (`id_gosto`);
-
---
 -- Índices de tabela `historico`
 --
 ALTER TABLE `historico`
@@ -726,12 +549,6 @@ ALTER TABLE `historico`
 --
 ALTER TABLE `lido`
   ADD PRIMARY KEY (`id_lido`);
-
---
--- Índices de tabela `linguagens_programacao`
---
-ALTER TABLE `linguagens_programacao`
-  ADD PRIMARY KEY (`id_linguagem`);
 
 --
 -- Índices de tabela `lista_de_conteudo`
@@ -770,46 +587,22 @@ ALTER TABLE `pbl_mencionar`
   ADD PRIMARY KEY (`id_mencionar`);
 
 --
--- Índices de tabela `preferencias_usuarios`
---
-ALTER TABLE `preferencias_usuarios`
-  ADD PRIMARY KEY (`id_preferencia`);
-
---
--- Índices de tabela `preferencia_area`
---
-ALTER TABLE `preferencia_area`
-  ADD PRIMARY KEY (`id_preferencia`);
-
---
--- Índices de tabela `preferencia_lp`
---
-ALTER TABLE `preferencia_lp`
-  ADD PRIMARY KEY (`id_preferencia`);
-
---
 -- Índices de tabela `privado`
 --
 ALTER TABLE `privado`
   ADD PRIMARY KEY (`id_privado`);
 
 --
--- Índices de tabela `registro_cripto`
+-- Índices de tabela `reacao`
 --
-ALTER TABLE `registro_cripto`
-  ADD PRIMARY KEY (`id_registro`);
+ALTER TABLE `reacao`
+  ADD PRIMARY KEY (`id_reacao`);
 
 --
 -- Índices de tabela `tipo_de_conteudo`
 --
 ALTER TABLE `tipo_de_conteudo`
   ADD PRIMARY KEY (`id_t_conteudo`);
-
---
--- Índices de tabela `versoes_codigos`
---
-ALTER TABLE `versoes_codigos`
-  ADD PRIMARY KEY (`id_versao`);
 
 --
 -- Índices de tabela `visto`
@@ -831,7 +624,7 @@ ALTER TABLE `comunidade_integrante`
 -- AUTO_INCREMENT de tabela `contacto_aceite`
 --
 ALTER TABLE `contacto_aceite`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `conteudo_de_lista`
@@ -846,34 +639,16 @@ ALTER TABLE `denucias`
   MODIFY `id_denuncia` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `escolha_conteudo`
---
-ALTER TABLE `escolha_conteudo`
-  MODIFY `id_e_conteudo` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de tabela `gosto`
---
-ALTER TABLE `gosto`
-  MODIFY `id_gosto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
 -- AUTO_INCREMENT de tabela `historico`
 --
 ALTER TABLE `historico`
-  MODIFY `id_historico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id_historico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT de tabela `lido`
 --
 ALTER TABLE `lido`
   MODIFY `id_lido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT de tabela `linguagens_programacao`
---
-ALTER TABLE `linguagens_programacao`
-  MODIFY `id_linguagem` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `lista_de_conteudo`
@@ -885,7 +660,7 @@ ALTER TABLE `lista_de_conteudo`
 -- AUTO_INCREMENT de tabela `login`
 --
 ALTER TABLE `login`
-  MODIFY `id_login` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_login` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `pais`
@@ -897,7 +672,7 @@ ALTER TABLE `pais`
 -- AUTO_INCREMENT de tabela `partilha`
 --
 ALTER TABLE `partilha`
-  MODIFY `id_partilha` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_partilha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `pbl_definicoes`
@@ -912,34 +687,16 @@ ALTER TABLE `pbl_mencionar`
   MODIFY `id_mencionar` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `preferencias_usuarios`
---
-ALTER TABLE `preferencias_usuarios`
-  MODIFY `id_preferencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT de tabela `preferencia_area`
---
-ALTER TABLE `preferencia_area`
-  MODIFY `id_preferencia` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de tabela `preferencia_lp`
---
-ALTER TABLE `preferencia_lp`
-  MODIFY `id_preferencia` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de tabela `privado`
 --
 ALTER TABLE `privado`
   MODIFY `id_privado` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `registro_cripto`
+-- AUTO_INCREMENT de tabela `reacao`
 --
-ALTER TABLE `registro_cripto`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+ALTER TABLE `reacao`
+  MODIFY `id_reacao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de tabela `tipo_de_conteudo`
@@ -948,16 +705,10 @@ ALTER TABLE `tipo_de_conteudo`
   MODIFY `id_t_conteudo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `versoes_codigos`
---
-ALTER TABLE `versoes_codigos`
-  MODIFY `id_versao` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de tabela `visto`
 --
 ALTER TABLE `visto`
-  MODIFY `id_visto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
+  MODIFY `id_visto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

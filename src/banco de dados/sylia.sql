@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/11/2024 às 16:47
+-- Tempo de geração: 06/12/2024 às 04:04
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -17,18 +17,12 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Banco de dados: `pro_start`
---
-
--- --------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS `sylia` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `sylia`;
 
 --
 -- Estrutura para tabela `chat`
 --
-
-CREATE DATABASE IF NOT EXISTS `pro_start` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `pro_start`;
 
 CREATE TABLE `chat` (
   `id_chat` int(11) NOT NULL,
@@ -47,28 +41,13 @@ CREATE TABLE `chat` (
 
 CREATE TABLE `cmt` (
   `id_cmt` int(11) NOT NULL,
-  `id_pbl` int(11) NOT NULL,
-  `id_cmt_res` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `id` int(11) NOT NULL,
-  `tipo` varchar(10) NOT NULL,
+  `tipo` enum('poste','repositorio','comentario','perfil') NOT NULL,
   `texto` varchar(250) NOT NULL,
   `data` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `codigos`
---
-
-CREATE TABLE `codigos` (
-  `id_code` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `titulo` int(11) NOT NULL,
-  `linguagem` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -84,6 +63,7 @@ CREATE TABLE `comunidade` (
   `data` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
+
 -- --------------------------------------------------------
 
 --
@@ -97,6 +77,7 @@ CREATE TABLE `contacto` (
   `data` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
 -- --------------------------------------------------------
 
 --
@@ -107,7 +88,7 @@ CREATE TABLE `doc` (
   `id_doc` int(11) NOT NULL,
   `id` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `tipo` varchar(10) NOT NULL,
+  `tipo` enum('poste','mensagen','repositorio','comentario','usuario','comunidade','storie') NOT NULL,
   `indereco` varchar(60) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -138,6 +119,19 @@ CREATE TABLE `pbl` (
   `id_comunidade` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+--
+-- Despejando dados para a tabela `pbl`
+--
+
+INSERT INTO `pbl` (`id_pbl`, `id_user`, `texto`, `data`, `id_comunidade`) VALUES
+(1, 1, 'oi mundo', '2024-12-06 01:20:50', 0),
+(2, 1, '', '2024-12-06 02:55:41', 0),
+(3, 1, 'qual, de novo.', '2024-12-06 03:05:50', 1),
+(4, 2, 'carregamento de varias imagens', '2024-12-06 03:51:16', 1),
+(5, 2, 'imagens, muitas', '2024-12-06 03:52:16', 1),
+(6, 2, 'teste', '2024-12-06 03:55:14', 0);
+
+-- --------------------------------------------------------
 
 --
 -- Estrutura para tabela `repositorio`
@@ -180,6 +174,10 @@ CREATE TABLE `usuarios` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
+-- Índices para tabelas despejadas
+--
+
+--
 -- Índices de tabela `chat`
 --
 ALTER TABLE `chat`
@@ -190,12 +188,6 @@ ALTER TABLE `chat`
 --
 ALTER TABLE `cmt`
   ADD PRIMARY KEY (`id_cmt`);
-
---
--- Índices de tabela `codigos`
---
-ALTER TABLE `codigos`
-  ADD PRIMARY KEY (`id_code`);
 
 --
 -- Índices de tabela `comunidade`
@@ -253,19 +245,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `chat`
 --
 ALTER TABLE `chat`
-  MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `cmt`
 --
 ALTER TABLE `cmt`
-  MODIFY `id_cmt` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de tabela `codigos`
---
-ALTER TABLE `codigos`
-  MODIFY `id_code` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_cmt` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de tabela `comunidade`
@@ -277,13 +263,13 @@ ALTER TABLE `comunidade`
 -- AUTO_INCREMENT de tabela `contacto`
 --
 ALTER TABLE `contacto`
-  MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `doc`
 --
 ALTER TABLE `doc`
-  MODIFY `id_doc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_doc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de tabela `noticia`
@@ -295,7 +281,7 @@ ALTER TABLE `noticia`
 -- AUTO_INCREMENT de tabela `pbl`
 --
 ALTER TABLE `pbl`
-  MODIFY `id_pbl` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id_pbl` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `repositorio`
@@ -307,13 +293,13 @@ ALTER TABLE `repositorio`
 -- AUTO_INCREMENT de tabela `stories`
 --
 ALTER TABLE `stories`
-  MODIFY `id_storie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_storie` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
