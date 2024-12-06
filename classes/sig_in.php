@@ -21,6 +21,24 @@ class sig_in extends conexao{
         }
         return false;
     }
+
+    private function diretorios_pessoal($code_nome): bool
+    {
+        $dir_img = "../src/userFile/".$code_nome."/img/";
+        if (!is_dir($dir_img)) {
+            if (!mkdir($dir_img, 0755, true)) {
+                return false;
+            }
+        }
+        $dir_repositorio = "../src/userFile/".$code_nome."/repositorio/";
+        if (!is_dir($dir_repositorio)) {
+            if (!mkdir($dir_repositorio, 0755, true)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function logar($email,$senha)
     {
         $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE email =:e AND senha =:s");
@@ -30,15 +48,8 @@ class sig_in extends conexao{
         if ($sql->rowCount() > 0) {
             $dados = $sql->fetch();
 
-            if (!is_dir("../src/userFile/".$dados['code_nome']."/img/")) {
-                if (!mkdir("../src/userFile/".$dados['code_nome']."/img/", 0755, true)) {
-                    return false;
-                }
-            }
-            if (!is_dir("../src/userFile/".$dados['code_nome']."/repositorio/")) {
-                if (!mkdir("../src/userFile/".$dados['code_nome']."/repositorio/", 0755, true)) {
-                    return false;
-                }
+            if(!$this->diretorios_pessoal($dados['code_nome'])){
+                return false;
             }
 
             $_SESSION['id_user'] = $dados['id_user'];
@@ -74,7 +85,7 @@ class sig_in extends conexao{
                 $sql->bindValue(":e", $email);
                 if ($sql->execute()) {
 
-                    if (!mkdir("../src/userFile/".$code_nome."/img/", 0755, true) || !mkdir("../src/userFile/".$code_nome."/repositorio/", 0755, true)) {
+                    if(!$this->diretorios_pessoal($code_nome)){
                         return false;
                     }
 

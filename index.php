@@ -106,7 +106,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                     $tmp = $_FILES['img_storie']['tmp_name'];
                     $type = $_FILES['img_storie']['type'];
                     $size = $_FILES['img_storie']['size'];
-                    $a =0;
+                    $a = 0;
                     $imagens = array();
                     while ($a < count($nome)) {
                         array_push($imagens,array("name"=>$nome[$a],"tmp_name"=>$tmp[$a],"type"=>$type[$a],"size"=>$size[$a]));
