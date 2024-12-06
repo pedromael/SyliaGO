@@ -154,7 +154,7 @@ class comunidade extends conexao
                     $sql->bindValue(":c", $id_comunidade);
                     $sql->bindValue(":user", $_SESSION['id_user']);
                     if ($sql->execute()) {
-                        if ($this->process->inserir_historico("integracao_comunidade", $id_comunidade)) {
+                        if ($this->process->inserir_historico("comfirmado", $id_comunidade, "comunidade")) {
                             return true;
                         }else {
                             return  false;

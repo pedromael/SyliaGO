@@ -28,13 +28,15 @@ function publicar(param) {
         btn.innerHTML = "<button>fechar</button>"
     }
 }
-function comentar(id,tipo,cmt_res) {
+
+function comentar(id,tipo) 
+{
     var texto = document.querySelector(".footer_chat textarea");
     if (texto.value.length <= 0) {
         return false
     }
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', indereco+'include/comentar.php', true)
+    xhr.open('POST', '/include/comentar.php', true)
     xhr.setRequestHeader('Content-Type', 'application/json');
     var comentarios = document.querySelector('.comentarios');
     xhr.onload = function() {
@@ -50,12 +52,12 @@ function comentar(id,tipo,cmt_res) {
     var data = {
         id: id,
         texto: texto.value,
-        tipo: tipo,
-        cmt_res: cmt_res
+        tipo: tipo
     }
     var jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 }
+
 function enviar_mensagem(id_dest) {
     var texto = document.querySelector(".footer_chat textarea");
     if (texto.value.length <= 0) {
@@ -237,9 +239,9 @@ function abri_fecha(id) {
         mode.classList.add('remover');
     }
 }
-function reagir(id,tipo) {
+function reagir(id,tipo,para) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', indereco+'algoritimos/reagir.php', true);
+    xhr.open('POST', '/algoritimos/reagir.php', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
       if (xhr.status === 200) {
@@ -265,7 +267,8 @@ function reagir(id,tipo) {
     };
     var data = {
       id: id,
-      tipo: tipo
+      tipo: tipo,
+      para:para
     };
     var jsonData = JSON.stringify(data);
     xhr.send(jsonData);

@@ -1,5 +1,5 @@
 <?php
-class comentarios extends informacoes_usuario
+class comentarios extends process
 {
     public $id;
     public $id_cmt = false;
@@ -42,24 +42,17 @@ class comentarios extends informacoes_usuario
         <?php
     }
     
-    public function comentar($id,$texto,$cmt_res,$tipo){
-        $sql = $this->pdo->prepare("INSERT INTO cmt(id_user,id,tipo,texto,id_cmt_res,data)
-        VALUES(:user,:id,:tipo,:t,:cmt,NOW())");
+    public function comentar($id,$texto,$tipo){
+        $sql = $this->pdo->prepare("INSERT INTO cmt(id_user,id,tipo,texto,data)
+        VALUES(:user,:id,:tipo,:t,NOW())");
         $sql->bindValue(":user", $_SESSION['id_user']);
         $sql->bindValue(":id", $id);
         $sql->bindValue(":tipo", $tipo);
-        $sql->bindValue(":cmt", $cmt_res);
         $sql->bindValue(":t", nl2br($texto));
         if ($sql->execute()) {
-            if ($tipo == "code") {$tipo = "cmt_code";}elseif($tipo = "pbl"){$tipo = "cmt";}
             $id_cmt = $this->pdo->lastInsertId();
-            if (inserir_historico($tipo, $id, $id_cmt)) { 
-                $sql = $this->pdo->prepare("SELECT * FROM cmt WHERE id=:id AND id_user=:user ORDER BY id_cmt DESC LIMIT 1");
-                $sql->bindValue(":id", $id);
-                $sql->bindValue(":user", $_SESSION['id_user']);
-                $sql->execute();
-                $dados = $sql->fetch();
-                return $dados;
+            if ($this->inserir_historico("comentario", $id, $tipo)) { 
+                return $this->comentario($id_cmt);
             }else {
                return  false;
             }
@@ -67,17 +60,13 @@ class comentarios extends informacoes_usuario
             return false;
         }
     }
-    public function pegar($tipo = "pbl",$numero_max = 1) {
-        $dados =  array();
-
+    public function pegar($tipo = "poste",$numero_max = 1) 
+    {
+        $sql = $this->pdo->prepare("SELECT * FROM cmt WHERE tipo = :t AND id = :id  ORDER BY id_cmt DESC");
+        $sql->bindValue(":t", $tipo);
         if ($this->id_cmt) {
-            $sql = $this->pdo->prepare("SELECT * FROM cmt WHERE tipo = :t AND id = :id AND id_cmt_res=:cmt ORDER BY id_cmt DESC");
-            $sql->bindValue(":t", $tipo);
-            $sql->bindValue(":id", $this->id);
-            $sql->bindValue(":cmt", $this->id_cmt);
+            $sql->bindValue(":id", $this->id_cmt);
         }else {
-            $sql = $this->pdo->prepare("SELECT * FROM cmt WHERE tipo = :t AND id = :id AND id_cmt_res = 0 ORDER BY id_cmt DESC");
-            $sql->bindValue(":t", $tipo);
             $sql->bindValue(":id", $this->id);
         }
         $sql->execute();
@@ -93,10 +82,9 @@ class comentarios extends informacoes_usuario
         }
         return true;
     }
-    public function comentario($id_cmt,$tipo = "pbl"){
-        $sql = $this->pdo->prepare("SELECT * FROM cmt WHERE id_cmt=:id AND tipo=:t");
-        $sql->bindValue(":id",$id_cmt);
-        $sql->bindValue(":t", $tipo);
+    public function comentario($id){
+        $sql = $this->pdo->prepare("SELECT * FROM cmt WHERE id_cmt=:id");
+        $sql->bindValue(":id",$id);
         $sql->execute();
         if ($sql->rowCount() <= 0) {
             return false;

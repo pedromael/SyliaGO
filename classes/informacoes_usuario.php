@@ -10,7 +10,7 @@ class informacoes_usuario extends conexao
         parent::__construct();
         $this->user = $this->usuario($_SESSION['id_user']);
         //$this->linguas_falada = $this->linguas_falada($_SESSION['id_user']);
-        $this->gostos = $this->gostos_do_usuario($_SESSION['id_user']);
+        // $this->gostos = $this->gostos_do_usuario($_SESSION['id_user']);
     }
     public function usuario($id_user = false,$todo=false) {
         if (!$id_user) {
@@ -27,7 +27,8 @@ class informacoes_usuario extends conexao
         $sql->bindValue(":user", $id_user);
         if ($sql->execute()) {
             return $sql->fetch();
-        }else{return false;}
+        }   
+        return false;
     }
     public function linguas_falada($id_user) {
         $sql = $this->pdo->prepare("SELECT * FROM $this->bdnome2.linguas_falada WHERE id_user=:user");
@@ -38,12 +39,12 @@ class informacoes_usuario extends conexao
         }else{return false;}
     }
     public function gostos_do_usuario($id_user) {
-        $sql = $this->pdo->prepare("SELECT * FROM $this->bdnome2.gostos_do_usuario WHERE id_user=:user");
-        $sql->bindValue(":user", $id_user);
-        if ($sql->execute()) {
-            $dados = $sql->fetch();
-            return $dados;
-        }else{return false;}
+        // $sql = $this->pdo->prepare("SELECT * FROM $this->bdnome2.gostos_do_usuario WHERE id_user=:user");
+        // $sql->bindValue(":user", $id_user);
+        // if ($sql->execute()) {
+        //     $dados = $sql->fetch();
+        //     return $dados;
+        // }else{return false;}
     }
     public function mostrar_amigos($dados){
         if (!isset($this->indereco)) {

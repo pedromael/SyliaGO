@@ -3,10 +3,11 @@ class process extends informacoes_usuario{
     function __construct() {
         parent::__construct(); 
     }
-    public function inserir_historico($tipo, $id) {
-        $sql = $this->pdo->prepare("INSERT INTO $this->bdnome2.historico(id_user,id,tipo,data) VALUES(:user,:id,:t,NOW())");
+    public function inserir_historico($tipo, $id, $de, $inverso = false) {
+        $sql = $this->pdo->prepare("INSERT INTO $this->bdnome2.historico(id_user,id,tipo,de,data) VALUES(:user,:id,:t,:d,NOW())");
         $sql->bindValue(":user", $_SESSION['id_user']);
-        $sql->bindValue("t", $tipo);
+        $sql->bindValue(":t", $tipo);
+        $sql->bindValue(":d", $de);
         $sql->bindValue(":id", $id);
         if (!$sql->execute()) {
             return false;
@@ -102,7 +103,7 @@ class process extends informacoes_usuario{
         if ($de == "notificacao") {
             $notificacoes = new notificacoes;
             $i=0;
-            foreach ($notificacoes->procurar("Conta") as $key => $value) {
+            foreach ($notificacoes->procurar("Conta") as $value) {
                 if ($this->qtd_vistos($value['id_historico'],'notific',$_SESSION['id_user']) < 1) {
                     $i++;
                 }
@@ -168,73 +169,44 @@ class process extends informacoes_usuario{
             return false;
         } 
     }
-    public function reagir($id,$tipo,$positivo = 1) {
-        $sql = $this->pdo->prepare("SELECT * FROM $this->bdnome2.gosto WHERE id_user=:user AND id=:id AND tipo=:tipo AND positivo = :p");
+    public function reagir($id,$tipo,$para) {
+        $sql = $this->pdo->prepare("SELECT * FROM $this->bdnome2.reacao WHERE id_user=:user AND id=:id AND para = :p");
         $sql->bindValue(":user", $_SESSION['id_user']);
         $sql->bindValue(":id", $id); 
-        $sql->bindValue(":tipo", $tipo);
-        $sql->bindValue(":p", $positivo);
+        $sql->bindValue(":p", $para);
         $sql->execute();
-        if ($sql->rowCount() > 0) {
-            $sql = $sql->fetch();
-            $id_gosto = $sql['id_gosto'];
-            $sql = $this->pdo->prepare("DELETE FROM $this->bdnome2.gosto WHERE id_gosto=:i");
-            $sql->bindValue(":i", $id_gosto);
-            if ($sql->execute()) {
-                $sql = $this->pdo->prepare("DELETE FROM $this->bdnome2.historico WHERE id_user=:u AND id=:i AND tipo= :t");
-                $sql->bindValue(":u", $_SESSION['id_user']);
-                $sql->bindValue(":i", $id);
-                $sql->bindValue(":t", "reagir_pbl");
-                if ($sql->execute()) {
-                    return true;
-                }else {
-                    return false;
+        if ($sql->rowCount() > 0) 
+        {
+            $id_reacao = $sql->fetch()['id_reacao'];
+            $sql = $this->pdo->prepare("DELETE FROM $this->bdnome2.reacao WHERE id_reacao=:i");
+            $sql->bindValue(":i", $id_reacao);
+            $sql->execute();
+            if ($this->inserir_historico("reacao", $id, $para, true)) {
+                if ($tipo != 'remover') {
+                    return $this->reagir($id, $tipo, $para);
                 }
             }else{
                 return false;
             }
         }else{
-            $sql = $this->pdo->prepare("SELECT * FROM $this->bdnome2.gosto WHERE id_user=:user AND id=:id AND tipo=:tipo AND positivo != :p");
+            $sql = $this->pdo->prepare("INSERT INTO $this->bdnome2.reacao(id_user, id, tipo, para, data)
+            VALUES(:user, :id, :t, :p, NOW()) ");
             $sql->bindValue(":user", $_SESSION['id_user']);
-            $sql->bindValue(":id", $id); 
-            $sql->bindValue(":tipo", $tipo);
-            $sql->bindValue(":p", $positivo);
+            $sql->bindValue(':id', $id);
+            $sql->bindValue(':p', $para);
+            $sql->bindValue(':t', $tipo);
             $sql->execute();
-            if ($sql->rowCount() <= 0) {
-                $sql = $this->pdo->prepare("INSERT INTO $this->bdnome2.gosto(id_user,id,tipo,positivo,data) 
-                VALUES(:user,:id,:t,:p,NOW())");
-                $sql->bindValue(":user", $_SESSION['id_user']);
-                $sql->bindValue(":id", $id); 
-                $sql->bindValue(":t", $tipo);
-                $sql->bindValue(":p", $positivo);
-                if ($sql->execute()) {
-                    if ($this->inserir_historico("reagir_pbl", $id)) {
-                        return true;
-                    }else {
-                        return  false;
-                    }
-                }else{
-                    return false;
-                }
-            }else {
-                $id_gosto = $sql->fetch()['id_gosto'];
-                $sql = $this->pdo->prepare("UPDATE `gosto` SET positivo=:p WHERE id_gosto:id");
-                $sql->bindValue(":id", $id_gosto);
-                if ($sql->execute()) {
-                    return true;
-                }
-            }
         }
-
+        return true;
     }
-    public function qtd_reacao($id,$tipo,$id_user = NULL,$positivo=NULL){
+    public function qtd_reacao($id,$para,$id_user = NULL)
+    {
         if ($id_user != NULL) {
-            $reac = $this->pdo->prepare("SELECT count(*) AS valor FROM $this->bdnome2.gosto WHERE id_user = :id AND id=$id AND tipo = '$tipo' AND positivo = COALESCE(:p,positivo)");
+            $reac = $this->pdo->prepare("SELECT count(*) AS valor FROM $this->bdnome2.reacao WHERE id_user = :id AND id=$id AND tipo = '$para'");
             $reac->bindValue(":id", $this->user['id_user']);
         }else {
-            $reac = $this->pdo->prepare("SELECT count(*) AS valor FROM $this->bdnome2.gosto WHERE id=$id AND tipo = '$tipo' AND positivo = COALESCE(:p,positivo)");
+            $reac = $this->pdo->prepare("SELECT count(*) AS valor FROM $this->bdnome2.reacao WHERE id=$id AND tipo = '$para'");
         }
-        $reac->bindValue(":p", $positivo);
         $reac->execute();
         return $reac->fetch()['valor'];
     }
@@ -397,7 +369,7 @@ class process extends informacoes_usuario{
             $sql = $this->pdo->prepare("INSERT INTO $this->bdnome2.contacto_aceite(id_contacto,data) VALUES (:id,now())");
             $sql->bindValue(":id", $id_contacto);
             if ($sql->execute()) {
-                $this->inserir_historico("contacto_aceite", $id_contacto);
+                $this->inserir_historico("comfirmado", $id_contacto, "perfil");
             } else {
                 return false;
             }

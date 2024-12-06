@@ -27,24 +27,6 @@ function conn()
     return mysqli_connect($c->bdhost,$c->bduser,$c->bdpass,$c->bdnome); 
 }
 
-function inserir_historico($tipo, $id, $id_cmt = 0) {
-    $conexao = new conexao;
-    $sql = $conexao->pdo->prepare("INSERT INTO $conexao->bdnome2.historico(id_user,id,tipo,data) VALUES(:user,:id,:t,NOW())");
-    $sql->bindValue(":user", $_SESSION['id_user']);
-    $sql->bindValue("t", $tipo);
-    $sql->bindValue(":id", $id);
-    if ($sql->execute()) {
-        if ($id_cmt) {
-            $sql = $conexao->pdo->prepare("INSERT INTO $conexao->bdnome2.historico_id(id_historico,id) VALUES(:h,:id)");
-            $sql->bindValue(":h", $conexao->pdo->lastInsertId());
-            $sql->bindValue(":id", $id_cmt);
-            $sql->execute();
-            return true;
-        }
-    }else {
-        return false;
-    }
-}
 function resumir_texto($string,$tamanho) 
 {
     $n = strlen($string);
@@ -80,9 +62,9 @@ function Verificar_pontuacao($row,$id_user) {
         $pontuacao =  $pontuacao - 20;
     }
 
-    $vistos = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.visto WHERE id = $id_pbl AND tipo='pbl'");
+    $vistos = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.visto WHERE id = $id_pbl AND tipo='poste'");
     $qtd_vistos = mysqli_fetch_assoc($vistos);
-    $reacao = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.gosto WHERE id = $id_pbl AND tipo='pbl'");
+    $reacao = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.reacao WHERE id = $id_pbl AND tipo='poste'");
     $qtd_reacao = mysqli_fetch_assoc($reacao);
 
     if ($qtd_reacao['qtd'] <= 0) {
@@ -118,13 +100,13 @@ function verificar_contacto($id,$id2) {
         return false;
     }
 }
-function qtd_de_reacao($id, $tipo = "pbl") {
+function qtd_de_reacao($id, $para = "poste") {
     global $bdnome2;
-    $query = mysqli_query(conn(),"SELECT count(*) AS qtd FROM $bdnome2.gosto WHERE id=$id AND tipo='$tipo'");
+    $query = mysqli_query(conn(),"SELECT count(*) AS qtd FROM $bdnome2.reacao WHERE id=$id AND para='$para'");
     $resultado =  mysqli_fetch_assoc($query);
     return $resultado['qtd'];
 }
-function qtd_de_cmt($id, $tipo = "pbl") {
+function qtd_de_cmt($id, $tipo = "poste") {
     $query = mysqli_query(conn(),"SELECT count(*) AS qtd FROM cmt WHERE id=$id AND tipo = '$tipo'");
     $resultado =  mysqli_fetch_assoc($query);
     return $resultado['qtd'];
@@ -135,7 +117,7 @@ function qtd_pbl_user($id_user) {
     return $resultado['qtd'];
 }
 function qtd_cmt_respostas($id_cmt) {
-    $query = mysqli_query(conn(),"SELECT count(*) AS qtd FROM cmt WHERE id_cmt_res=$id_cmt");
+    $query = mysqli_query(conn(),"SELECT count(*) AS qtd FROM cmt WHERE id=$id_cmt AND tipo = 'comentario' ");
     $resultado =  mysqli_fetch_assoc($query);
     return $resultado['qtd'];
 }

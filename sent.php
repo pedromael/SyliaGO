@@ -23,7 +23,6 @@ if (isset($_POST['btn_pbl'])) {
             }
             $nome_img = "IMG-" . $a . "-" . $_SESSION['id_user'] . "-pbl-" . date("Y.m.d-H.i.s") . $ext;
 
-            // Armazenando as informações da imagem
             array_push($imagens, array(
                 "indereco" => $nome_img,
                 "name" => $nome[$a],
@@ -61,7 +60,7 @@ if (isset($_POST['btn_pbl'])) {
             if ($id_pbl = $c->publicar($texto, $id_comunidade, $nome_img)) {
                 if (isset($id_comunidade)) {
                     if ($nome_img != NULL) {
-                        $tipo = "pbl";
+                        $tipo = "poste";
                         // Carregar documentos após a publicação
                         foreach ($imagens as $imagen) {
                             if ($c->carregar_documento($id_pbl, $tipo, $imagen['indereco'])) {
@@ -138,7 +137,7 @@ if (isset($_POST['btn_pbl_comunidade'])) {
             if  ($id_pbl = $c->publicar($texto,$id_comunidade,$nome_img)) {
                 if (isset($id_comunidade)) {
                     if ($nome_img != NULL) {
-                        $tipo = "pbl";
+                        $tipo = "poste";
                         if ($nome_img != NULL) {
                             $tipo = "pbl";
                             foreach ($imagens as $imagen) {

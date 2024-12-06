@@ -37,7 +37,7 @@ $privado =  ($privado['valor'] >= 1) ? true : false;
 $menbro = $cmdd->pertence_a_comunidade();
 
 if (isset($_FILES['img']) && $_SESSION['id_user'] == $sql['id_user']) {
-  if (carregar_img($_FILES['img'],"cmdd",$id_comunidade)) {
+  if (carregar_img($_FILES['img'],"comunidade",$id_comunidade)) {
     ?>
         <script>
             document.location.href = "./?cmndd=<?=criptografar($id_comunidade)?>"

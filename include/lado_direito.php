@@ -1,18 +1,17 @@
 <?php
 require "../algoritimos/atalho.php";
- require "../algoritimos/seguranca.php";
- $data = json_decode(file_get_contents('php://input'), true);
+require "../algoritimos/seguranca.php";
 ?>
 <div class="prev_logados_chat overflow-x-auto">
     <?php
-    $listagem = new verificar_logados($data['indereco']);
+    $listagem = new verificar_logados();
     $listagem->logados();
     ?>
 </div>
 <div id="corpo_lista_sms" class="overflow-y-auto">
     <div> 
     <?php
-    $listagem = new lista_mensagens($data['indereco']);
+    $listagem = new lista_mensagens();
     $numero_de_sms_encontradas = $listagem->getListaAmigos();
     if ($numero_de_sms_encontradas < 1) {
         ?>
@@ -40,10 +39,4 @@ require "../algoritimos/atalho.php";
     }
     ?>
     </div>
-</div>
-<div class="ultimas_notific">
-<?php
-//$n = new notificacoes();
-//$n->procurar();
-?>
 </div>

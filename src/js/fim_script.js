@@ -6,30 +6,31 @@ function verificar_tela() {
     navegando = true;
   });
 
-  if (window.innerWidth > 749 && !navegando) {
-      var xhr_sms = new XMLHttpRequest();
-      xhr_sms.open('POST', indereco+'include/mensagens.php', true);
-      xhr_sms.setRequestHeader('Content-Type', 'application/json');
+  if (window.innerWidth > 749 && !navegando) 
+  {
+    var xhr_sms = new XMLHttpRequest();
+    xhr_sms.open('POST', '/include/lado_direito.php', true);
+    xhr_sms.setRequestHeader('Content-Type', 'application/json');
 
-      xhr_sms.onload = function() {
-        if (xhr_sms.status === 200) {
-          corpo2.innerHTML = xhr_sms.responseText;
-        }
-      };
-      var data = {
-        indereco: indereco 
-      };
+    xhr_sms.onload = function() {
+      if (xhr_sms.status === 200) {
+        corpo2.innerHTML = xhr_sms.responseText;
+      }
+    };
 
-      var jsonData = JSON.stringify(data);
-      
-      xhr_sms.send(jsonData);
-  }else{
+    xhr_sms.send();
+  }else if(window.innerWidth < 750){
     corpo2.innerHTML = "";
   }
-  if (corpo3.innerHTML == "") {
-    if (window.innerWidth > 1049) {
+  
+  corpo3.addEventListener('onmouseover', function(){
+    navegando = true;
+  });
+
+  if (window.innerWidth > 1049 && !navegando) 
+  {
       var xhr_code = new XMLHttpRequest();
-      xhr_code.open('POST', indereco+'include/codigos.php', true);
+      xhr_code.open('POST', '/include/lado_esquerdo.php', true);
       xhr_code.setRequestHeader('Content-Type', 'application/json');
 
       xhr_code.onload = function() {
@@ -37,38 +38,25 @@ function verificar_tela() {
           corpo3.innerHTML = xhr_code.responseText;
         }
       };
-      var data = {
-        indereco: indereco 
-      };
 
-      var jsonData = JSON.stringify(data);
-      
-      xhr_code.send(jsonData);
-    }else{
+      xhr_code.send();
+  }else if(window.innerWidth < 1050){
       corpo3.innerHTML = "";
-    }
-  }else{
-    if (window.innerWidth < 1050) {
-      corpo3.innerHTML = "";
-    }
   }
-  
 }
+
 verificar_tela()
 setInterval(verificar_tela,3000);
+
 function maisPbl() {
   var mais_pbl = document.querySelector('.mais_pbl_process')
   if (!mais_pbl.classList.contains('false')) {
-    // Crie um objeto XMLHttpRequest
     var xhr = new XMLHttpRequest();
     
-    // Defina o método e a URL do script PHP
     xhr.open('POST', 'algoritimos/mais_pbl.php', true);
-    
-    // Defina o cabeçalho para enviar dados JSON
+
     xhr.setRequestHeader('Content-Type', 'application/json');
-    
-    // Defina o callback para manipular a resposta
+
     xhr.onload = function() {
       if (xhr.status === 200) {
         if (xhr.responseText == "") {
@@ -137,7 +125,7 @@ setInterval(actualizar, 500)
 const corpo_principal = document.querySelector("#corpo");
 let scrollTimer;
 corpo_principal.addEventListener('scroll', function() {
-  var atraso_de_processo = 300;//em px
+  var atraso_de_processo = 300; // em px
   if (corpo_principal.scrollTop + corpo_principal.clientHeight >= corpo_principal.scrollHeight - atraso_de_processo) {
     if (document.querySelector('.mais_pbl_process')) {
       maisPbl(corpo_principal);

@@ -114,10 +114,10 @@
             </li>
             <li class="mb-2">
                 <a href="#" class="text-decoration-none text-dark">
-                    Idioma
+                    Mudar Idioma
                 </a>
             </li>
-            <li>
+            <li class="mb-2">
                 <a href="#" class="text-decoration-none text-dark">
                     Ajuda
                 </a>

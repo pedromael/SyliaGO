@@ -42,7 +42,7 @@ class postes extends process
         $id_pbl = $row['id_pbl'];
         $imagen = pegar_foto_perfil("perfil",$row['id_user']);
         $id = $sqll['id_user'];
-        $do = mysqli_query($this->link, "SELECT * FROM doc WHERE id=$id_pbl AND (tipo='pbl' OR tipo='video')");
+        $do = mysqli_query($this->link, "SELECT * FROM doc WHERE id=$id_pbl AND (tipo='poste' OR tipo='video')");
         $inderecos = array();
         while ($doc = mysqli_fetch_assoc($do)) {
             array_push($inderecos,"/src/userFile/".$this->usuario($row['id_user'])['code_nome']."/img/".$doc['indereco']);
@@ -64,7 +64,7 @@ class postes extends process
                     }
                     ?>  
                     <td id="img">
-                        <a href="/perfil/index.php?user=<?=criptografar($id)?>">
+                        <a href="/perfil/?user=<?=criptografar($id)?>">
                             <div id="img" class="loader" style="background-image: url(<?=$imagen?>);"></div>
                         </a>
                     </td>
@@ -204,15 +204,15 @@ class postes extends process
                         <div class="container">
                             <div class="row">
                                 <div class="reac_pbl col">
-                                    <div class="centralizador reac<?='pbl'.$id_pbl?>" onclick="reagir(<?=$id_pbl?>,'pbl')">
+                                    <div class="centralizador reac<?='pbl'.$id_pbl?>" onclick="reagir(<?=$id_pbl?>,'gosto','poste')">
                                         <?php    
-                                        if ($this->qtd_reacao($id_pbl,'pbl',$_SESSION['id_user']) > 0) {
+                                        if ($this->qtd_reacao($id_pbl,'poste',$_SESSION['id_user']) > 0) {
                                             ?>
-                                            <img class="teste add" src="/bibliotecas/bootstrap/icones/heart-fill.svg" alt=""><span><?=$this->qtd_reacao($id_pbl,'pbl')?></span>
+                                            <img class="teste add" src="/bibliotecas/bootstrap/icones/heart-fill.svg" alt=""><span><?=$this->qtd_reacao($id_pbl,'poste')?></span>
                                             <?php
                                         }else {
                                             ?>
-                                            <img class="" src="/bibliotecas/bootstrap/icones/heart.svg" alt=""> <span><?=$this->qtd_reacao($id_pbl,'pbl')?></span>
+                                            <img class="" src="/bibliotecas/bootstrap/icones/heart.svg" alt=""> <span><?=$this->qtd_reacao($id_pbl,'poste')?></span>
                                             <?php
                                         }
                                         ?>

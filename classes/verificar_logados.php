@@ -2,7 +2,7 @@
 class verificar_logados extends conexao
 {
     private $id_user;
-    public function __construct($indereco){
+    public function __construct(){
         parent::__construct();
         $this->id_user = $_SESSION['id_user'];
     }

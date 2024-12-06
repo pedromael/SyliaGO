@@ -17,7 +17,7 @@
  }else {
     $id_cmt = descriptografar($_GET['cmt']);
  }
- $sql = $comentarios->comentario($id_cmt,"pbl");
+ $sql = $comentarios->comentario($id_cmt);
 ?>
 <html lang="pt">
 <head>
@@ -53,7 +53,7 @@
                     $_SESSION['cmt_visualizado'] = array();
                     $comentarios->id = $sql['id'];
                     $comentarios->id_cmt = $sql['id_cmt'];
-                    $comentarios->pegar("pbl", 8);
+                    $comentarios->pegar("comentario", 8);
                     ?>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 <div class="formulario_normal_de_envio">
                     <textarea name="texto_cmt" id="" placeholder="a tua opiniao e importante"></textarea>
                     <div class="carregar"  style="background-image: url(/bibliotecas/bootstrap/icones/file-earmark-image.svg);"></div>
-                    <button name="btn_cmt" style="background-image: url(/bibliotecas/bootstrap/icones/send.svg);" class="form-control" onclick="comentar('<?=criptografar($sql['id'])?>','pbl','<?=criptografar($sql['id_cmt'])?>')"></button>
+                    <button name="btn_cmt" style="background-image: url(/bibliotecas/bootstrap/icones/send.svg);" class="form-control" onclick="comentar('<?=criptografar($sql['id_cmt'])?>','comentario')"></button>
                 </div>
             </footer>
         </div>

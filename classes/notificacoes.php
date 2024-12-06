@@ -7,71 +7,12 @@ class notificacoes extends process
         parent::__construct();
         $this->id_user = $_SESSION['id_user'];
     }
-    private function mostrar($sql, $stilo_de_bordas)
+    private function mostrar($sql)
     {
-        $stilo_de_bordas = $stilo_de_bordas == 1 ? 'notific_1' : 'notific_2';
-
-        $id_dest = $sql['id_dest'];
+        $imagen = pegar_foto_perfil("perfil", $sql['id_user']);
         $id = $sql['id'];
-        $user = $this->usuario($id_dest);
-        $imagen = pegar_foto_perfil('perfil', $id_dest);
-        
-        $data = resumir_data($sql['data']);
-        $userName = htmlspecialchars($user['nome']);
 
-        if ($sql['tipo'] == "cmt" || $sql['tipo'] == "cmt_code") {
-            $id_historico = $sql['id_historico'];
-            $id = mysqli_query(conn(), "SELECT id FROM pro_start_outros.historico_id WHERE id_historico = $id_historico");
-            $id = mysqli_fetch_assoc($id);
-            if (empty($id['id'])) return false;
-            $id = $id['id'];
-
-            if ($sql['tipo'] == "cmt") {
-                $cmt = mysqli_query(conn(), "
-                    SELECT cmt.texto AS texto_cmt, pbl.id_pbl, tipo, pbl.texto AS texto_pbl 
-                    FROM pbl 
-                    INNER JOIN cmt ON cmt.id = pbl.id_pbl
-                    WHERE cmt.id_cmt = $id
-                ");
-                $cmt = mysqli_fetch_assoc($cmt);
-
-                $commentText = resumir_texto($cmt['texto_cmt'], 28);
-                $postId = criptografar($cmt['id_pbl']);
-                echo $this->renderNotification(
-                    $imagen,
-                    $userName,
-                    " comentou na tua publicação",
-                    $commentText,
-                    "/pbl/?pbl=$postId",
-                    "chat-left-dots",
-                    $data,
-                    $stilo_de_bordas
-                );
-            } elseif ($sql['tipo'] == "cmt_code") {
-                $cmt = $this->pdo->prepare("
-                    SELECT cmt.texto AS texto_cmt, cod.id_code, tipo, cod.titulo AS texto_pbl 
-                    FROM codigos AS cod
-                    INNER JOIN cmt ON cmt.id = cod.id_code
-                    WHERE cmt.id_cmt = :id AND cmt.tipo = 'code'
-                ");
-                $cmt->bindValue(":id", $id);
-                $cmt->execute();
-                $cmt = $cmt->fetch();
-
-                $commentText = resumir_texto($cmt['texto_cmt'], 28);
-                $codeId = criptografar($cmt['id_code']);
-                echo $this->renderNotification(
-                    $imagen,
-                    $userName,
-                    " comentou no teu código",
-                    $commentText,
-                    "/coder/ver.php?coder=$codeId&modificar=0&comentar=1",
-                    "chat-left-dots",
-                    $data,
-                    $stilo_de_bordas
-                );
-            }
-        } elseif ($sql['tipo'] == "reagir_pbl") {
+        if($sql['tipo'] == "reacao" && $sql['de'] == 'poste'){
             $pbl = mysqli_query(conn(), "
                 SELECT pbl.texto, pbl.id_pbl 
                 FROM pbl 
@@ -83,33 +24,42 @@ class notificacoes extends process
             $postId = criptografar($pbl['id_pbl']);
             echo $this->renderNotification(
                 $imagen,
-                $userName,
+                $sql['nome'],
                 " reagiu à tua publicação",
                 $reactionText,
                 "/pbl/?pbl=$postId",
                 "heart-fill",
-                $data,
-                $stilo_de_bordas
+                $sql['data']
             );
-        } elseif ($sql['tipo'] == "contacto_aceite") {
-            $profileLink = "/perfil/?user=" . criptografar($id_dest);
+        } elseif ($sql['tipo'] == "comfirmado" && $sql['de'] == "perfil") {
+            $profileLink = "/perfil/?user=" . criptografar($id);
             echo $this->renderNotification(
                 $imagen,
-                $userName,
+                $sql['nome'],
                 " aceitou teu pedido de amizade",
                 "",
                 $profileLink,
                 "people",
-                $data,
-                $stilo_de_bordas
+                $sql['data']
+            );
+        } elseif ($sql['tipo'] == "comentario" && $sql['de'] == "poste") {
+            $profileLink = "/perfil/?user=" . criptografar($id);
+            echo $this->renderNotification(
+                $imagen,
+                $sql['nome'],
+                " comentou no teu poste",
+                "",
+                $profileLink,
+                "chat-left-dots",
+                $sql['data']
             );
         }
     }
 
-    private function renderNotification($image, $userName, $action, $content, $link, $icon, $date, $style)
+    private function renderNotification($image, $userName, $action, $content, $link, $icon, $date)
     {
     return <<<HTML
-    <div class="$style d-flex align-items-start p-3 mb-3 border rounded shadow-sm">
+    <div class="d-flex align-items-start p-3 mb-3 border rounded shadow-sm">
         <div class="profile-pic rounded-circle" style="background-image: url('$image'); width: 50px; height: 50px; background-size: cover; background-position: center;"></div>
         <div class="ms-3 flex-grow-1">
             <a href="$link" class="text-decoration-none text-dark">
@@ -129,12 +79,14 @@ class notificacoes extends process
 
     public function procurar($tipo = false)
     {
-        $query =  $this->pdo->prepare("SELECT id_historico,h.id_user AS id_dest, h.id, tipo , h.data FROM $this->bdnome2.historico AS h
-        LEFT JOIN pbl AS p ON (h.id = p.id_pbl AND p.id_user = :user AND (h.tipo = 'cmt' OR h.tipo = 'reagir_pbl'))
-        LEFT JOIN contacto AS c ON (h.id = c.id_contacto AND c.id_user = :user AND c.id_user_dest = h.id_user)
-        LEFT JOIN codigos AS cod ON (h.id = cod.id_code AND cod.id_user = :user AND h.tipo = 'cmt_code')
-        WHERE (((p.id_pbl > 0 OR cod.id_code > 0) AND tipo != 'contacto_aceite') OR (c.id_contacto > 0)) AND h.id_user != :user ORDER BY id_historico DESC");
-        $query->bindValue(":user", $this->id_user);
+        $query =  $this->pdo->prepare("SELECT h.id_historico, h.id, h.id_user, emissor.nome AS nome, h.tipo, h.de, h.data FROM $this->bdnome2.historico AS h
+        LEFT JOIN usuarios AS emissor ON (emissor.id_user = h.id_user)
+        LEFT JOIN pbl AS p ON (p.id_pbl = h.id AND p.id_user = :user AND h.de = 'poste')
+        LEFT JOIN cmt AS c ON (c.id_cmt = h.id AND c.id_user = :user AND h.de = 'comentario')
+        LEFT JOIN usuarios AS u ON (u.id_user = p.id_user OR u.id_user = c.id_user)
+        WHERE (p.id_pbl > 0 OR c.id_cmt > 0) AND u.id_user = :user AND emissor.id_user != :user
+        ");
+        $query->bindValue(":user", $_SESSION['id_user']);
         $query->execute();
         
         if ($tipo) {
@@ -142,18 +94,8 @@ class notificacoes extends process
         }
         $query = $query->fetchAll();
         foreach ($query as $sql) {
-            if (!isset($stilo_de_bordas)) {
-                $stilo_de_bordas = 1;
-            }
-            if ($sql['id'] != NULL) {
-                if ($stilo_de_bordas == 1) {
-                    $stilo_de_bordas = 2 ;
-                }else {
-                    $stilo_de_bordas = 1;
-                }
-                $this->mostrar($sql,$stilo_de_bordas);
-                $this->marcar_visto($sql['id_historico'],"notific");
-            }
+            $this->mostrar($sql);
+            //$this->marcar_visto($sql['id_historico'],"notific");
         }  
     }
 }
