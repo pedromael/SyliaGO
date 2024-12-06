@@ -116,7 +116,7 @@ if (isset($_FILES['img']) && $_SESSION['id_user'] == $sql['id_user']) {
       </div>
       <div id="corpo" class="crp">
         <?php
-        $imagen = pegar_foto_perfil("cmdd",$id_comunidade);
+        $imagen = pegar_foto_perfil("comunidade",$id_comunidade);
         ?>
           <style>
               #img_comunidade{

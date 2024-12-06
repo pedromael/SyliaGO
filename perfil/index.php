@@ -51,15 +51,6 @@
     <link rel="stylesheet" href="/src/css/stilo.css">
     <link rel="stylesheet" href="/src/css/perfil.css">
     <link rel="stylesheet" href="/src/css/coder.css">
-    <link href="/bibliotecas/codemirror-5.7/lib/codemirror.css" rel="stylesheet">
-    <link rel="stylesheet" href="/bibliotecas/codemirror-5.7/theme/base16-dark.css">
-    <link rel="stylesheet" href="/bibliotecas/codemirror-5.7/theme/dracula.css">
-    <link rel="stylesheet" href="/bibliotecas/codemirror-5.7/theme/eclipse.css">
-    <script src="/bibliotecas/codemirror-5.7/lib/codemirror.js"></script>
-    <script src="/bibliotecas/codemirror-5.7/lib/codemirror.js"></script>
-    <script src="/bibliotecas/codemirror-5.7/addon/hint/show-hint.js"></script>
-    <script src="/bibliotecas/codemirror-5.7/addon/hint/javascript-hint.js"></script>
-    <script src="/bibliotecas/codemirror-5.7/mode/javascript/javascript.js"></script>
     <script src="/src/js/script.js"></script>
     <title><?=$sql['nome']?></title>
 </head>

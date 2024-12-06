@@ -2,7 +2,15 @@
 require "../algoritimos/atalho.php";
 require "../algoritimos/seguranca.php";
 
-$r = new repositorio(1);
+if (isset($_GET["id_repositorio"])) {
+    $r = new repositorio(descriptografar($_GET['id_repositorio']));
+}else{
+    ?>
+        <script>
+            document.location.href = "../"
+        </script>
+    <?php
+}
 
 if (!isset($_SESSION['dir'])) {
     $_SESSION['dir'] = $r->diretotio;

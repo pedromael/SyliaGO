@@ -5,8 +5,8 @@ class conexao
     public $erro;
     public $bdnome = "sylia";
     public $bdhost = "localhost";
-    public $bdpass = "543216+";
-    public $bduser = "pedmanue";
+    public $bdpass = "";
+    public $bduser = "root";
     public $bdnome2 = "sylia_outros";
     public $bdrepositorio = "sylia_repositorios";
 

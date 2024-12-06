@@ -204,7 +204,7 @@ function pegar_foto_perfil($tipo,$id)
         }else if (empty($imagen)) {   
             return "/src/img/sem_img_no_perfil.jpeg";
         }
-    }elseif($tipo == "cmdd") {
+    }elseif($tipo == "comunidade") {
         $img = mysqli_query(conn(), "SELECT * FROM doc WHERE id=$id AND tipo='$tipo' ORDER BY id_doc DESC");
         $img = mysqli_fetch_assoc($img);
         if (isset($img['indereco'])) {

@@ -10,7 +10,7 @@ class repositorio extends informacoes_usuario
         if ($id_repositorio != null) {
             $this->id_repositorio = $id_repositorio;
             
-            $this->diretotio = "../src/userFile/".$this->user['code_nome']."/repositorio/".$this->repositorio($id_repositorio)."/";
+            $this->diretotio = "../src/userFile/".$this->user['code_nome']."/repositorio/".$this->repositorio($id_repositorio)['nome']."/";
         }
     }
 

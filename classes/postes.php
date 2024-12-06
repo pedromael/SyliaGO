@@ -60,7 +60,7 @@ class postes extends process
                 <tr>
                     <?php
                     if ($row['id_comunidade'] > 0 && $this->oque == "pbl") {
-                        $imagen = pegar_foto_perfil("cmdd",$row['id_comunidade']);
+                        $imagen = pegar_foto_perfil("comunidade",$row['id_comunidade']);
                     }
                     ?>  
                     <td id="img">
