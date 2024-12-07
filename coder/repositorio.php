@@ -80,8 +80,8 @@ if (!isset($_SESSION["id_user"])) {
 
     <!-- Área de conteúdo principal -->
     <div class="container-fluid flex-grow-1 d-flex">
-        <!-- Coluna de 10% -->
-        <div class="menu-lateral col-1 d-flex">
+        <!-- Coluna de 20% -->
+        <div class="menu-lateral col-2 d-flex">
             <h2>Menu Lateral</h2>
             <div class="container">
                 <ul>
@@ -98,9 +98,109 @@ if (!isset($_SESSION["id_user"])) {
             </div>
         </div>
 
-        <!-- Coluna de 90% -->
-        <div class="conteudo-principal col-11 d-flex">
-            Conteúdo Principal
+        <!-- Coluna de 80% -->
+        <div class="conteudo-principal col-10">
+            <div class="container mt-4">
+                <!-- Nome e ações do repositório -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><?= htmlspecialchars($r->repositorio()['nome']) ?></h2>
+                    <div>
+                        <a href="<?=$r->diretotio?>" target="_blank" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-github"></i> Repositório Remoto
+                        </a>
+                        <button class="btn btn-outline-success">Fork</button>
+                    </div>
+                </div>
+
+                <!-- Informações gerais -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <p class="text-muted"><?= htmlspecialchars($r->repositorio()['descricao']) ?></p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <span class="badge bg-primary">HTML</span>
+                        <span class="badge bg-secondary">CSS</span>
+                        <span class="badge bg-success">JavaScript</span>
+                    </div>
+                </div>
+
+                <!-- Commits recentes -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Commits Recentes</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <?php foreach ($r->commits_recentes as $commit): ?>
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <strong><?= htmlspecialchars($commit['autor']) ?></strong> - 
+                                            <span><?= htmlspecialchars($commit['mensagem']) ?></span>
+                                        </div>
+                                        <small class="text-muted"><?= htmlspecialchars($commit['data']) ?></small>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Colaboradores -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Colaboradores</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap">
+                            <?php foreach ($r->colaboradores as $colaborador): ?>
+                                <div class="me-3 mb-3 text-center">
+                                    <img src="<?= htmlspecialchars($colaborador['avatar']) ?>" alt="Avatar" class="rounded-circle" width="50" height="50">
+                                    <p class="mt-2 mb-0"><?= htmlspecialchars($colaborador['nome']) ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Issues e Pull Requests -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Issues</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    <?php foreach ($r->issues as $issue): ?>
+                                        <li class="list-group-item">
+                                            <a href="#" class="text-decoration-none"><?= htmlspecialchars($issue['titulo']) ?></a>
+                                            <span class="badge bg-warning"><?= htmlspecialchars($issue['status']) ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Pull Requests</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    <?php foreach ($r->pull_requests as $pr): ?>
+                                        <li class="list-group-item">
+                                            <a href="#" class="text-decoration-none"><?= htmlspecialchars($pr['titulo']) ?></a>
+                                            <span class="badge bg-info"><?= htmlspecialchars($pr['status']) ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
