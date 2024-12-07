@@ -244,10 +244,10 @@ a{
     margin: rgb(39 2 77);
 }
 .corpos{
-    top: 54px;
+    top: 56px;
     position: fixed;
     width: 100%;
-    height:  calc(100% - 54px - 35px);
+    height:  calc(100% - 56px - 35px);
     background-color: transparent;
 }
 .corpos .crp{

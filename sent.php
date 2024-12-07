@@ -139,7 +139,7 @@ if (isset($_POST['btn_pbl_comunidade'])) {
                     if ($nome_img != NULL) {
                         $tipo = "poste";
                         if ($nome_img != NULL) {
-                            $tipo = "pbl";
+                            $tipo = "poste";
                             foreach ($imagens as $imagen) {
                                 if ($c->carregar_documento($id_pbl,$tipo,$imagen['indereco'])) {
     

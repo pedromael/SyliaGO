@@ -2,10 +2,10 @@
 <nav id="metade_da_nav" onclick="abri_fecha('#segunda_nav')">
     <img src="/bibliotecas/bootstrap/icones/border-width.svg">
 </nav>
-<nav class="px-3 py-2">
+<nav class="px-1 py-2">
     <div class="container_nav">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <ul class="nav col-12 justify-content-center my-md-0 text-small">
+            <ul class="nav col justify-content-center my-md-0 text-small">
             <li>
                 <a href="/./" class="nav-link text-secondary">
                 <img src="/bibliotecas/bootstrap/icones/house.svg">
@@ -17,11 +17,10 @@
                 </a>
             </li>
             <li>
-                <a href="/coder/" class="nav-link text-white">
+                <a href="/coder/" class="nav-link text-white p-1">
                     <button id="coder">GO</button>
                 </a>
             </li>
-
             <li>
                 <a href="/mensagens/" class="nav-link text-white">
                     <img src="/bibliotecas/bootstrap/icones/chat-left-dots.svg"/> 

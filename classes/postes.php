@@ -246,9 +246,9 @@ class postes extends process
             </table>
         </div>
         <?php 
-        $this->marcar_visto($id_pbl,"pbl");
+        $this->marcar_visto($id_pbl,"poste");
         if ($visualizacao_unica) {
-            $this->marcar_lido($id_pbl,"pbl");
+            $this->marcar_lido($id_pbl,"poste");
         }
         array_push($_SESSION['visualizado'],$id_pbl);
     }

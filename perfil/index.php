@@ -26,7 +26,6 @@
  $sql = mysqli_fetch_assoc($sql);
 
  $imagen_perfil = pegar_foto_perfil("perfil",$id_user);
- $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
 
  if (isset($_FILES['img'])) {
     

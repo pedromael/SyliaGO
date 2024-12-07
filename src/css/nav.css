@@ -98,7 +98,7 @@ nav .pesquisar{
     bottom: 0;
     height: 43px;
     margin-bottom: 6px;
-    border-width: 5px;
+    border-width: 2px;
     border-style: solid;
     border-radius: 20px;
     border-color: var(--cor_terc);
@@ -125,6 +125,11 @@ nav .pesquisar{
 @media (max-width: 750px) {
     .pesquisar{
         display: none;
+    }
+    body nav{
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 

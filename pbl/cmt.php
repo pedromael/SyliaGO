@@ -33,9 +33,9 @@
 <body>
     <script src="/src/js/script.js"></script>
     <script>var indereco = "../";</script>
-    <nav id="nav_simples">
-        <a href="../" class="link">pagina inicial</a>
-    </nav>
+    <?php
+        require "../include/nav.php";
+    ?>
     <div class="corpos">
         <div class="corpo3 crp"></div>
         <div id="corpo" class="crp">
