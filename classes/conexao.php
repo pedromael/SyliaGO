@@ -4,9 +4,9 @@ class conexao
     public $pdo;
     public $erro;
     public $bdnome = "sylia";
-    public $bdhost = "localhost";
-    public $bdpass = "";
-    public $bduser = "root";
+    public $bdhost = "192.168.18.17";
+    public $bdpass = "5432167o+";
+    public $bduser = "pedmanue";
     public $bdnome2 = "sylia_outros";
     public $bdrepositorio = "sylia_repositorios";
 
