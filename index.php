@@ -34,7 +34,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
     
     <link rel="stylesheet" href="src/css/stilo.css">
     <link rel="stylesheet" href="src/css/coder.css">
-    <title>Pro-Start</title>
+    <title>SyliaGO</title>
 </head>
 <body> 
     <script>var indereco="./";</script>
@@ -117,12 +117,15 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                         $storie = new stories;
                         foreach ($storie->stories as $row) {
                             $dados = $storie->storie_info($row['id_user']);
-                            $imagen_user = '/src/userFile/'.(new informacoes_usuario())->usuario($row['id_user'])['code_nome'].'/img/'.$dados['bg_storie'];
+                            $capa_storie = '/src/userFile/'.(new informacoes_usuario())->usuario($row['id_user'])['code_nome'].'/img/'.$dados['bg_storie'];
                             ?> 
-                            <div class="item" onclick="abrir_storie(<?=$row['id_user']?>)" style="background-image : url(<?=$imagen_user?>);">
+                            <div class="item" onclick="abrir_storie(<?=$row['id_user']?>)" style="background-image : url(<?=$capa_storie?>);">
                                 <div class="usuario">
-                                    <div class="nome">
-                                        <?=$dados['nome']?>
+                                    <div class="d-flex align-items-center">
+                                        <div id="img_user_storie" class="m-1" style="background-image: url(<?=pegar_foto_perfil("perfil", $row['id_user'])?>);"></div>
+                                        <div class="nome">
+                                            <?=$dados['nome']?>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="numero_de_storie">

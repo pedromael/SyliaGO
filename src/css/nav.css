@@ -162,12 +162,14 @@ nav .pesquisar{
 #segunda_nav .d-flex {
     margin-bottom: 20px;
 }
-
-#segunda_nav img {
-    border-radius: 50%;
+#segunda_nav a.d-flex {
+    margin-bottom: 0;
 }
+
 #segunda_nav ul li{
     display: inline-block;
+    background-color: var(--cor_terc);
+    border-radius: 5px;
 }
 #segunda_nav .list-unstyled li a {
     color: #fff;

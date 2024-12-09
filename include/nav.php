@@ -89,7 +89,7 @@
                         <span class="badge bg-primary ms-auto"><?=$c->verificar_qtd("pdd", $user['id_user'])?></span>
                     <?php } ?>
                 </a>
-            </li>
+            </li> 
             <li>
                 <a href="/salvos.php" class="d-flex align-items-center text-decoration-none text-dark">
                     <img src="/bibliotecas/bootstrap/icones/bookmark.svg" alt="" class="me-2" style="width: 24px; height: 24px;">

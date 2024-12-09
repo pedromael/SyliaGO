@@ -437,16 +437,24 @@ a{
     background-position: center;
     transition: all 0.7s;
 }
+.item #img_user_storie{
+    border: 2px solid rgb(0, 17, 255);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 2px 2px 4px black;
+}
 .item:hover{
-    box-shadow: 2px 2px 4px #373636;
-    padding: 10px;
+    box-shadow: 1px 1px 2px #373636;
     opacity: 100%;
 }
 .numero_de_storie{
     display: flex;
     justify-content: center;
     height: 20;
-    margin-top: 40px;
+    margin-top: 30px;
 }
 .numero_de_storie .content{
     width: max-content;
@@ -462,7 +470,7 @@ a{
     background-color: #ddd;
 }
 .numero_de_storie .n_visto{
-    background-color: var(--cor_pri);
+    background-color: rgb(0, 17, 255);
     box-shadow: 1px 1px 4px black;
 }
 .item .usuario{
