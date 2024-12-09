@@ -33,225 +33,83 @@ class postes extends process
         $sql->execute();
         return $sql->fetch();
     }
-    public function mostrar($row,$visualizacao_unica=false,$reac=true,$partilha=false)
-    { 
-        if (empty($row['id_user'])) {
-            return false;
-        }
-        $sqll = $this->usuario($row['id_user']);
+    public function mostrar($row, $visualizacao_unica = false, $reac = true, $partilha = false)
+    {
+        if (empty($row['id_user'])) return false;
+    
+        $usuario = $this->usuario($row['id_user']);
         $id_pbl = $row['id_pbl'];
-        $imagen = pegar_foto_perfil("perfil",$row['id_user']);
-        $id = $sqll['id_user'];
-        $do = mysqli_query($this->link, "SELECT * FROM doc WHERE id=$id_pbl AND (tipo='poste' OR tipo='video')");
-        $inderecos = array();
-        while ($doc = mysqli_fetch_assoc($do)) {
-            array_push($inderecos,"/src/userFile/".$this->usuario($row['id_user'])['code_nome']."/img/".$doc['indereco']);
-        }  
-
-        $comunidade=[];
-        if ($row['id_comunidade']) {
-            $comunidade = $this->comunidade->comunidade($row['id_comunidade']);
-        }
+        $id_user = $usuario['id_user'];
+        $nome_usuario = $usuario['nome'];
+        $imagem_perfil = pegar_foto_perfil("perfil", $row['id_user']);
+        $inderecos = array_map(function ($doc) use ($usuario) {
+            return "/src/userFile/{$usuario['code_nome']}/img/{$doc['indereco']}";
+        }, mysqli_fetch_all(mysqli_query($this->link, "SELECT * FROM doc WHERE id=$id_pbl AND (tipo='poste' OR tipo='video')"), MYSQLI_ASSOC));
+    
         $qtd_indereco = count($inderecos);
-
-        if (!$partilha) {?><div id="pbl" class=""><?php }else{?><div id="" class="pbl_partilhadaa"><?php }
+        $comunidade = $row['id_comunidade'] ? $this->comunidade->comunidade($row['id_comunidade']) : null;
+    
+        $classPartilha = $partilha ? "pbl_partilhada" : "";
         ?>
-            <table>
-                <tr>
-                    <?php
-                    if ($row['id_comunidade'] > 0 && $this->oque == "pbl") {
-                        $imagen = pegar_foto_perfil("comunidade",$row['id_comunidade']);
-                    }
-                    ?>  
-                    <td id="img">
-                        <a href="/perfil/?user=<?=criptografar($id)?>">
-                            <div id="img" class="loader" style="background-image: url(<?=$imagen?>);"></div>
+        <div id="pbl" class="<?= $classPartilha ?> card mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <a href="/perfil/?user=<?= criptografar($id_user) ?>">
+                        <img src="<?= $imagem_perfil ?>" class="rounded-circle me-2" alt="Perfil" style="width: 50px; height: 50px;">
+                    </a>
+                    <div>
+                        <?php if ($comunidade && $this->oque == "pbl"): ?>
+                            <span><a class="fw-bold" href="/comunidade/?cmndd=<?= criptografar($row['id_comunidade']) ?>"><?= $comunidade['nome'] ?></a></span><br>
+                        <?php endif; ?>
+                        <span><a href="/perfil/?user=<?= criptografar($id_user) ?>" class="text-decoration-none"><?= $nome_usuario ?></a></span>
+                        <div class="text-muted"><?= resumir_data($row['data']) ?></div>
+                    </div>
+                    <div class="ms-auto">
+                        <button class="btn btn-light" onclick="abrir_info_pbl(<?= $id_pbl ?>)">...</button>
+                    </div>
+                </div>
+                
+                <p class="text-muted mb-3"><?= htmlspecialchars_decode($row['texto']) ?></p>
+    
+                <?php if ($qtd_indereco > 0): ?>
+                    <div class="mb-3">
+                        <div class="d-flex flex-wrap gap-2">
+                            <?php foreach (array_slice($inderecos, 0, 5) as $indereco): ?>
+                                <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
+                                    <img src="<?= $indereco ?>" class="img-fluid" style="max-width: 150px; border-radius: 8px;" alt="Poste">
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+    
+                <?php if ($reac): ?>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-light" onclick="reagir(<?= $id_pbl ?>, 'gosto', 'poste')">
+                            <img src="/bibliotecas/bootstrap/icones/<?= $this->qtd_reacao($id_pbl, 'poste', $_SESSION['id_user']) > 0 ? 'heart-fill.svg' : 'heart.svg' ?>" alt="Gosto">
+                            <?= $this->qtd_reacao($id_pbl, 'poste') ?>
+                        </button>
+                        <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>&cmt=true" class="btn btn-light">
+                            <img src="/bibliotecas/bootstrap/icones/chat-dots.svg" alt="Comentários"> <?= qtd_de_cmt($id_pbl) ?>
                         </a>
-                    </td>
-                    <td id="nome" colspan="2">
-                        <?php
-                        if ($row['id_comunidade'] > 0 && $this->oque == "pbl") {
-                            ?>
-                            <span>
-                                <a class="nome_comunidade" href="/comunidade/?cmndd=<?=criptografar($row['id_comunidade'])?>"><?=$comunidade['nome']?></a><br>
-                            </span>
-                            <?php
-                        }
-                        if ($this->oque == "pbl") {
-                            if ($row['id_comunidade']) {
-                                ?>
-                                <span class="da_comunidade">
-                                    <a href="/perfil/?user=<?=criptografar($id)?>"><?=$sqll['nome']?></a>
-                                </span>
-                                <?php
-                            }else {
-                                ?>
-                                <span>
-                                    <a href="/perfil/?user=<?=criptografar($id)?>"><?=$sqll['nome']?></a>
-                                </span>
-                                <?php
-                                $id = $sqll['id_user'];
-                                $v_a = $this->pdo->prepare("SELECT count(*) AS total FROM contacto WHERE (id_user = $id
-                                AND id_user_dest = :id) OR (id_user = :id AND id_user_dest = $id)");
-                                $v_a->bindValue(":id", $this->user['id_user']);
-                                $v_a->execute();
-                                $v_a  = $v_a->fetch();
-                                if ($v_a['total'] <= 0 && $id != $this->user['id_user']) {
-                                    ?>
-                                    <div class="img_add_user">
-                                        <img src="/bibliotecas/bootstrap/icones/person-fill-add.svg" alt="">
-                                    </div>
-                                    <?php
-                                }
-                            }
-                            
-                        }else {
-                            ?>
-                                <a href="<?=criptografar($id)?>"><?=$sqll['nome']?></a>
-                            <?php        
-                        }
-                        ?>
-                    </td>
-                    <?php if (!$partilha) {?>
-                        <td id="mais_pbl">
-                            <span align="right" class="mais <?="pbl",$id_pbl?>" onclick="abrir_info_pbl(<?=$id_pbl?>)">...</span>
-                            <br>
-                            <span class="data">
-                                <?=resumir_data($row['data'])?>
-                            </span>
-                        </td>
-                        <?php
-                            $diretorio = "include/mais_pbl.php";
-                            if (file_exists($diretorio)) {
-                                require $diretorio;
-                            }else{ require "../".$diretorio;}
-                        }
-                    ?>
-                </tr>
-                <tr id="txt">
-                    <td colspan="3"><p class="text <?=verificar_texto_poste(strlen($row['texto']),$qtd_indereco,$row['id_partilha'])?> pbl_text<?=$id_pbl?>"><?=htmlspecialchars_decode($row['texto'])?></p></td>
-                </tr>
-                <?php
-                if (count($inderecos) > 0 && !$visualizacao_unica) {
-                ?>
-                <tr id="img_pbl">
-                    <td colspan="3">
-                        <figcaption>
-                            <?php
-                            $a=0;
-                            foreach ($inderecos as $indereco) {
-                                if ($a == 0) {$class = "primeiro";}else {$class = "";}
-                                if ($a == 1 && $qtd_indereco > 5) {$class = "primeiro";}
-                                if ($a < 3 && count($inderecos) > 4) {$class = "primeiro";}
-                                if ($qtd_indereco <= 5) {
-                                    ?>
-                                        <a href="/pbl/?pbl=<?=criptografar($id_pbl)?>"><img src="<?=$indereco?>" alt="" class="qtd<?=$qtd_indereco?> <?=$class?>"></a>
-                                    <?php    
-                                }else {
-                                    ?>
-                                        <a href="/pbl/?pbl=<?=criptografar($id_pbl)?>"><img src="<?=$indereco?>" alt="" class="qtd_mais <?=$class?>"></a>
-                                    <?php
-                                }
-                                if ($a == 4) {break;}
-                                $a++;
-                            }
-                            ?>
-                        </figcaption>
-                    </td>
-                </tr>
-                <?php
-                }elseif(count($inderecos) > 0 && $visualizacao_unica){
-                    $class = "unica";
-                    ?>
-                    <tr id="img_pbl" class="">
-                        <td colspan="3">
-                                <?php
-                                $a=0;
-                                foreach ($inderecos as $indereco) {
-                                    ?>
-                                    <figcaption class="v_unica">
-                                        <a href="/pbl/?pbl=<?=criptografar($id_pbl)?>"><img src="<?=$indereco?>" alt="" class="<?=$class?>"></a>
-                                    </figcaption>
-                                    <?php    
-                                    $a++;
-                                }
-                                ?>
-                        </td>
-                    </tr>
-                    <?php
-                }
-                if ($row['id_partilha']>0) {
-                    ?>
-                    <tr>
-                        <td colspan="3">
-                            <div class="pbl_partilhada">
-                                <?php
-                                if ($row['tipo_partilha'] == 'pbl') {
-                                    $this->mostrar($this->poste($row['id_partilha']),false,false,true);
-                                }elseif($row['tipo_partilha'] == 'code') {
-                                    //$this->codigo->mostrar($this->codigo->codigo($row['id_partilha']),4,'feed',NULL,1);
-                                }
-                                ?>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php
-                }
-                if ($reac) {
-                ?>
-                <tr id="reac">
-                    <td colspan="3">
-                        <div class="container">
-                            <div class="row">
-                                <div class="reac_pbl col">
-                                    <div class="centralizador reac<?='pbl'.$id_pbl?>" onclick="reagir(<?=$id_pbl?>,'gosto','poste')">
-                                        <?php    
-                                        if ($this->qtd_reacao($id_pbl,'poste',$_SESSION['id_user']) > 0) {
-                                            ?>
-                                            <img class="teste add" src="/bibliotecas/bootstrap/icones/heart-fill.svg" alt=""><span><?=$this->qtd_reacao($id_pbl,'poste')?></span>
-                                            <?php
-                                        }else {
-                                            ?>
-                                            <img class="" src="/bibliotecas/bootstrap/icones/heart.svg" alt=""> <span><?=$this->qtd_reacao($id_pbl,'poste')?></span>
-                                            <?php
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                                <div class="reac_pbl col">
-                                    <a href="/pbl/?pbl=<?=criptografar($id_pbl)?>&cmt=true">
-                                        <div class="centralizador">
-                                            <img src="/bibliotecas/bootstrap/icones/chat-dots.svg" alt=""> <span><?=qtd_de_cmt($id_pbl)?></span>
-                                        </div> 
-                                    </a>   
-                                </div>
-                                <?php
-                                if ($row['id_partilha'] <= 0) {
-                                    ?>
-                                    <div class="reac_pbl col" id="">
-                                        <div class="centralizador" onclick="abrir_partilhar('pbl',<?=$id_pbl?>)" >
-                                            <img src="/bibliotecas/bootstrap/icones/reply.svg" alt="">
-                                        </div>
-                                    </div>
-                                    <?php
-                                }
-                                ?>
-                            </div>    
-                        </div> 
-                    </td>
-                </tr>
-                <?php
-                }
-                ?>
-            </table>
+                        <?php if ($row['id_partilha'] <= 0): ?>
+                            <button class="btn btn-light" onclick="abrir_partilhar('pbl', <?= $id_pbl ?>)">
+                                <img src="/bibliotecas/bootstrap/icones/reply.svg" alt="Partilhar">
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
-        <?php 
-        $this->marcar_visto($id_pbl,"poste");
+        <?php
+    
+        $this->marcar_visto($id_pbl, "poste");
         if ($visualizacao_unica) {
-            $this->marcar_lido($id_pbl,"poste");
+            $this->marcar_lido($id_pbl, "poste");
         }
-        array_push($_SESSION['visualizado'],$id_pbl);
+        $_SESSION['visualizado'][] = $id_pbl;
     }
+    
     private function procura_aleatoria()
     {
         if($this->oque == "pbl") {
