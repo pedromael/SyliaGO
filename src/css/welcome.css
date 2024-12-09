@@ -1,163 +1,194 @@
-body{
-    background-color: var(--cor_pri);
+/* Estilo Geral */
+body {
+    background-color: var(--cor_terc) !important;
     color: var(--char);
+    margin: 0;
+    padding: 0;
 }
-/* primeira pagina */
-
-nav{
-    margin-top: 5px;
+h1, h2, p {
     text-align: center;
 }
-nav p{
+
+/* Navbar Fixo */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--cor_pri) !important;
+    color: var(--cor_sec);
+    padding: 10px 0;
+    text-align: center;
+    border-bottom: 2px solid var(--cor_pri);
+}
+nav p {
     text-align: justify;
     margin: 5px;
+    color: var(--char);
 }
-.linha.esq h1{
-    font-size: 18pt;
-}
-nav .linha{
+
+/* Linhas Esquerda e Direita */
+.linha {
     width: 45%;
     height: 30px;
     background-color: var(--cor_terc);
 }
-nav .linha.dir{
+nav .linha.dir {
     float: right;
     margin-right: 1%;
     animation: slide_dir 1s linear;
 }
-@keyframes slide_dir{
-    0%{
-        margin-right: -45%;
-    }100%{
-        margin-right: 0%;
-    }
-}
-nav .linha.esq{
+nav .linha.esq {
     margin-left: 1%;
     animation: slide_esq 1s linear;
 }
-@keyframes slide_esq{
-    0%{
+@keyframes slide_dir {
+    0% {
+        margin-right: -45%;
+    }
+    100% {
+        margin-right: 0%;
+    }
+}
+@keyframes slide_esq {
+    0% {
         margin-left: -45%;
-    }100%{
+    }
+    100% {
         margin-left: 0%;
     }
 }
-footer{
-    width: 100%;
-                    height: 100px;
-    border: 2px solid transparent;
-    position: absolute;
-    bottom: 1px;
-}
-footer div{
-    width: 40px;
-    color: var(--cor_terc);
-}
-footer .anterior{
-    font-size: 46pt;
-    height: 100px;
-    float: left;
-}
-footer .proximo{
-    font-size: 46pt;
-    height: 100px;
-    float: right;
-    animation: piscar 1s linear infinite;
-}
-@keyframes piscar{
-    0%{
-        font-size: 46pt;
-        margin-top: 0;
-        margin-right: 0;
-    }50%{
-        font-size: 48pt;
-        margin-top: -2px;
-        margin-right: 5px;
-    }100%{
-        font-size: 46pt;
-        margin-top: 0;
-        margin-right: 0;
-    }
-}
 
-/* pagina da patentes patentes*/
-.corpo_patente{
+/* Elemento de Patente */
+.corpo_patente {
     position: relative;
     width: 75%;
-    margin-left: 10%;
+    margin: 0 auto;
+    padding: 20px 0;
+    text-align: center;
 }
-.patente{
-    width: 50%;
+.patente {
+    margin: 0 auto;
+    width: 200px; /* Ajustado para tamanhos responsivos */
     aspect-ratio: 1/1;
     border-radius: 50%;
-    background-size: 100%;
-    background-repeat: none;
+    background-size: cover;
+    background-repeat: no-repeat;
     border-style: solid;
     border-width: 3px;
     animation: trocar_fundo 45s linear infinite;
 }
-.circulo_decorado{
+.circulo_decorado {
     width: 100%;
     aspect-ratio: 1/1;
-    border:5px solid transparent;
+    border: 5px solid transparent;
     border-radius: 50%;
-    /*border-image: linear-gradient(to right, #f06, #3cf) 1;
-    border-image-slice: 1;*/
     border-left-color: var(--cor_terc);
     animation: giro_esq 4s linear infinite;
 }
-.borda1,
-.borda2{
+.borda1, .borda2 {
     width: 100%;
     aspect-ratio: 1/1;
     border-radius: 50%;
 }
-.borda1{
+.borda1 {
     border: 4px solid transparent;
     border-bottom-color: var(--char);
     border-top-color: rgb(5, 188, 229);
     animation: giro_esq 7s linear infinite;
 }
-.borda2{
+.borda2 {
     position: relative;
     border: 4px solid transparent;
     border-left-color: rgb(167, 164, 164);
     border-right-color: var(--cor_terc);
     animation: giro_dir 1.5s linear infinite;
 }
-@keyframes trocar_fundo{
-    0%{
+@keyframes trocar_fundo {
+    0% {
         background-image: url(../img/c.jpeg);
         border-color: var(--cor_pri);
-    }20%{
+    }
+    20% {
         background-image: url(../img/c++.jpeg);
         border-color: rgb(16, 16, 228);
-    }40%{
+    }
+    40% {
         background-image: url(../img/php.jpeg);
         border-color: red;
-    }60%{
+    }
+    60% {
         background-image: url(../img/python.jpeg);
         border-color: yellow;
-    }80%{
+    }
+    80% {
         background-image: url(../img/assembler.jpeg);
         border-color: white;
-    }100%{
+    }
+    100% {
         background-image: url(../img/java.jpeg);
         border-color: rgb(169, 174, 174);
     }
 }
-@keyframes giro_dir{
-    0%{
+@keyframes giro_dir {
+    0% {
         transform: rotate(0deg);
-    }100%{
+    }
+    100% {
         transform: rotate(1080deg);
     }
 }
-@keyframes giro_esq{
-    0%{
+@keyframes giro_esq {
+    0% {
         transform: rotate(1440deg);
-    }100%{
+    }
+    100% {
         transform: rotate(0deg);
+    }
+}
+
+/* Footer Fixo */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    border: 2px solid transparent;
+    background-color: var(--cor_pri);
+    color: var(--char);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+}
+footer .anterior, footer .proximo {
+    font-size: 46pt;
+    height: 100px;
+    display: inline-block;
+}
+footer .btn{
+    background-color: var(--cor_sec);
+}
+footer .proximo {
+    animation: piscar 1s linear infinite;
+}
+@keyframes piscar {
+    0% {
+        font-size: 46pt;
+        margin-top: 0;
+        margin-right: 0;
+    }
+    50% {
+        font-size: 48pt;
+        margin-top: -2px;
+        margin-right: 5px;
+    }
+    100% {
+        font-size: 46pt;
+        margin-top: 0;
+        margin-right: 0;
     }
 }

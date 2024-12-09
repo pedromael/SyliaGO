@@ -4,62 +4,140 @@ require "../algoritimos/seguranca.php";
 unset($_SESSION['id_user']);
 $c = new sig_in;
 ?>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../src/img/glou_icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="../src/css/temas/branco.css">
     <link href="../bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../src/css/stilo.css">
+    <link rel="stylesheet" href="/src/css/temas/branco.css">
+    <link rel="stylesheet" href="/src/css/login.css">
     <title>Login</title>
 </head>
-<body id="inicio">
-    <nav class="nw-100 nav_login">
-        <h1><a href="sig-in.php">Cadastrar</a></h1>
+
+<script>
+    function mudar_formulario() {
+        login = window.document.querySelector(".corpo_login");
+        cad = window.document.querySelector(".corpo_sig-in");
+        changer = window.document.querySelector(".changer");
+
+        if (login.classList.contains('d-none')) {
+            cad.classList.add('d-none');
+            login.classList.remove('d-none');
+            changer.innerText = "criar conta";
+        }else{
+            login.classList.add('d-none');
+            cad.classList.remove('d-none');
+            changer.innerText = "fazer login";
+        }
+    }
+</script>
+
+<body>
+
+    <!-- Navbar fixa -->
+    <nav class="navbar fixed-top">
+        <h1 class="">SyliaGO</h1>
+        <div class="changer" onclick="mudar_formulario()">criar conta</div>
     </nav>
-    <div class="corpos">
-        <div class="login_conteiner">
-            <div class="size80 center login">
-                <p></p>
-                <div class="img">
-                    <img src="../src/img/glou_icon.png" alt="">
+
+    <!-- Conteúdo principal -->
+    <div class="container corpo_login">
+
+        <div class=" form-container mx-2">
+            <h2 class="text-center">Login</h2>
+            <form name="Game" method="post">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input class="form-control" type="email" name="l_e" placeholder="E-mail do usuário" required>
                 </div>
-                <form name="Game" method="post">
-                    <fieldset class="login">
-                        <div class="bg">
-                            <div>
-                                <p class="text-center">Pagina de Login</p>
-                                <input class="form-control" type="email" name="e" id="" placeholder="email de usuario" required>
-                            </div>
-                            <div>
-                                <p class="text-center"></p>
-                                <input class="form-control" type="password" name="s" placeholder="palavra passe" required>
-                            </div>
-                            <p></p>
-                            <div class="size80">
-                                <button class="form-control button">entrar</button>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-                <p id="" class="text-center info_login"><a href="recuperar.php">esquece a minha conta</a></p>
+                <div class="form-group mt-3">
+                    <label for="password">Senha</label>
+                    <input class="form-control" type="password" name="l_s" placeholder="Palavra-passe" required>
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
+
+            <hr class="my-4">
+
+            <!-- Botões para Redes Sociais -->
+            <div class="text-center">
+                <p>Ou entre com:</p>
+                <div class="d-flex align-items-center justify-content-center">
+                    <a href="#" class="btn btn-danger d-flex align-items-center m-2">
+                        <img src="/bibliotecas/bootstrap/icones/bell.svg" alt="Google" style="width: 20px;">
+                    </a>
+                    <a href="#" class="btn btn-primary d-flex align-items-center m-2">
+                        <img src="/bibliotecas/bootstrap/icones/bell.svg" alt="Facebook" style="width: 20px;">
+                    </a>
+                    <a href="#" class="btn btn-info d-flex align-items-center m-2 text-white">
+                        <img src="/bibliotecas/bootstrap/icones/bell.svg" alt="LinkedIn" style="width: 20px;">
+                    </a>
+                    <a href="#" class="btn btn-dark d-flex align-items-center m-2">
+                        <img src="/bibliotecas/bootstrap/icones/bell.svg" alt="GitHub" style="width: 20px;">
+                    </a>
+                </div>
             </div>
+            <p class="text-center mt-3">
+                <a href="recuperar.php" class="text-dark">Esqueci minha conta</a>
+            </p>
         </div>
-        <div class="login_conteiner_2"></div>
+        <div class="img-container mx-2"></div>
     </div>
-    <footer class="footer">
-        <div>
-            <a href="#">mais info...</a>
+    <div class="container corpo_sig-in d-none">
+        <div class="img-container"></div>
+
+        <div class="form-container">
+            <h2 class="text-center">Cadastro</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="n" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="e" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="pais">País de Residência</label>
+                    <select id="pais" name="p" class="form-control">
+                        <?php
+                        $paises = mysqli_query(conn(), "SELECT * FROM $bdnome2.pais ORDER BY nome");
+                        while ($pais = mysqli_fetch_assoc($paises)) {
+                            $selected = ($pais['nome'] == "Angola") ? "selected" : "";
+                            echo "<option value='{$pais['id_pais']}' $selected>{$pais['nome']}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="senha_sig">Senha</label>
+                    <input type="password" id="senha_sig" name="s" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha_conf">Confirmar Senha</label>
+                    <input type="password" id="senha_conf" name="cs" class="form-control" required>
+                </div>
+                <button type="submit">Cadastrar</button>
+            </form>
+            <p class="text-center mt-3">
+                <a href="" class="text-center w-100 m-2" onclick="trocar_formulario()">Já tem uma conta? Entrar</a>
+            </p>
         </div>
+    </div>
+
+    <footer class="text-white text-center py-2 fixed-bottom">
+        <a href="#" class="text-black text-decoration-none">Mais informações...</a>
     </footer>
 </body>
 </html>
+
 <?php
-if (isset($_POST['e'])) {
-    $senha = filtro($_POST['s']);
-    $email = filtro($_POST['e']);
+if (isset($_POST['l_e'])) {
+    $senha = filtro($_POST['l_s']);
+    $email = filtro($_POST['l_e']);
     if (!empty($senha) && !empty($email)) {
         if ($c->logar($email,$senha)) {
             #header("location: ../");
@@ -88,6 +166,32 @@ if (isset($_POST['e'])) {
             erro ao conectar banco de dados
         </div>
         <?php
+    }
+}
+
+if (isset($_POST['e'])) {
+    $senha = filtro($_POST['s']);
+    $c_senha = filtro($_POST['cs']);
+    $email = filtro($_POST['e']);
+    $pais = filtro($_POST['p']);
+    $nome = filtro($_POST['n']);
+    if (!empty($senha) && !empty($email) && !empty($pais) && !empty($nome) && !empty($c_senha)) {
+        if ($senha == $c_senha) {
+            if (verificar_requisito_de_seguranca_de_senha($senha)) {
+                require "../algoritimos/code_nome.php";
+                if ($c->cadastrar($nome, $email, $pais, $senha)) {
+                    echo "<script>document.location.href = '../instrucoes/';</script>";
+                } else {
+                    echo "<div class='erro-ao-entrar'>Já existe um usuário com esse email</div>";
+                }
+            } else {
+                echo "<div class='erro-ao-entrar'>Senha não atende aos requisitos mínimos de segurança</div>";
+            }
+        } else {
+            echo "<div class='erro-ao-entrar'>As senhas não correspondem</div>";
+        }
+    } else {
+        echo "<div class='erro-ao-entrar'>Preencha todos os campos</div>";
     }
 }
 ?>

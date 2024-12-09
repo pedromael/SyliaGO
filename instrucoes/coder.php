@@ -5,32 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../src/img/glou_icon.png" type="image/x-icon">
     <link href="../bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> 
-    <link rel="stylesheet" href="../src/css/temas/padrao.css">
-    <link rel="stylesheet" href="../src/css/welcome.css">
+    <link rel="stylesheet" href="/src/css/temas/branco.css">
+    <link rel="stylesheet" href="/src/css/welcome.css">
     <script src="../src/js/welcome.js"></script>
-    <title>Bem vindo</title>
+    <title>Bem vindo - Coder</title>
 </head>
 <body>
-    <nav>
-        <div class="linha esq"><h1>Coder</h1></div>
-        <div><p>Na PRO-START damos ao o usuario a opcao de partilhar o seu codigo 
-            com outros usuarios...</p></div>
-        <div class="linha dir"><div>ler mais...</div></div>
+    <nav class="navbar navbar-expand-lg mb-5">
+        <div class="container-fluid">
+            <h1 class="navbar-brand" href="#">Coder</h1>
+            <div class="linha esq">
+            </div>
+            <div>
+                <p class="">Na SyliaGO damos ao usuário a opção de partilhar seu código com outros usuários...</p>
+            </div>
+            <div class="linha dir">
+                <a href="#" class="text-decoration-none">Ler mais...</a>
+            </div>
+        </div>
     </nav>
-    <div class="corpo_patente">
-        <div class="patente">
-            <div class="circulo_decorado">
-                <div class="borda1">
-                    <div class="borda2">
+
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="patente bg-light shadow">
+                    <div class="circulo_decorado">
+                        <div class="borda1">
+                            <div class="borda2"></div>
                         </div>
                     </div>
                 </div>
+                <h2 class="mt-4">Patente Especial</h2>
+                <p class="text-muted">Este é o seu espaço para personalizar e destacar suas habilidades!</p>
+                <a href="../patentes" class="btn btn-primary btn-lg">Explorar Patentes</a>
             </div>
         </div>
     </div>
-    <footer>
-    <a href="./"><div class="anterior"><</div></a>
-        <a href="../"><div class="proximo">></div></a>
+
+    <footer class="text-light text-center py-3 mt-5">
+        <div class="d-flex justify-content-between align-items-center container">
+            <a href="./" class="btn btn-outline-light">
+                <span class="anterior">&lt;</span> Voltar
+            </a>
+            <a href="../" class="btn btn-outline-light">
+                Próximo <span class="proximo">&gt;</span>
+            </a>
+        </div>
     </footer>
 </body>
 </html>
