@@ -28,7 +28,7 @@
     <link href="/bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/src/css/temas/<?=pegar_tema()?>.css">
     <link rel="stylesheet" href="/src/css/stilo.css">
-    <title>Document</title>
+    <title>Poste</title>
 </head>
 <body>
     <script>var indereco="../";</script>

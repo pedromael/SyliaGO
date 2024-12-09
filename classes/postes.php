@@ -287,16 +287,20 @@ class postes extends process
                 $sql = $this->pdo->prepare("SELECT pbl.*,p.id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl 
                 LEFT JOIN contacto AS a ON ((a.id_user = pbl.id_user AND a.id_user_dest = :user) 
                 OR (a.id_user_dest = pbl.id_user AND a.id_user = :user))
+                LEFT JOIN $this->bdnome2.visto as v ON (v.id = pbl.id_pbl AND v.tipo = 'poste' AND v.id_user = :user)
                 LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
                 LEFT JOIN $this->bdnome2.contacto_aceite AS aa ON (aa.id_contacto = a.id_contacto)
                 LEFT JOIN $this->bdnome2.comunidade_integrante AS ci ON (ci.id_comunidade = pbl.id_comunidade AND ci.id_user = :user)
                 LEFT JOIN comunidade as c ON (c.id_comunidade = pbl.id_comunidade)
-                WHERE ((a.id_contacto = aa.id_contacto OR a.id_user_dest = pbl.id_user  AND a.id_user = :user) AND pbl.id_comunidade <= 0)
-                OR (ci.id_integrante > 0 OR c.id_user = :user)
+                WHERE 
+                ((a.id_contacto = aa.id_contacto OR a.id_user_dest = pbl.id_user  AND a.id_user = :user) 
+                AND pbl.id_comunidade <= 0)
+                OR (ci.id_integrante > 0 OR c.id_user = :user) 
+                AND v.id_visto IS NULL
                 ORDER BY id_pbl DESC");  
             }else {
                 $sql = $this->pdo->prepare("SELECT pbl.*,id2 AS id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl 
-                LEFT JOIN $this->bdnome2.visto as v ON (v.id = pbl.id_pbl AND v.tipo = 'pbl' AND v.id_user = :user)
+                LEFT JOIN $this->bdnome2.visto as v ON (v.id = pbl.id_pbl AND v.tipo = 'poste' AND v.id_user = :user)
                 LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
                 WHERE id_visto IS NULL AND pbl.id_user != :user
                 ORDER BY id_pbl DESC");  
@@ -316,7 +320,7 @@ class postes extends process
             $sql->bindValue(":id", $this->oque);
         } 
         $sql->execute();
-        if ($tipo != "global") 
+        if ($tipo == "pbl") 
         {
             $postes = $sql->fetchAll();
         }else {
@@ -336,6 +340,7 @@ class postes extends process
             }else {
                 $postes = $sql->fetchAll();
             }
+            
         }
 
         foreach ($postes AS $row) {
