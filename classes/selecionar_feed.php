@@ -4,7 +4,8 @@ class selecionar_feed
     private $postes;
     public $id;
     public $postes_encotrados;
-    public $quantidade_de_postes = 5;
+    public $quantidade_de_postes = 10;
+    public $numero_postes_globais = 3;
 
     public function __construct(){
         $this->postes = new postes;
@@ -35,14 +36,27 @@ class selecionar_feed
         }else {
             $a = 0;
             $this->postes->para = "pagina_inicial";
-            $this->postes->oque = "pbl";
-            while ($a <= $this->quantidade_de_postes) {
-                $this->postes_encotrados = $a;
-                $this->postes->procurar(NULL);
+            $this->postes->oque = "poste";
+            while ($a < $this->quantidade_de_postes) {
+                // Verificar se devemos adicionar um post global entre os posts normais
+                if (($this->numero_postes_globais > 0) && (($a + 1) % ceil($this->quantidade_de_postes / $this->numero_postes_globais) == 0)) {
+                    $this->postes->procurar("global");
+                    $this->numero_postes_globais--;  
+                    $a++; 
+                    continue;
+                }
+        
+                if ($this->postes->procurar(NULL) == 404) {
+                    $a++;
+                    break;
+                }
+        
                 $a++;
             }
+        
+            $this->postes_encotrados = $a;
             return true;
-        }
+        }        
     }
 }
 

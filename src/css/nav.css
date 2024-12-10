@@ -76,7 +76,12 @@ nav ul {
     left: 0;
     display: flex;
     justify-content: space-evenly;
-    margin-left: 10px;
+}
+
+@media (max-width: 325px) {
+    nav ul li a{
+        padding: 4px 8px !important;
+    }
 }
 
 nav ul li img {

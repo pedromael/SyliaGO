@@ -48,7 +48,7 @@
     <link href="/bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">  
     <link rel="stylesheet" href="/src/css/temas/<?=pegar_tema()?>.css">
     <link rel="stylesheet" href="/src/css/stilo.css">
-    <link rel="stylesheet" href="/src/css/perfil.css">
+    <!-- <link rel="stylesheet" href="/src/css/perfil.css"> -->
     <link rel="stylesheet" href="/src/css/coder.css">
     <script src="/src/js/script.js"></script>
     <title><?=$sql['nome']?></title>
@@ -94,59 +94,48 @@
                 <?php
             }
             ?>
-            <div id="cabe">
-                <div id="dir">
-                    <div id="dados">
-                        <style>
-                            .perfil_img{
-                                background-image: url(<?=$imagen_perfil?>);
-                            }
-                        </style>
-                        <?php
-                        if ($id_user == $_SESSION['id_user']) {
-                            $parametro = 1;
-                        }else {
-                            $parametro = 2;
-                        }
-                        ?>
-                        <div class="perfil_img" onmouseover="perfil_img(<?=$parametro?>,1)" onmouseout="perfil_img(<?=$parametro?>,11)">
-                        <?php
-                        if ($id_user == $_SESSION['id_user']) {
-                            if ($imagen_perfil != "sem_img_no_perfil.jpeg") {
-                            ?>
-                            <a href="visualizar.php?image=<?=criptografar($imagen)?>"><div class="div1_img perfil_img_1 remover" onmouseover="personalizar(2)"></div></a>
-                            <?php
-                            }
-                            ?>
-                            <div class="div2_img perfil_img_1 remover" onmouseover="personalizar(2)" onclick="aba_carregar_foto()"></div>
-                        <?php
-                        }else{
-                            if ($imagen_perfil != "sem_img_no_perfil.jpeg") {
-                        ?>
-                            <a href="visualizar.php?image=<?=criptografar($imagen)?>"><div class="div1_img perfil_img_1 remover" onmouseover="personalizar(2)"></div></a>
-                        <?php
-                            }
-                        }
-                        ?>
+            <div class="container-fluid py-4">
+                <div class="row">
+                    <!-- Coluna esquerda: Perfil e Dados do Usuário -->
+                    <div class="col-md-4 d-flex flex-column align-items-center">
+                    <div class="position-relative">
+                        <div class="perfil_img" style="background-image: url(<?=$imagen_perfil?>); width: 100px; height: 100px; border-radius: 50%; background-size: cover; background-position: center;" onmouseover="perfil_img(<?=$parametro?>,1)" onmouseout="perfil_img(<?=$parametro?>,11)">
+                        <?php if ($id_user == $_SESSION['id_user']): ?>
+                            <?php if ($imagen_perfil != "sem_img_no_perfil.jpeg"): ?>
+                            <a href="visualizar.php?image=<?=criptografar($imagen)?>">
+                                <div class="position-absolute top-0 end-0 m-2">
+                                <!-- <div class="btn btn-outline-light btn-sm">Remover</div> -->
+                                </div>
+                            </a>
+                            <?php endif; ?>
+                            <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2">
+                            <button class="btn btn-outline-light btn-sm" onclick="aba_carregar_foto()">Alterar foto</button>
+                            </div>
+                        <?php elseif ($imagen_perfil != "sem_img_no_perfil.jpeg"): ?>
+                            <a href="visualizar.php?image=<?=criptografar($imagen)?>">
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <!-- <div class="btn btn-outline-light btn-sm">Visualizar</div> -->
+                            </div>
+                            </a>
+                        <?php endif; ?>
                         </div>
-                        <p><?=$sql['nome']?></p>
-                        <?php
+                    </div>
+                    <p class="mt-2  fs-5 fw-bold"><?=$sql['nome']?></p>
+                    <?php
                         $a_seguir = $seguidores = 0;
                         $sql = mysqli_query($link, "SELECT * FROM contacto WHERE id_user= $id_user OR id_user_dest=$id_user");
                         while ($row = mysqli_fetch_assoc($sql)) {
                             $id_contacto = $row['id_contacto'];
+                            $aceite = mysqli_query($link, "SELECT count(*) AS valor FROM $bdnome2.contacto_aceite WHERE id_contacto =$id_contacto");
+                            $aceite = mysqli_fetch_assoc($aceite);
                             if ($id_user == $row['id_user']) {
-                                $aceite = mysqli_query($link, "SELECT count(*) AS valor FROM $bdnome2.contacto_aceite WHERE id_contacto =$id_contacto");
-                                $aceite = mysqli_fetch_assoc($aceite);
                                 if ($aceite['valor'] > 0) {
                                     $a_seguir++;
                                     $seguidores++;
                                 } else {
                                     $a_seguir++;
                                 }
-                            }else {
-                                $aceite = mysqli_query($link, "SELECT count(*) AS valor FROM $bdnome2.contacto_aceite WHERE id_contacto =$id_contacto");
-                                $aceite = mysqli_fetch_assoc($aceite);
+                            } else {
                                 if ($aceite['valor'] > 0) {
                                     $a_seguir++;
                                     $seguidores++;
@@ -155,60 +144,50 @@
                                 }
                             }
                         }
-                        ?>
-                        <div id="a_seguir">
-                            <p>seguidores <?=$seguidores?> / a seguir <?=$a_seguir?></p>
-                        </div>
+                    ?>
+                    <div class="mt-2 text-muted text-center">
+                        <span>Seguidores: <?=$seguidores?> </span>/<span> A seguir: <?=$a_seguir?></span>
                     </div>
-                </div>
-                <div id="esq">
-                    <table class="cima">
-                            <tr>
-                                <td class="bloco">
-                                    <div class="estatistica"><?=media_de_interacao($id_user)?></div>
-                                    <div class="referencia"><p>media de interacao</p></div>
-                                </td>
-                                <td class="bloco">
-                                    <div class="estatistica"><?=qtd_pbl_user($id_user)?></div>
-                                    <div class="referencia"><p>Postes</p></div>
-                                </td>
-                                <td class="bloco">
-                                    <div class="estatistica"></div>
-                                    <div class="referencia"><p>projectos realizados</p></div>
-                                </td>
-                            </tr>
-                        
+                    </div>
+
+                    <!-- Coluna direita: Estatísticas -->
+                    <div class="col-md-8">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="text-center">Média de Interação</th>
+                            <th scope="col" class="text-center">Postagens</th>
+                            <th scope="col" class="text-center">Projetos Realizados</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="text-center"><?=media_de_interacao($id_user)?></td>
+                            <td class="text-center"><?=qtd_pbl_user($id_user)?></td>
+                            <td class="text-center">-</td>
+                        </tr>
+                        </tbody>
                     </table>
-                    <div class="baixo">
-                        <?php
-                        if ($id_user == $_SESSION['id_user']) {
-                            ?>
-                            <div class="esq">
-                                <a href=""><button class="form-control msg">mais detalhes</button></a>
-                            </div>
-                            <?php
-                        }else {
-                            ?>
-                            <div class="esq">
-                                <?php
-                                    if (verificar_contacto($id_user,$_SESSION['id_user'])) {
-                                        ?>
-                                            <button class="form-control msg">opcoes</button>
-                                        <?php
-                                    }else {
-                                        ?>
-                                            <button class="form-control msg">adicionar</button>
-                                        <?php
-                                    }
-                                ?>
-                                <a href="/mensagens/?user=<?=criptografar($id_user)?>"><button class="form-control msg">mensagem</button></a>
-                            </div>
-                            <?php
-                        }
-                        ?>
+                    <div class="mt-4 mb-2 p-2 border rounded">
+                        <!-- <h5>Área</h5> -->
+                        <p>Desenvolvedor Web</p>
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <?php if ($id_user == $_SESSION['id_user']): ?>
+                        <a href="" class="btn btn-primary btn-sm">Mais detalhes</a>
+                        <?php else: ?>
+                        <?php if (verificar_contacto($id_user,$_SESSION['id_user'])): ?>
+                            <button class="btn btn-outline-primary btn-sm">Opções</button>
+                        <?php else: ?>
+                            <button class="btn btn-outline-success btn-sm">Adicionar</button>
+                        <?php endif; ?>
+                        <a href="/mensagens/?user=<?=criptografar($id_user)?>" class="btn btn-outline-info btn-sm ms-2">Mensagem</a>
+                        <?php endif; ?>
+                    </div>
                     </div>
                 </div>
             </div>
+
             <?php
             if ($id_user == $_SESSION['id_user']) {
                 ?>

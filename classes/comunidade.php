@@ -21,7 +21,7 @@ class comunidade extends conexao
     }
     public function mostrar_comunidades($row,$caso){
         $id_comunidade = $row['id_comunidade'];
-        $imagen = pegar_foto_perfil("cmdd",$id_comunidade);
+        $imagen = pegar_foto_perfil("comunidade",$id_comunidade);
         if ($caso == "minhas") {
             ?>
         <div class="card mb-3">

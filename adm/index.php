@@ -3,7 +3,11 @@
  require "../algoritimos/atalho.php";
  require "../algoritimos/seguranca.php";
  $c = new process;
-
+ ?>
+ <script>
+     document.location.href = "../";
+ </script>
+<?php
  if (!isset($_SESSION["id_user"])) {
     #header("location: ../login/");
     ?>

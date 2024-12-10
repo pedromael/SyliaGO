@@ -169,7 +169,6 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                     <div class="d-flex justify-content-between align-items-center">
                         <label for="input_file_pbl" class="btn btn-outline-secondary d-flex align-items-center">
                             <img src="bibliotecas/bootstrap/icones/file-earmark-image.svg" alt="Upload" class="me-2" style="width: 20px;"> 
-                            Adicionar Fotos
                         </label>
                         <input type="file" id="input_file_pbl" name="doc[]" accept="image/*" multiple hidden>
                         <button name="btn_pbl" class="btn btn-primary d-flex align-items-center">
@@ -261,12 +260,13 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                     if ($id_pbl > 0) {
                         $pbl = new postes();
                         $pbl->para = "pagina_inicial";
-                        $pbl->oque = "pbl";
+                        $pbl->oque = "poste";
                         $pbl->mostrar($pbl->poste($id_pbl)); 
                     } 
                 }
-                $s->quantidade_de_postes = 0;
+
                 $s->selecionar_poste();
+                echo $s->postes_encotrados;
                 ?>
             </div>
             <?php
