@@ -15,6 +15,7 @@ function autoloader($class) {
     }
 }
 spl_autoload_register('autoloader');
+
 if (isset($_SESSION['id_user'])) {
     $user = new informacoes_usuario;
     $user = $user->user;
@@ -42,63 +43,6 @@ function resumir_texto($string,$tamanho)
         $nn++;
     }
     return $texto = $texto." ".$tres_pontos;
-}
-function Verificar_pontuacao($row,$id_user) {
-    global $bdnome2;
-    $id = $row['id_user'];
-    $id_pbl = $row['id_pbl'];
-    $pontuacao = 0;
-
-    $user1 = mysqli_query(conn(), "SELECT * FROM usuarios WHERE id_user= $id");
-    $user1 = mysqli_fetch_assoc($user1);
-    $user2 = mysqli_query(conn(), "SELECT * FROM usuarios WHERE id_user= $id_user");
-    $user2 = mysqli_fetch_assoc($user2);
-
-    $pontuacao = $pontuacao + 2 * verificar_contactos_em_comum($id_user,$id);
-    
-    if ($user1['id_pais'] == $user2['id_pais']) {
-        $pontuacao =  $pontuacao + 5;
-    }else {
-        $pontuacao =  $pontuacao - 20;
-    }
-
-    $vistos = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.visto WHERE id = $id_pbl AND tipo='poste'");
-    $qtd_vistos = mysqli_fetch_assoc($vistos);
-    $reacao = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.reacao WHERE id = $id_pbl AND tipo='poste'");
-    $qtd_reacao = mysqli_fetch_assoc($reacao);
-
-    if ($qtd_reacao['qtd'] <= 0) {
-        $qtd_reacao['qtd'] = 1;
-    }
-    if ($qtd_vistos['qtd'] <= 25) {
-        $qtd_vistos['qtd'] = 25;
-    }
-
-    $media_de_aceitacao = ($qtd_reacao['qtd'] / $qtd_vistos['qtd']) * (100);
-    $pontuacao = $pontuacao + $media_de_aceitacao;
-    
-    return $pontuacao;
-}
-function verificar_se_e_partilha($id_pbl,$bdnome2) {
-    $partilha = mysqli_query(conn(), "SELECT count(*) AS valor,id2 FROM $bdnome2.partilha WHERE id1 = $id_pbl");
-    $partilha = mysqli_fetch_assoc($partilha);
-    if ($partilha['valor'] >= 1) {
-        $id_pbl_partilha = $partilha['id2'];
-        $partilha = mysqli_query(conn(), "SELECT * FROM pbl WHERE id_pbl = $id_pbl_partilha");
-        return mysqli_fetch_assoc($partilha);
-    }else{
-        return false;
-    }
-}
-function verificar_peso($a,$b){
-    return $b['pontuacao'] - $a['pontuacao'];
-}
-function verificar_contacto($id,$id2) {
-    if (rand(1,2) == 1) {
-        return true;
-    }else {
-        return false;
-    }
 }
 function qtd_de_reacao($id, $para = "poste") {
     global $bdnome2;
@@ -248,7 +192,7 @@ function pegar_tema() {
 function resumir_data($data_p): bool|string
 {
     $data_atual = strtotime(date("Y-m-d H:i:s")); 
-    $data = $data_atual - strtotime($data_p) + 3600; // Remove 1 hora, pode ser removido se não necessário.
+    $data = $data_atual - strtotime($data_p) - 3600; // Remove 1 hora, pode ser removido se não necessário.
     
     $segundo = $data;
     $minuto = $segundo / 60;
@@ -261,37 +205,31 @@ function resumir_data($data_p): bool|string
         return "agora";
     }
 
-    // Se foi criado entre 5 segundos e 1 minuto
     if ($segundo < 60) {
         return "há ".(int)$segundo." segundos";
     }
 
-    // Se foi criado entre 1 e 60 minutos
     if ($minuto < 60) {
         return "há ".(int)$minuto." min";
     }
 
-    // Se foi criado entre 1 e 24 horas
     if ($hora < 24) {
         return "há ".(int)$hora."h";
     }
 
-    // Se foi criado entre 1 e 7 dias
     if ($dias >= 1 && $dias < 7) {
         return "há ".(int)$dias." dia".($dias > 1 ? "s" : "");
     }
 
-    // Se foi criado entre 7 dias e 6 meses
     if ($dias >= 7 && $meses < 6) {
         return "em ".date("d/m", strtotime($data_p));
     }
 
-    // Se foi criado há mais de 6 meses
     if ($meses >= 6) {
         return "em ".date("d/m/Y", strtotime($data_p));
     }
 
-    return false; // Caso nenhum dos casos anteriores se encaixe
+    return false;
 }
 
 function pegar_imagem_em_cache($URL_imagem,$codigo_de_cache) {
@@ -339,10 +277,7 @@ function verificar_grupos_em_comum($id_user,$id) {
     
     return count(array_intersect($user1,$user2));
 }
-function verificar_contactos_em_comum($id1,$id2) {
-    global $bdnome2;
-    $lista1 = $lista2 = array();
-
+function verificar_contactos_em_comum($id1,$id2): int {
     $users = new informacoes_usuario;
 
     if ($users->lista_amigos($id1) <= 0 || $users->lista_amigos($id2) <= 0) {
@@ -350,27 +285,5 @@ function verificar_contactos_em_comum($id1,$id2) {
     }else{
         return count(array_intersect($users->lista_amigos($id1,true),$users->lista_amigos($id2,true)));
     }
-}
-function pegar_qtd_de_membros_de_grupo($id_comunidade) {
-    global $bdnome2;
-    $sql = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.comunidade_integrante
-    WHERE id_comunidade = $id_comunidade");
-    $sql = mysqli_fetch_assoc($sql);
-    return $sql['qtd'] + 1;
-}
-function analizar_ligacao_entre_usuario($id_user) {
-    $user = new informacoes_usuario;
-    $user1 = $user->user;
-    $user2 = $user->usuario($id_user);
-
-    $pontuacao = 0;
-    $pontuacao = $pontuacao + 5 * verificar_contactos_em_comum($user1['id_user'],$user2['id_user']);
-    $pontuacao = $pontuacao + 10 * verificar_grupos_em_comum($user1['id_user'],$user2['id_user']);
-    if ($user1['id_pais'] == $user2['id_pais']) {
-        $pontuacao = $pontuacao + 15;
-    }
-
-    return $pontuacao;
-
 }
 ?>

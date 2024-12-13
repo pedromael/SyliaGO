@@ -142,14 +142,14 @@ if (isset($_FILES['img']) && $_SESSION['id_user'] == $sql['id_user']) {
                 ?>
                   <div class="definicoes direita"><a href="definicoes.php?cmndd=<?=criptografar($id_comunidade)?>"><img class="icone_medio" src="/bibliotecas/bootstrap/icones/gear.svg" alt=""></a></div>
                   <div class="direita">
-                    <span class="titulo">membros:</span><span class="descricao"><?=pegar_qtd_de_membros_de_grupo($id_comunidade)?></span>
+                    <span class="titulo">membros:</span><span class="descricao"><?=$cmdd->membros_de_comunidade($id_comunidade)?></span>
                   </div>
                 <?php
               }else {
                 ?>
                 <div class="definicoes direita">
                   <span class="titulo">criador:</span> <span class="descricao"><?=$criador['nome']?></span><br>
-                  <span class="titulo">membros:</span> <span class="descricao"><?=pegar_qtd_de_membros_de_grupo($id_comunidade)?></span>
+                  <span class="titulo">membros:</span> <span class="descricao"><?=$cmdd->membros_de_comunidade($id_comunidade)?></span>
                 </div>
                 <?php
               }

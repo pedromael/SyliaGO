@@ -47,12 +47,9 @@ class informacoes_usuario extends conexao
         // }else{return false;}
     }
     public function mostrar_amigos($dados){
-        if (!isset($this->indereco)) {
-            $this->indereco = "./";
-        }
         ?>
         <div class="usuario container">
-            <div class="img d-inline-block" style="background-image :url(<?=$this->indereco."media/img/".pegar_foto_perfil("perfil",$dados['id_user'])?>);"></div>
+            <div class="img d-inline-block" style="background-image :url(<?=pegar_foto_perfil("perfil",$dados['id_user'])?>);"></div>
             <div class="nome d-inline-block">
                 <div class="container">
                     <div class="d-block"><?=$dados['nome']?></div>
@@ -77,6 +74,28 @@ class informacoes_usuario extends conexao
             array_push($lista,$query['id_user']);
         }
         return $lista;
+    }
+
+    //funcao responsavel por analizar em pontos o nivel de ligacao de dois usuario
+    public function ligacao_entre_usuario($id_user, $id_user2 = NULL): int 
+    {
+        $user = new informacoes_usuario;
+        if(is_null($id_user2)) {
+            $user1 = $user->user;
+        }else{
+            $user1 = $user->usuario($id_user2);
+        }
+        $user2 = $user->usuario($id_user);
+    
+        $pontuacao = 0;
+        $pontuacao = $pontuacao + 5 * verificar_contactos_em_comum($user1['id_user'],$user2['id_user']);
+        $pontuacao = $pontuacao + 10 * verificar_grupos_em_comum($user1['id_user'],$user2['id_user']);
+        if ($user1['id_pais'] == $user2['id_pais']) {
+            $pontuacao = $pontuacao + 15;
+        }
+    
+        return $pontuacao;
+    
     }
 }
 ?>

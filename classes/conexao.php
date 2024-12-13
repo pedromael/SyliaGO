@@ -4,7 +4,7 @@ class conexao
     public $pdo;
     public $erro;
     public $bdnome = "sylia";
-    public $bdhost = "192.168.18.17";
+    public $bdhost = "192.168.18.103";
     public $bdpass = "5432167o+";
     public $bduser = "pedmanue";
     public $bdnome2 = "sylia_outros";

@@ -34,6 +34,41 @@ class postes extends process
         $sql->execute();
         return $sql->fetch();
     }
+    public function relacao_poste_usuario($poste,$id_user): int {
+        global $bdnome2;
+        $id_pbl = $poste['id_pbl'];
+        $pontuacao = 0;
+    
+        $user = new informacoes_usuario;
+    
+        $user1 = $user->usuario($poste['id_user']);
+        $user2 = $user->usuario($id_user);
+    
+        $pontuacao = $pontuacao + 2 * verificar_contactos_em_comum($id_user,$poste['id_user']);
+        
+        if ($user1['id_pais'] == $user2['id_pais']) {
+            $pontuacao =  $pontuacao + 5;
+        }else {
+            $pontuacao =  $pontuacao - 20;
+        }
+    
+        $vistos = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.visto WHERE id = $id_pbl AND tipo='poste'");
+        $qtd_vistos = mysqli_fetch_assoc($vistos);
+        $reacao = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.reacao WHERE id = $id_pbl AND tipo='poste'");
+        $qtd_reacao = mysqli_fetch_assoc($reacao);
+    
+        if ($qtd_reacao['qtd'] <= 0) {
+            $qtd_reacao['qtd'] = 1;
+        }
+        if ($qtd_vistos['qtd'] <= 25) {
+            $qtd_vistos['qtd'] = 25;
+        }
+    
+        $media_de_aceitacao = ($qtd_reacao['qtd'] / $qtd_vistos['qtd']) * (100);
+        $pontuacao = $pontuacao + $media_de_aceitacao;
+        
+        return $pontuacao;
+    }
     public function mostrar($row, $visualizacao_unica = false, $reac = true, $partilha = false)
     {
         if (empty($row['id_user'])) return false;
@@ -209,8 +244,8 @@ class postes extends process
                 $publicacoes_verificadas =  array();
 
                 foreach ($sql->fetchAll() AS $row) {
-                    if (Verificar_pontuacao($row,$this->user['id_user']) >= 0) {
-                        $row['pontuacao'] = Verificar_pontuacao($row,$this->user['id_user']);
+                    if ($this->relacao_poste_usuario($row,$this->user['id_user']) >= 0) {
+                        $row['pontuacao'] = $this->relacao_poste_usuario($row,$this->user['id_user']);
                         array_push($publicacoes_verificadas,$row);
                     }
                 }

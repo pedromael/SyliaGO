@@ -190,7 +190,7 @@
                     AND id_user_dest = $id_user) OR (id_user = $id_user AND id_user_dest = $id)");
                     $sqll = mysqli_fetch_assoc($sqll);
                     if ($sqll['total'] <= 0) {
-                        $row["ligacao"] = analizar_ligacao_entre_usuario($id);
+                        $row["ligacao"] = (new informacoes_usuario())->ligacao_entre_usuario($id);
                         array_push($pessoas_sugeridas, $row);
                         usort($pessoas_sugeridas,'comparar_peso');
                     }

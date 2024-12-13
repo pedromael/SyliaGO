@@ -215,6 +215,13 @@ class comunidade extends conexao
             }
         }
     }
+    public function membros_de_comunidade($id_comunidade, $lista = false): float|int {
+        global $bdnome2;
+        $sql = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.comunidade_integrante
+        WHERE id_comunidade = $id_comunidade");
+        $sql = mysqli_fetch_assoc($sql);
+        return $sql['qtd'] + 1;
+    }
 }
 
 ?>
