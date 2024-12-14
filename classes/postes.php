@@ -46,16 +46,9 @@ class postes extends process
     
         $user = new informacoes_usuario;
     
-        $user1 = $user->usuario($poste['id_user']);
-        $user2 = $user->usuario($id_user);
+        $pontuacao = $user->ligacao_entre_usuario($poste['id_user'], $id_user);
     
         $pontuacao = $pontuacao + 2 * verificar_contactos_em_comum($id_user,$poste['id_user']);
-        
-        if ($user1['id_pais'] == $user2['id_pais']) {
-            $pontuacao =  $pontuacao + 5;
-        }else {
-            $pontuacao =  $pontuacao - 20;
-        }
     
         $vistos = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.visto WHERE id = $id_pbl AND tipo='poste'");
         $qtd_vistos = mysqli_fetch_assoc($vistos);
@@ -99,7 +92,7 @@ class postes extends process
                         <img src="<?= $imagem_perfil ?>" class="rounded-circle me-2" alt="Perfil" style="width: 50px; height: 50px;">
                     </a>
                     <div>
-                        <?php if ($comunidade && $this->oque == "pbl"): ?>
+                        <?php if ($comunidade && $this->oque == "poste"): ?>
                             <span><a class="fw-bold" href="/comunidade/?cmndd=<?= criptografar($row['id_comunidade']) ?>"><?= $comunidade['nome'] ?></a></span><br>
                         <?php endif; ?>
                         <span><a href="/perfil/?user=<?= criptografar($id_user) ?>" class="text-decoration-none"><?= $nome_usuario ?></a></span>
@@ -110,14 +103,14 @@ class postes extends process
                     </div>
                 </div>
                 
-                <p class="text-muted mb-3"><?= $this->proveniente."---".htmlspecialchars_decode($row['texto']) ?></p>
+                <p class="text-muted mb-3"><?=htmlspecialchars_decode($row['texto']) ?></p>
     
                 <?php if ($qtd_indereco > 0): ?>
                     <div class="mb-3">
                         <div class="d-flex flex-wrap gap-2">
                             <?php foreach (array_slice($inderecos, 0, 5) as $indereco): ?>
                                 <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                    <img src="<?= $indereco ?>" class="img-fluid" style="max-width: 150px; border-radius: 8px;" alt="Poste">
+                                    <img src="<?= $indereco ?>" class="img-fluid" style="max-width: 100%; max-height: 400px; border-radius: 8px;" alt="imagen Poste">
                                 </a>
                             <?php endforeach; ?>
                         </div>
@@ -148,7 +141,7 @@ class postes extends process
         if ($visualizacao_unica) {
             $this->marcar_lido($id_pbl, "poste");
         }
-        $_SESSION['visualizado'][] = $id_pbl;
+        $_SESSION['visualizado'][$id_pbl] = true;
 
         return true;
     }
@@ -180,11 +173,11 @@ class postes extends process
         }   
         $sql->execute();
         foreach ($sql->fetchAll() AS $row) {
-            if (!in_array($row['id_pbl'], $_SESSION['visualizado'])) {
+            if (!isset($_SESSION['visualizado'][$row['id_pbl']])) {
                 return  $this->mostrar($row);
             }
         }
-        return 404;
+        return false;
     }
     public function procurar($tipo = "global")
     {
@@ -264,7 +257,7 @@ class postes extends process
         }
 
         foreach ($postes AS $row) {
-            if (!in_array($row['id_pbl'], $_SESSION['visualizado'])) {
+            if (!isset($_SESSION['visualizado'][$row['id_pbl']])) {
                 return  $this->mostrar($row);
             }
         }

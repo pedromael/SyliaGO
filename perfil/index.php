@@ -43,7 +43,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <link rel="icon" href="/src/img/glou_icon.png" type="image/x-icon">
     <link href="/bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">  
     <link rel="stylesheet" href="/src/css/temas/<?=pegar_tema()?>.css">
@@ -176,7 +176,7 @@
                         <?php if ($id_user == $_SESSION['id_user']): ?>
                         <a href="" class="btn btn-primary btn-sm">Mais detalhes</a>
                         <?php else: ?>
-                        <?php if (verificar_contacto($id_user,$_SESSION['id_user'])): ?>
+                        <?php if (true): // varificar amizade?>
                             <button class="btn btn-outline-primary btn-sm">Opções</button>
                         <?php else: ?>
                             <button class="btn btn-outline-success btn-sm">Adicionar</button>
@@ -187,28 +187,33 @@
                     </div>
                 </div>
             </div>
+<?php
+if ($id_user == $_SESSION['id_user']) {
+    ?>
+    <div class="container p-3">
+        <div class="row">
+            <a href="#" class="btn bg-white col m-1">Files</a>
+            <div class="btn bg-white col m-1" onclick="mostrar_lista_amigos('<?=criptografar($id_user)?>')">Amigos</div>
+            <a href="#" class="btn bg-white col m-1">Codes</a>
+            <a href="#" class="btn bg-white col m-1">Mais</a>
+        </div>
+    </div>
+    <?php
+} else {
+    ?>
+    <div class="container p-3">
+        <div class="row">
+            <a href="#" class="btn bg-white col m-1">Files</a>
+            <div class="btn bg-white col m-1" onclick="mostrar_lista_amigos('<?=criptografar($id_user)?>')">Amigos</div>
+            <a href="#" class="btn bg-white col m-1">Codes</a>
+            <a href="#" class="btn bg-white col m-1">Mais</a>
+        </div>
+    </div>
+    <?php
+}
+?>
 
-            <?php
-            if ($id_user == $_SESSION['id_user']) {
-                ?>
-                <div class="ops_perfil">
-                    <a href=""><div>files</div></a>
-                    <div onclick="mostrar_lista_amigos('<?=criptografar($id_user)?>')">amigos</div>
-                    <a href=""><div>CODES</div></a>
-                    <a href=""><div>mais</div></a>
-                </div>
-                <?php
-            }else{
-                ?>
-                <div class="ops_perfil">
-                    <a href=""><div>fotos</div></a>
-                    <div onclick="mostrar_lista_amigos('<?=criptografar($id_user)?>')">amigos</div>
-                    <a href=""><div>CODES</div></a>
-                    <a href=""><div>mais</div></a>
-                </div>
-                <?php
-            }
-            ?>
+
             <div class="container_amigos"></div>
             <div>
                 <?php

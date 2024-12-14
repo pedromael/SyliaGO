@@ -21,7 +21,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Cache-Control" content="max-age=3600">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <link rel="icon" href="src/img/glou_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="src/css/temas/<?=pegar_tema()?>.css">
     <link href="bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -255,22 +255,21 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                 <?php
                 $_SESSION['visualizado'] = array();
                 $_SESSION['code_visualizado'] = array();
-                $s = new selecionar_feed();
                 if (isset($id_pbl)) {
                     if ($id_pbl > 0) {
                         $pbl = new postes();
-                        $pbl->para = "pagina_inicial";
+                        $pbl->para = "pagina_inicial"; 
                         $pbl->oque = "poste";
                         $pbl->mostrar($pbl->poste($id_pbl)); 
                     } 
                 }
 
+                $s = new selecionar_feed();
                 $s->selecionar_poste();
-                echo $s->postes_encotrados;
                 ?>
             </div>
             <?php
-            if ($s->postes_encotrados < $s->quantidade_de_postes) {
+            if ($s->postes_encontrados < $s->quantidade_de_postes) {
                 ?>
                     <div class="texto_interativo">
                         entre em <a href="comunidade/?abrir=pdd" class="destaque"><span>comunidades</span></a> com interesses de sua escolha,
@@ -290,7 +289,6 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
     <?php 
         require "include/footer.php";
         require "include/search.php";
-        mysqli_close(conn());
     ?>
     <script src="bibliotecas/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="src/js/fim_script.js"></script>

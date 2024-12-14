@@ -63,6 +63,17 @@
         </div>
     </div>
 </nav>
+<style>
+    #segunda_nav {
+    z-index: 1050;
+    overflow-y: auto; /* Permitir rolagem vertical */
+    }
+
+    ul.list-unstyled {
+        padding-left: 0;
+    }
+
+</style>
 <div id="segunda_nav" class="remover bg-light position-fixed shadow-lg" style="width: 280px; z-index: 1050;">
     <div class="container py-3 d-flex flex-column h-100">
         <!-- Perfil -->

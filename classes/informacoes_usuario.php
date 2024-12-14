@@ -12,24 +12,28 @@ class informacoes_usuario extends conexao
         //$this->linguas_falada = $this->linguas_falada($_SESSION['id_user']);
         // $this->gostos = $this->gostos_do_usuario($_SESSION['id_user']);
     }
-    public function usuario($id_user = false,$todo=false) {
-        if (!$id_user) {
-            $id_user = $_SESSION['id_user'];
-        }
-        if ($todo) {
-            $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE id_user!=:user");
+    public function usuario($id_user = false, $todo = false) {
+        try {
+            if (!$id_user) {
+                $id_user = $_SESSION['id_user'];
+            }
+    
+            if ($todo) {
+                $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE id_user != :user");
+            } else {
+                $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE id_user = :user");
+            }
+    
             $sql->bindValue(":user", $id_user);
-            $sql->execute();
-            return $sql->fetchAll();
-        }else {
-            $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE id_user=:user");   
+    
+            if ($sql->execute()) {
+                return $todo ? $sql->fetchAll() : $sql->fetch();
+            }  
+        } catch (\Throwable $th) {
+            return $this->usuario($id_user, $todo);   
         }
-        $sql->bindValue(":user", $id_user);
-        if ($sql->execute()) {
-            return $sql->fetch();
-        }   
-        return false;
     }
+    
     public function linguas_falada($id_user) {
         $sql = $this->pdo->prepare("SELECT * FROM $this->bdnome2.linguas_falada WHERE id_user=:user");
         $sql->bindValue(":user", $id_user);
@@ -62,7 +66,7 @@ class informacoes_usuario extends conexao
     public function lista_amigos($id_user,$so_id = false){
         $lista = [];
         $sql = $this->pdo->prepare("SELECT u.* FROM usuarios AS u
-        JOIN contacto AS c ON ((c.id_user = :id AND c.id_user_dest = u.id_user) OR (c.id_user_dest = $id_user AND c.id_user = u.id_user))
+        JOIN contacto AS c ON ((c.id_user = :id AND c.id_user_dest = u.id_user) OR (c.id_user_dest = :id AND c.id_user = u.id_user))
         JOIN $this->bdnome2.contacto_aceite AS ca ON (ca.id_contacto = c.id_contacto)
         WHERE ca.id_contacto IS NOT NULL");
         $sql->bindValue(":id", $id_user);
@@ -84,9 +88,15 @@ class informacoes_usuario extends conexao
             $user1 = $user->user;
         }else{
             $user1 = $user->usuario($id_user2);
+            if($user1 == false){
+                return false;
+            }
         }
         $user2 = $user->usuario($id_user);
-    
+        if($user2 == false){
+            return false;
+        }
+
         $pontuacao = 0;
         $pontuacao = $pontuacao + 5 * verificar_contactos_em_comum($user1['id_user'],$user2['id_user']);
         $pontuacao = $pontuacao + 10 * verificar_grupos_em_comum($user1['id_user'],$user2['id_user']);
