@@ -13,6 +13,11 @@ function verificar_texto_poste($len,$doc,$partilha) {
         return 'texto-pequeno';
     }
 }
+
+function verificar_peso($a,$b){
+    return $b['pontuacao'] - $a['pontuacao'];
+}
+
 class postes extends process
 { 
     private $link;
