@@ -10,6 +10,7 @@ class notificacoes extends process
     private function mostrar($sql)
     {
         $imagen = pegar_foto_perfil("perfil", $sql['id_user']);
+        $data = resumir_data($sql['data']);
         $id = $sql['id'];
 
         if($sql['tipo'] == "reacao" && $sql['de'] == 'poste'){
@@ -29,7 +30,7 @@ class notificacoes extends process
                 $reactionText,
                 "/pbl/?pbl=$postId",
                 "heart-fill",
-                $sql['data']
+                $data
             );
         } elseif ($sql['tipo'] == "comfirmado" && $sql['de'] == "perfil") {
             $profileLink = "/perfil/?user=" . criptografar($id);
@@ -40,7 +41,7 @@ class notificacoes extends process
                 "",
                 $profileLink,
                 "people",
-                $sql['data']
+                $data
             );
         } elseif ($sql['tipo'] == "comentario" && $sql['de'] == "poste") {
             $profileLink = "/perfil/?user=" . criptografar($id);
@@ -51,7 +52,7 @@ class notificacoes extends process
                 "",
                 $profileLink,
                 "chat-left-dots",
-                $sql['data']
+                $data
             );
         }
     }

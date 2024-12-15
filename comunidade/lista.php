@@ -46,38 +46,14 @@ if (isset($_GET['abrir'])) {
     require "../include/nav.php";
     ?>
     <div class="corpos">
-        <div id="aps" class="">
-            <a href="lista.php?abrir=nova" class="text-center btn_simples2">
-                <div class="container p-5">Criar Comunidade</div>
-            </a>
-            <div class="block">
-                <div class="inline">
-                <a href="./lista.php" class="btn_simples 
-                <?php
-                    if (!isset($_GET['abrir'])) {
-                        echo "selecionado";
-                    }
-                ?>
-                ">minhas comunidades</a>
-                </div>
-                <div class="inline">
-                    <a href="./lista.php?abrir=pdd" class="btn_simples 
-                    <?php
-                        if (isset($_GET['abrir'])) {
-                            if ($_GET['abrir'] == 'pdd') {
-                                echo "selecionado";
-                            } 
-                        }
-                    ?>
-                    ">procurar comunidades</a>
+        <div class="d-flex justify-content-center items-align-center w-100">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="btn bg-white m-1 col">minhas</div>
+                    <div class="btn bg-white m-1 col-3">criar nova</div>
+                    <div class="btn bg-white m-1 col">sugeridas</div>
                 </div>
             </div>
-            
-        </div>
-        <div class="container  d-flex justify-content-center align-items-center p-1">
-            <a href="lista.php?abrir=nova">
-                <div class="ops_nova_comunidade btn bg-sec">Criar nova comunidade</div>
-            </a>
         </div>
         <div class="corpo_metade1 rolagem_vertical">
             <div class="container d-flex justify-content-center w-100">

@@ -278,9 +278,6 @@ a{
     .corpo_metade1{
         width: 100%;
     }
-    .corpo_metade1,.corpo_metade2{
-        height: calc(100% - 80px);
-    }
 }
 #corpo{
     background-color: transparent;

@@ -49,13 +49,12 @@ $c = new sig_in;
         <div class=" form-container mx-2">
             <h2 class="text-center">Login</h2>
             <form name="Game" method="post">
+                <div class="text-center p-2 w-100">digite seu email e senha</div>
                 <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input class="form-control" type="email" name="l_e" placeholder="E-mail do usuário" required>
+                    <input class="form-control" type="email" name="l_e" placeholder="E-mail" required>
                 </div>
                 <div class="form-group mt-3">
-                    <label for="password">Senha</label>
-                    <input class="form-control" type="password" name="l_s" placeholder="Palavra-passe" required>
+                    <input class="form-control" type="password" name="l_s" placeholder="Senha" required>
                 </div>
                 <button type="submit">Entrar</button>
             </form>

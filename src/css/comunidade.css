@@ -6,16 +6,6 @@
     position: absolute;
     float: left;
 }
-@media (min-width: 600px){
-    #aps{
-        display: none;
-    }
-}
-@media (max-width: 600px){
-    .ops_nova_comunidade{
-        display: none;
-    }
-}
 .carregar_img{
     position: absolute;
     width: 50%;

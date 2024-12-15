@@ -15,7 +15,7 @@ if (!isset($_SESSION['id_user'])) {
 $user = mysqli_query(conn(),"SELECT * FROM usuarios WHERE id_user = $id_user");
 $user = mysqli_fetch_assoc($user);
 ?>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
