@@ -18,7 +18,7 @@ spl_autoload_register('autoloader');
 
 if (isset($_SESSION['id_user'])) {
     $user = new informacoes_usuario;
-    $user = $user->user;
+    $user = $user->usuario();
 }
 
 $bdnome2 = (new conexao)->bdnome2;
@@ -93,7 +93,7 @@ function carregar_img($doc,$tipo,$id) {
         }
         
         $nome_img = "IMG-" . $_SESSION['id_user'] . "-perfil-" . date("Y.m.d-H.i.s") . $ext;
-        $dir = '../src/userFile/'.(new informacoes_usuario())->user['code_nome'].'/img/';
+        $dir = '../src/userFile/'.(new informacoes_usuario())->usuario()['code_nome'].'/img/';
         if (move_uploaded_file($_FILES['img']['tmp_name'], $dir . $nome_img)) {
             if ($c->carregar_documento($id, $tipo, $nome_img)) {
                 return true;
@@ -125,7 +125,7 @@ function carregar_img_storie($imgs) {
             }
             
             $nome_img = "IMG-" . $_SESSION['id_user'] . "-".rand(0,9000)."-" . date("Y.m.d-H.i.s") . $ext;
-            $dir = 'src/userFile/'.(new informacoes_usuario())->user['code_nome'].'/img/';
+            $dir = 'src/userFile/'.(new informacoes_usuario())->usuario()['code_nome'].'/img/';
             if (move_uploaded_file($_FILES['img']['tmp_name'], $dir . $nome_img)) {
                 if (!$c->postar_stories($nome_img)) {
                     return false;

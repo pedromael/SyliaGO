@@ -271,7 +271,7 @@ a{
 .corpo_metade2{
     right: 0;
 }
-@media (max-width: 600px){
+@media (max-width: 620px){
     .corpo_metade2{
         display: none;
     }

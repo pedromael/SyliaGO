@@ -14,7 +14,7 @@ class repositorio extends informacoes_usuario
         
         if ($id_repositorio != null) {
             $this->id_repositorio = $id_repositorio;
-            $this->diretotio = "../src/userFile/".$this->user['code_nome']."/repositorio/".$this->repositorio()['nome']."/";
+            $this->diretotio = "../src/userFile/".$this->usuario()['code_nome']."/repositorio/".$this->repositorio()['nome']."/";
         }
     }
 
@@ -54,7 +54,7 @@ class repositorio extends informacoes_usuario
             return false; // Nome já em uso
         }
     
-        $dir = __DIR__."/../src/userFile/" . $this->user['code_nome'] . "/repositorio/";
+        $dir = __DIR__."/../src/userFile/" . $this->usuario()['code_nome'] . "/repositorio/";
     
         // if (!mkdir($dir, 0755, true)) {
         //     throw new Exception("Erro ao criar o diretório: $dir");

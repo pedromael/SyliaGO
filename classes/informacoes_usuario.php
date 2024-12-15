@@ -1,14 +1,12 @@
 <?php
 class informacoes_usuario extends conexao
 {
-    public $user;
     //public $linguas_falada;
     public $gostos;
     public $indereco; 
 
     public function __construct(){ 
         parent::__construct();
-        $this->user = $this->usuario($_SESSION['id_user']);
         //$this->linguas_falada = $this->linguas_falada($_SESSION['id_user']);
         // $this->gostos = $this->gostos_do_usuario($_SESSION['id_user']);
     }
@@ -27,10 +25,11 @@ class informacoes_usuario extends conexao
             $sql->bindValue(":user", $id_user);
     
             if ($sql->execute()) {
-                return $todo ? $sql->fetchAll() : $sql->fetch();
+                
             }  
+            return $todo ? $sql->fetchAll() : $sql->fetch();
         } catch (\Throwable $th) {
-            return $this->usuario($id_user, $todo);   
+            return false;  
         }
     }
     
@@ -85,7 +84,7 @@ class informacoes_usuario extends conexao
     {
         $user = new informacoes_usuario;
         if(is_null($id_user2)) {
-            $user1 = $user->user;
+            $user1 = $user->usuario();
         }else{
             $user1 = $user->usuario($id_user2);
             if($user1 == false){

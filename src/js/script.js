@@ -4,7 +4,7 @@ var largura = window.innerWidth
 function actualizar_login() {
     var xhr = new XMLHttpRequest();
 
-    xhr.open('POST', indereco+'include/login.php', true)
+    xhr.open('POST', '/include/login.php', true)
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
       if (xhr.status !== 200) {
@@ -138,49 +138,6 @@ function personalizar(params) {
         }else{
             div2 = document.querySelector(".div2_img");
             div2.style.cursor ="hand"
-        }
-    }
-}
-function perfil_img(params1,params) {
-    if (params1 == 1) {
-        div2 = document.querySelector(".div2_img");
-        if (div1 = document.querySelector(".div1_img")) {
-            if (params == 1) {
-                if (div1.classList.contains('remover')) {
-                    div1.classList.remove('remover')
-                    div2.classList.remove('remover')
-                }
-            }
-            if (params == 11) {
-                if (!div1.classList.contains('remover')) {
-                    div1.classList.add('remover')
-                    div2.classList.add('remover')
-                }
-            }
-        }else{
-            if (params == 1) {
-                if (div2.classList.contains('remover')) {
-                    div2.classList.remove('remover')
-                }
-            }
-            if (params == 11) {
-                if (!div2.classList.contains('remover')) {
-                    div2.classList.add('remover')
-                }
-            }
-        }
-    }
-    if(params1 == 2){
-        div1 = document.querySelector(".div1_img");
-        if (params == 1) {
-            if (div1.classList.contains('remover')) {
-                div1.classList.remove('remover')
-            }
-        }
-        if (params == 11) {
-            if (!div1.classList.contains('remover')) {
-                div1.classList.add('remover')
-            }
         }
     }
 }

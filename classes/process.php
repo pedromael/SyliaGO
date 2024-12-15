@@ -203,7 +203,7 @@ class process extends informacoes_usuario{
     {
         if ($id_user != NULL) {
             $reac = $this->pdo->prepare("SELECT count(*) AS valor FROM $this->bdnome2.reacao WHERE id_user = :id AND id=$id AND tipo = '$para'");
-            $reac->bindValue(":id", $this->user['id_user']);
+            $reac->bindValue(":id", $this->usuario()['id_user']);
         }else {
             $reac = $this->pdo->prepare("SELECT count(*) AS valor FROM $this->bdnome2.reacao WHERE id=$id AND tipo = '$para'");
         }

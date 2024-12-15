@@ -211,7 +211,7 @@ class postes extends process
 
                 $this->proveniente = "pbl_global";
             }
-            $sql->bindValue(":user", $this->user['id_user']);
+            $sql->bindValue(":user", $_SESSION['id_user']);
         } elseif ($this->oque > 0 && $this->para == "comunidade") {
             $sql = $this->pdo->prepare("SELECT pbl.*,id2 AS id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl
             LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
@@ -242,8 +242,8 @@ class postes extends process
                 $publicacoes_verificadas =  array();
 
                 foreach ($sql->fetchAll() AS $row) {
-                    if ($this->relacao_poste_usuario($row,$this->user['id_user']) >= 0) {
-                        $row['pontuacao'] = $this->relacao_poste_usuario($row,$this->user['id_user']);
+                    if ($this->relacao_poste_usuario($row,$_SESSION['id_user']) >= 0) {
+                        $row['pontuacao'] = $this->relacao_poste_usuario($row,$_SESSION['id_user']);
                         array_push($publicacoes_verificadas,$row);
                     }
                 }

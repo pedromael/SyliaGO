@@ -51,7 +51,7 @@ class comunidade extends conexao
                         <!-- Botão -->
                         <div>
                             <a href="/comunidade/?cmndd=<?=criptografar($id_comunidade)?>" class="btn btn-primary">
-                                Visualizar
+                                Ver
                             </a>
                         </div>
                     </div>
