@@ -6,32 +6,16 @@ if (isset($_POST['l_e'])) {
     $email = filtro($_POST['l_e']);
     if (!empty($senha) && !empty($email)) {
         if ($c->logar($email,$senha)) {
-            #header("location: ../");
-            if ($_SESSION['id_user'] == 4) {
-                ?>
-                <script>
-                    document.location.href = "../adm/?usuarios"
-                </script>
-            <?php
-            }
             ?>
                 <script>
                     document.location.href = "../"
                 </script>
             <?php
         } else {
-            ?>
-            <div class="erro_ao_entrar">
-                dados de acesso incorretos
-            </div>
-            <?php
+            echo "<div class='erro_ao_entrar'>dados de acesso encorreto</div>";
         }
     } else {
-        ?>
-        <div class="erro_ao_entrar">
-            erro ao conectar banco de dados
-        </div>
-        <?php
+        echo "<div class='erro_ao_entrar'>preencha todos os campos</div>";
     }
 }
 
@@ -48,16 +32,16 @@ if (isset($_POST['e'])) {
                 if ($c->cadastrar($nome, $email, $pais, $senha)) {
                     echo "<script>document.location.href = '../instrucoes/';</script>";
                 } else {
-                    echo "<div class='erro-ao-entrar'>Já existe um usuário com esse email</div>";
+                    echo "<div class='erro_ao_entrar'>Já existe um usuário com esse email</div>";
                 }
             } else {
-                echo "<div class='erro-ao-entrar'>Senha não atende aos requisitos mínimos de segurança</div>";
+                echo "<div class='erro_ao_entrar'>Senha não atende aos requisitos mínimos de segurança</div>";
             }
         } else {
-            echo "<div class='erro-ao-entrar'>As senhas não correspondem</div>";
+            echo "<div class='erro_ao_entrar'>As senhas não correspondem</div>";
         }
     } else {
-        echo "<div class='erro-ao-entrar'>Preencha todos os campos</div>";
+        echo "<div class='erro_ao_entrar'>Preencha todos os campos</div>";
     }
 }
 ?>

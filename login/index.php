@@ -42,7 +42,9 @@ $c = new sig_in;
         <h1 class="">SyliaGO</h1>
         <div class="changer" onclick="mudar_formulario()">criar conta</div>
     </nav>
-
+    <?php
+        require "sender.php"
+    ?>
     <!-- Conteúdo principal -->
     <div class="container corpo_login">
 
@@ -51,10 +53,10 @@ $c = new sig_in;
             <form name="Game" method="post">
                 <div class="text-center p-2 w-100">digite seu email e senha</div>
                 <div class="form-group">
-                    <input class="form-control" type="email" name="l_e" placeholder="E-mail" required>
+                    <input class="form-control" type="email" name="l_e" placeholder="E-mail" value="<?php if(isset($_POST['l_e'])){echo $_POST['l_e'];}?>" required>
                 </div>
                 <div class="form-group mt-3">
-                    <input class="form-control" type="password" name="l_s" placeholder="Senha" required>
+                    <input class="form-control" type="password" name="l_s" placeholder="Senha" value="<?php if(isset($_POST['l_s'])){echo $_POST['l_s'];}?>" required>
                 </div>
                 <button type="submit">Entrar</button>
             </form>
@@ -93,19 +95,23 @@ $c = new sig_in;
             <form method="post">
                 <div class="form-group">
                     <label for="nome">Nome</label>
-                    <input type="text" id="nome" name="n" class="form-control" required>
+                    <input type="text" id="nome" name="n" class="form-control" value="<?php if(isset($_POST['n'])){echo $_POST['n'];}?>" required>
                 </div>
                 <div class="form-group">
                     <label for="email">E-mail</label>
-                    <input type="email" id="email" name="e" class="form-control" required>
+                    <input type="email" id="email" name="e" class="form-control" value="<?php if(isset($_POST['e'])){echo $_POST['e'];}?>" required>
                 </div>
                 <div class="form-group">
                     <label for="pais">País de Residência</label>
-                    <select id="pais" name="p" class="form-control">
+                    <select id="pais" name="p" class="form-control" >
                         <?php
                         $paises = mysqli_query(conn(), "SELECT * FROM $bdnome2.pais ORDER BY nome");
                         while ($pais = mysqli_fetch_assoc($paises)) {
-                            $selected = ($pais['nome'] == "Angola") ? "selected" : "";
+                            if(isset($_POST["p"])){
+                                $selected = ($pais['nome'] == $_POST['p']) ? "selected" : "";
+                            }else{
+                                $selected = ($pais['nome'] == "Angola") ? "selected" : "";
+                            }
                             echo "<option value='{$pais['id_pais']}' $selected>{$pais['nome']}</option>";
                         }
                         ?>
@@ -113,13 +119,13 @@ $c = new sig_in;
                 </div>
                 <div class="form-group">
                     <label for="senha_sig">Senha</label>
-                    <input type="password" id="senha_sig" name="s" class="form-control" required>
+                    <input type="password" id="senha_sig" name="s" class="form-control" value="<?php if(isset($_POST['s'])){echo $_POST['s'];}?>" required>
                 </div>
                 <div class="form-group">
                     <label for="senha_conf">Confirmar Senha</label>
-                    <input type="password" id="senha_conf" name="cs" class="form-control" required>
+                    <input type="password" id="senha_conf" name="cs" class="form-control" value="<?php if(isset($_POST['cs'])){echo $_POST['cs'];}?>" required>
                 </div>
-                <button type="submit">Cadastrar</button>
+                <button type="submit" name="btn_cadastrar">Cadastrar</button>
             </form>
             <p class="text-center mt-3">
                 <a href="" class="text-center w-100 m-2" onclick="trocar_formulario()">Já tem uma conta? Entrar</a>
@@ -132,7 +138,8 @@ $c = new sig_in;
     </footer>
 </body>
 </html>
-
 <?php
-require "sender.php"
+if (isset($_POST['btn_cadastrar'])) {
+    ?><script>mudar_formulario()</script><?php
+}
 ?>

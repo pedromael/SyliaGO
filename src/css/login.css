@@ -123,3 +123,12 @@ footer {
     text-align: center;
     padding: 10px 0;
 }
+.erro_ao_entrar{
+    position: absolute;
+    top: 63px;
+    background-color: rgba(255, 0, 0, 0.274);
+    border: 1px solid red;
+    color: red;
+    margin: 2px;
+    padding: 2px;
+}
