@@ -41,35 +41,93 @@
 <div class="corpos">
     <div class="corpo3 crp"></div>
     <div id="corpo" class="crp">
-      <div class="corpo_diminuido overflow-y-auto">
-        
-      <div class="msg">
-        <?php
-        if($id_dest != NULL){
-          $msg = new mensagens;
-          $msg->receptor = $id_dest;
-          $msg->selecionar();
-        }else {
-          ?>
-          <div class="container d-flex justify-content-center align-items-center h-100">
-            <h4>selecine uma mensagen</h>
-          </div>
+      <div class="corpo_diminuido overflow-y-auto"> 
+        <div class="container p-2 m-1">
           <?php
-        }
-        ?>
-      </div>
-  </div> 
-  <footer class="footer_chat">
-        <div class="formulario_normal_de_envio">
-            <textarea name="texto_cmt" id="" placeholder="a tua opiniao e importante"></textarea>
-            <div class="carregar"  style="background-image: url(../bibliotecas/bootstrap/icones/file-earmark-image.svg);"></div>
-            <button name="btn_cmt" style="background-image: url(../bibliotecas/bootstrap/icones/send.svg);" class="form-control" onclick="enviar_mensagem('<?=criptografar($id_dest)?>')"></button>
+          if($id_dest != null){
+            $info = $c->usuario($id_dest);
+            $info_login = (new verificar_logados())->dados_de_login($id_dest);
+            ?>
+            <style>
+              .data_logado{
+                font-size: 11pt;
+                color: #d3d3ddff;
+                text-shadow: 1px 1px 2px #ddd;
+                <?php
+                  if($info_login["ativo"]){
+                    ?>
+                    border-bottom: 2px solid green;
+                    <?php
+                  }else{
+                    ?>
+                    border-bottom: 2px solid #d3d3ddff;
+                    <?php
+                  }
+                ?>
+              }
+            </style>
+            <div class="card mb-2 p-1">
+              <div class="row g-0 align-items-center">
+                <div class="col-auto">
+                  <div class="rounded-circle" 
+                      style="width: 60px; height: 60px; background-image: url('<?=pegar_foto_perfil("perfil", $id_dest)?>'); background-size: cover; background-position: center;">
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="container">
+                    <div class="row p-1"><?=$info['nome']?></div>
+                    <div class="row text-end p-1 data_logado">
+                      <div class="container">
+                        <?php
+                          if($info_login['ativo']){
+                            echo "ativo";
+                          }else{
+                            echo "ativo ". resumir_data($info_login["data"]);
+                          }
+                        ?>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <?php
+          }
+          ?>
         </div>
+        <div class="msg">
+          <?php
+          if($id_dest != NULL){
+            $msg = new mensagens;
+            $msg->receptor = $id_dest;
+            $msg->selecionar();
+          }else {
+            ?>
+            <div class="container d-flex justify-content-center align-items-center h-100">
+              <h4>selecine uma mensagen</h>
+            </div>
+            <?php
+          }
+          ?>
+        </div>
+      </div> 
       <?php
-      require "../sent.php";
+      if($id_dest != NULL){
+        ?>
+          <footer class="footer_chat">
+              <div class="formulario_normal_de_envio">
+                  <textarea name="texto_cmt" id="" placeholder="manda um oi!"></textarea>
+                  <div class="carregar"  style="background-image: url(../bibliotecas/bootstrap/icones/file-earmark-image.svg);"></div>
+                  <button name="btn_cmt" style="background-image: url(../bibliotecas/bootstrap/icones/send.svg);" class="form-control" onclick="enviar_mensagem('<?=criptografar($id_dest)?>')"></button>
+              </div>
+            <?php
+            require "../sent.php";
+            ?>
+          </footer>
+        <?php
+      }
       ?>
-  </footer>
-  </div> 
+    </div> 
   <div class="corpo2 crp"></div>
 </div>
 
@@ -81,3 +139,22 @@
 <script src="/src/js/fim_script.js"></script>
 </body>
 </html>
+<script>
+    var largura = window.innerWidth;
+    var sms = document.querySelector(".corpo_diminuido")
+
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', 'include/sms.php', true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const user = urlParams.get('user')
+    if (largura < 750 && user == null) {
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                sms.innerHTML = xhr.responseText;
+            }
+        };
+        xhr.send();
+    }
+</script>

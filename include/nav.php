@@ -80,7 +80,7 @@
         <div class="d-flex align-items-center mb-4">
             <div class="me-3">
                 <a href="/perfil/?user=<?=criptografar($user['id_user'])?>">
-                    <img src="<?=$imagen?>" alt="" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                    <img src="<?=pegar_foto_perfil("perfil", $_SESSION['id_user'])?>" alt="" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                 </a>
             </div>
             <div>

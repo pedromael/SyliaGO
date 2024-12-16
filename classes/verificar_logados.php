@@ -28,7 +28,7 @@ class verificar_logados extends conexao
         LEFT JOIN $this->bdnome2.contacto_aceite aa ON (aa.id_contacto = a.id_contacto)
         LEFT JOIN chat c ON ((c.id_user = u.id_user AND c.id_user_dest = :id) 
             OR (c.id_user_dest = u.id_user AND c.id_user = :id))
-        LEFT JOIN $this->bdnome2.login AS l ON (l.id_user = u.id_user AND ABS(TIMESTAMPDIFF(SECOND, NOW(), l.data)) < 30)
+        LEFT JOIN $this->bdnome2.login AS l ON (l.id_user = u.id_user AND ABS(TIMESTAMPDIFF(SECOND, NOW(), l.data)) < 60)
         WHERE u.id_user != :id AND (aa.id_contacto = a.id_contacto OR (u.id_user = c.id_user OR u.id_user = c.id_user_dest))
         AND ((a.id_user = u.id_user AND a.id_user_dest = :id) 
             OR (a.id_user_dest = u.id_user AND a.id_user = :id))
@@ -47,6 +47,13 @@ class verificar_logados extends conexao
             }
         } else {return array();}
         return $numero_de_contactos;
+    }
+
+    public function dados_de_login($id_user): array {
+        $sql = $this->pdo->prepare('SELECT *,IF(ABS(TIMESTAMPDIFF(SECOND, NOW(), data)) < 60, TRUE, FALSE) AS ativo FROM '.$this->bdnome2.'.login WHERE id_user=:user ORDER BY id_login DESC');
+        $sql->bindValue(':user', $id_user);
+        $sql->execute();
+        return $sql->fetch();
     }
 }
 

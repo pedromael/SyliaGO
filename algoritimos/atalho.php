@@ -199,7 +199,7 @@ function resumir_data($data_p): bool|string
     $hora = $minuto / 60;
     $dias = $hora / 24;
     $meses = $dias / 30;
-    
+
     // Se foi criado agora (menos que 5 segundos)
     if ($segundo < 5) {
         return "agora";

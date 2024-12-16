@@ -56,9 +56,9 @@ if (isset($_GET['abrir'])) {
         <div class="d-flex justify-content-center items-align-center w-100">
             <div class="container text-center m-1">
                 <div class="row">
-                    <div class="btn apagar bg-white m-1 p-1 col" onclick="document.location.href='lista.php?abrir='">minhas</div>
-                    <div class="btn bg-white m-1 p-1 col-3" onclick="document.location.href='lista.php?abrir=nova'">criar nova</div>
-                    <div class="btn apagar bg-white m-1 p-1 col" onclick="document.location.href='lista.php?abrir=pdd'">sugeridas</div>
+                    <div class="btn apagar bg-white m-1 p-1 col <?php if ($novos == false) echo 'active'; ?>" onclick="document.location.href='lista.php?abrir='">minhas</div>
+                    <div class="btn bg-white m-1 p-1 col-3      <?php if ($novos == "nova") echo 'active'; ?>" onclick="document.location.href='lista.php?abrir=nova'">criar nova</div>
+                    <div class="btn apagar bg-white m-1 p-1 col <?php if ($novos == "pdd") echo 'active'; ?>" onclick="document.location.href='lista.php?abrir=pdd'">sugeridas</div>
                 </div>
             </div>
         </div>

@@ -43,22 +43,22 @@
     require "../include/nav.php";
     ?>
     <div class="corpos">
-        <div id="aps" class="container-fluid bg-light py-3 shadow-sm">
+        <div class="container d-flex justify-content-center p-2">
             <div class="row align-items-center">
                 <!-- Aba Centralizada -->
-                <div class="col-md-6 d-flex justify-content-center">
+                <div class="col">
                     <a href="./index.php" 
-                    class="btn btn-outline-primary px-4 fw-bold 
+                    class="btn btn-outline-primary fw-bold 
                     <?php if (!isset($_GET['abrir'])) echo 'active'; ?>">
                         Novos
                     </a>
                 </div>
 
                 <!-- Aba à Direita -->
-                <div class="col-md-6 d-flex justify-content-center">
+                <div class="col">
                     <?php if ($c->verificar_qtd("pdd", $id_user) > 0) { ?>
                         <a href="index.php?abrir=pdd" 
-                        class="btn btn-outline-primary px-4 fw-bold 
+                        class="btn btn-outline-primary fw-bold 
                         <?php if (isset($_GET['abrir']) && $_GET['abrir'] === 'pdd') echo 'active'; ?>">
                             Pedidos(<span><?=$c->verificar_qtd("pdd", $id_user)?></span>)
                         </a>

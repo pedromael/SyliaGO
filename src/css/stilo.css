@@ -666,7 +666,7 @@ a{
     bottom: 36px;
     position: absolute;
     width: 100%;
-    height: calc(100% - 54px - 60px - 50px);
+    height: calc(100% - 32px - 60px);
     margin: auto;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -905,41 +905,6 @@ a{
         transform: rotate(360deg);
     }
 }
-/* mensagens */
-.prev_logados_chat{
-    bottom: 0;
-    position: absolute;
-    width: 100%;
-    height: 69px;
-    margin: auto;
-    border-top: 4px solid var(--cor_terc);
-}
-.prev_logados_chat .user{
-    width: 60px;
-    height: 60px;
-    margin: 3px;
-    border: 1px solid var(--cor_sec);
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center center;
-    display: inline-block;
-    position: relative;
-}
-.prev_logados_chat .user div{
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 4px;
-    right: 4px;
-}
-.prev_logados_chat .user .logado{
-    background-color: green;
-}
-.prev_logados_chat .user .nao_logado{
-    background-color: rgb(139, 141, 139);
-}
-
 #img_user{
     width: 75px;
     height: 74px;
