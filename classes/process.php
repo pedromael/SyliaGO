@@ -3,17 +3,36 @@ class process extends informacoes_usuario{
     function __construct() {
         parent::__construct(); 
     }
-    public function inserir_historico($tipo, $id, $de, $inverso = false) {
-        $sql = $this->pdo->prepare("INSERT INTO $this->bdnome2.historico(id_user,id,tipo,de,data) VALUES(:user,:id,:t,:d,NOW())");
-        $sql->bindValue(":user", $_SESSION['id_user']);
-        $sql->bindValue(":t", $tipo);
-        $sql->bindValue(":d", $de);
-        $sql->bindValue(":id", $id);
-        if (!$sql->execute()) {
-            return false;
+    public function inserir_historico($tipo, $id, $de, $id_receptor, $inverso = false) {
+        if ($inverso) {
+            // Deletar o histórico com os valores passados
+            $sql = $this->pdo->prepare("DELETE FROM $this->bdnome2.historico WHERE id_emissor = :user AND id_receptor = :receptor AND id = :id AND tipo = :t AND de = :d");
+            $sql->bindValue(":user", $_SESSION['id_user']);
+            $sql->bindValue(":receptor", $id_receptor);
+            $sql->bindValue(":t", $tipo);
+            $sql->bindValue(":d", $de);
+            $sql->bindValue(":id", $id);
+            
+            if (!$sql->execute()) {
+                return false;  // Retorna falso se a exclusão falhar
+            }
+            return true;  // Retorna verdadeiro se a exclusão for bem-sucedida
+        } else {
+            // Inserir o histórico normalmente
+            $sql = $this->pdo->prepare("INSERT INTO $this->bdnome2.historico(id_emissor, id_receptor, id, tipo, de, data) VALUES(:user, :receptor, :id, :t, :d, NOW())");
+            $sql->bindValue(":user", $_SESSION['id_user']);
+            $sql->bindValue(":receptor", $id_receptor);
+            $sql->bindValue(":t", $tipo);
+            $sql->bindValue(":d", $de);
+            $sql->bindValue(":id", $id);
+            
+            if (!$sql->execute()) {
+                return false;  // Retorna falso se a inserção falhar
+            }
+            return true;  // Retorna verdadeiro se a inserção for bem-sucedida
         }
-        return false;
     }
+    
     public function marcar_visto($id,$tipo){
         $sql = $this->pdo->prepare("SELECT * FROM $this->bdnome2.visto WHERE id_user=:user AND id=$id AND tipo='$tipo'");
         $sql->bindValue(":user", $_SESSION['id_user']);
@@ -170,6 +189,23 @@ class process extends informacoes_usuario{
         } 
     }
     public function reagir($id,$tipo,$para) {
+        switch ($para) {
+            case 'comentario':
+                $id_user = (new comentarios())->comentario($id)['id_user'];
+                break;
+
+            case 'repositorio':
+                # code...
+                break;
+
+            case 'poste':
+                $id_user = (new postes())->poste($id)['id_user'];
+                break;
+
+            default:
+                return false;
+        }
+
         $sql = $this->pdo->prepare("SELECT * FROM $this->bdnome2.reacao WHERE id_user=:user AND id=:id AND para = :p");
         $sql->bindValue(":user", $_SESSION['id_user']);
         $sql->bindValue(":id", $id); 
@@ -181,11 +217,8 @@ class process extends informacoes_usuario{
             $sql = $this->pdo->prepare("DELETE FROM $this->bdnome2.reacao WHERE id_reacao=:i");
             $sql->bindValue(":i", $id_reacao);
             $sql->execute();
-            if ($this->inserir_historico("reacao", $id, $para, true)) {
-                if ($tipo != 'remover') {
-                    return $this->reagir($id, $tipo, $para);
-                }
-            }else{
+
+            if (!$this->inserir_historico("reacao", $id, $para, $id_user, true)) {
                 return false;
             }
         }else{
@@ -196,19 +229,23 @@ class process extends informacoes_usuario{
             $sql->bindValue(':p', $para);
             $sql->bindValue(':t', $tipo);
             $sql->execute();
+
+            if (!$this->inserir_historico("reacao", $id, $para, $id_user)) {
+                return false;
+            }
         }
         return true;
     }
-    public function qtd_reacao($id,$para,$id_user = NULL)
+    public function qtd_reacao($id,$para,$id_user = NULL): int
     {
         if ($id_user != NULL) {
-            $reac = $this->pdo->prepare("SELECT count(*) AS valor FROM $this->bdnome2.reacao WHERE id_user = :id AND id=$id AND tipo = '$para'");
-            $reac->bindValue(":id", $this->usuario()['id_user']);
+            $reac = $this->pdo->prepare("SELECT * FROM $this->bdnome2.reacao WHERE id_user = :id AND id=$id AND para = '$para'");
+            $reac->bindValue(":id", $id_user);
         }else {
-            $reac = $this->pdo->prepare("SELECT count(*) AS valor FROM $this->bdnome2.reacao WHERE id=$id AND tipo = '$para'");
+            $reac = $this->pdo->prepare("SELECT * FROM $this->bdnome2.reacao WHERE id=$id AND para = '$para'");
         }
         $reac->execute();
-        return $reac->fetch()['valor'];
+        return $reac->rowCount();
     }
     public function postar_stories($imgs) {
         if (!is_array($imgs)) {
@@ -369,7 +406,10 @@ class process extends informacoes_usuario{
             $sql = $this->pdo->prepare("INSERT INTO $this->bdnome2.contacto_aceite(id_contacto,data) VALUES (:id,now())");
             $sql->bindValue(":id", $id_contacto);
             if ($sql->execute()) {
-                $this->inserir_historico("comfirmado", $id_contacto, "perfil");
+                $sql = $this->pdo->prepare("SELECT * FROM contacto WHERE id_contacto = $id_contacto");
+                $sql->execute();
+                $dados = $sql->fetch();
+                $this->inserir_historico("comfirmado", $id_contacto, "perfil", $dados['id_user']);
             } else {
                 return false;
             }

@@ -43,6 +43,11 @@ class comentarios extends process
     }
     
     public function comentar($id,$texto,$tipo){
+        $tipos_disponiveis = ['comentario', 'poste', 'repositorio'];
+        if (!in_array($tipo, $tipos_disponiveis)) {
+            return false;
+        }
+        
         $sql = $this->pdo->prepare("INSERT INTO cmt(id_user,id,tipo,texto,data)
         VALUES(:user,:id,:tipo,:t,NOW())");
         $sql->bindValue(":user", $_SESSION['id_user']);
@@ -51,7 +56,25 @@ class comentarios extends process
         $sql->bindValue(":t", nl2br($texto));
         if ($sql->execute()) {
             $id_cmt = $this->pdo->lastInsertId();
-            if ($this->inserir_historico("comentario", $id, $tipo)) { 
+            
+            switch ($tipo) {
+                case 'comentario':
+                    $id_user = $this->comentario($id)['id_user'];
+                    break;
+
+                case 'repositorio':
+                    # code...
+                    break;
+
+                case 'poste':
+                    $id_user = (new postes())->poste($id)['id_user'];
+                    break;
+
+                default:
+                    return false;
+            }
+
+            if ($this->inserir_historico("comentario", $id_cmt, $tipo,$id_user)) { 
                 return $this->comentario($id_cmt);
             }else {
                return  false;

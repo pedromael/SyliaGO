@@ -202,24 +202,8 @@ function reagir(id,tipo,para) {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
       if (xhr.status === 200) {
-        var div_reagir = document.querySelector('.reac'+tipo+id)
-        var img = document.querySelector('.reac'+tipo+id+' img')
-        if (img.classList.contains('add')) {
-            div_reagir.classList.remove('reac_animacao');
-            if (tipo == "pbl") {
-                div_reagir.innerHTML = "<img src='"+indereco+"bibliotecas/bootstrap/icones/heart.svg'><span>"+xhr.responseText+"</span>"
-            }else{
-                div_reagir.innerHTML = "<img src='"+indereco+"bibliotecas/bootstrap/icones/star.svg'><span>"+xhr.responseText+"</span>"
-            }
-        }else{
-            div_reagir.classList.add('reac_animacao');
-            if (tipo == "pbl") {
-                div_reagir.innerHTML = "<img class='add' src='"+indereco+"bibliotecas/bootstrap/icones/heart-fill.svg'><span>"+xhr.responseText+"</span>"
-            }else{
-                div_reagir.innerHTML = "<img class='add' src='"+indereco+"bibliotecas/bootstrap/icones/star-fill.svg'><span>"+xhr.responseText+"</span>"    
-            }
-            div_reagir.classList.remove('reac_animacao');
-        }
+        var button = document.querySelector('#reac_'+para+id)
+        button.innerHTML = xhr.responseText;
       }
     };
     var data = {
@@ -297,14 +281,15 @@ function denunciar(tipo) {
     xhr.send(jsonData);
 
 }
-function abrir_partilhar(tipo,id) {
+function abrir_partilhar(tipo,id,como) {
     var pbl = document.querySelector(".pbl_partilhar")
 
     if (pbl.classList.contains("remover")) {
         pbl.classList.remove("remover")
         pbl.classList.add(tipo+"_"+id)
 
-        document.querySelector("#tipo_da_partilha").value = tipo;
+        document.querySelector("#tipo_de_conteudo_partilha").value = tipo;
+        document.querySelector("#partilhado_em").value = como;
         document.querySelector("#id_pbl_da_partilha").value = id
 
         return true;
@@ -316,7 +301,8 @@ function abrir_partilhar(tipo,id) {
 }
 function partilhar() {
     var indereco;
-    var tipo_de_partilha = document.querySelector("#tipo_da_partilha").value;
+    var tipo_de_conteudo_partilha = document.querySelector("#tipo_de_conteudo_partilha").value;
+    var partilhado_em = document.querySelector("#partilhado_em").value;
     var id = document.querySelector("input#id_pbl_da_partilha").value
     var descricao = document.querySelector(".descricao_partilha").value;
 
@@ -337,7 +323,8 @@ function partilhar() {
     var data = {
       id: id,
       descricao: descricao,
-      tipo: tipo_de_partilha
+      tipo: tipo_de_conteudo_partilha,
+      como: partilhado_em
     };
     
     // Converta o objeto em uma string JSON

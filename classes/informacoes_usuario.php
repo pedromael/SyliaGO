@@ -24,11 +24,12 @@ class informacoes_usuario extends conexao
     
             $sql->bindValue(":user", $id_user);
     
-            if ($sql->execute()) {
-                
+            if (!$sql->execute()) {
+                throw new Exception("falha ao executar busca no banco de dados");
             }  
             return $todo ? $sql->fetchAll() : $sql->fetch();
-        } catch (\Throwable $th) {
+        } catch (Exception $th) {
+            
             return false;  
         }
     }

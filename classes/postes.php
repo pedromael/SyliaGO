@@ -32,8 +32,8 @@ class postes extends process
         $this->comunidade = new comunidade;
     }
     public function poste($id){
-        $sql = $this->pdo->prepare("SELECT pbl.*,id2 AS id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl 
-        LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
+        $sql = $this->pdo->prepare("SELECT pbl.*, id_partilhado,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl 
+        LEFT JOIN $this->bdnome2.partilha AS p ON (p.id_partilha = pbl.id_pbl AND p.como = 'poste')
         WHERE id_pbl = :id");   
         $sql->bindValue(":id", $id);
         $sql->execute();
@@ -44,9 +44,7 @@ class postes extends process
         $id_pbl = $poste['id_pbl'];
         $pontuacao = 0;
     
-        $user = new informacoes_usuario;
-    
-        $pontuacao = $user->ligacao_entre_usuario($poste['id_user'], $id_user);
+        $pontuacao = $this->ligacao_entre_usuario($poste['id_user'], $id_user);
     
         $pontuacao = $pontuacao + 2 * verificar_contactos_em_comum($id_user,$poste['id_user']);
     
@@ -70,10 +68,10 @@ class postes extends process
     public function mostrar($row, $visualizacao_unica = false, $reac = true, $partilha = false)
     {
         if (empty($row['id_user'])) return false;
-    
+
         $usuario = $this->usuario($row['id_user']);
         $id_pbl = $row['id_pbl'];
-        $id_user = $usuario['id_user'];
+        $id_user = $row['id_user'];
         $nome_usuario = $usuario['nome'];
         $imagem_perfil = pegar_foto_perfil("perfil", $row['id_user']);
         $inderecos = array_map(function ($doc) use ($usuario) {
@@ -96,15 +94,28 @@ class postes extends process
                             <span><a class="fw-bold" href="/comunidade/?cmndd=<?= criptografar($row['id_comunidade']) ?>"><?= $comunidade['nome'] ?></a></span><br>
                         <?php endif; ?>
                         <span><a href="/perfil/?user=<?= criptografar($id_user) ?>" class="text-decoration-none"><?= $nome_usuario ?></a></span>
-                        <div class="text-muted"><?= resumir_data($row['data']) ?></div>
+                        <?php if(!$partilha): ?>
+                            <div class="text-muted"><?= resumir_data($row['data']) ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="ms-auto">
-                        <button class="btn btn-light" onclick="abrir_info_pbl(<?= $id_pbl ?>)">...</button>
+                        <?php if(!$partilha): ?>
+                            <button class="btn btn-light" onclick="abrir_info_pbl(<?= $id_pbl ?>)">...</button>
+                        <?php else: ?>
+                            <div class="text-muted"><?= resumir_data($row['data']) ?></div>
+                        <?php endif; ?>
                     </div>
                 </div>
-                
-                <p class="text-muted mb-3"><?=htmlspecialchars_decode($row['texto']) ?></p>
-    
+
+                <?php if ($row['id_partilhado'] <= 0): ?>
+                    <p class="text-muted mb-3"><?=htmlspecialchars_decode($row['texto']) ?></p>
+                <?php else: ?>
+                    <div class="container m-0 p-0">
+                        <p class="text-muted mb-3"><?=htmlspecialchars_decode($row['texto']) ?></p>
+                        <?php $this->mostrar($this->poste($row['id_partilhado']),false,false,true);?>
+                    </div>
+                <?php endif; ?>
+
                 <?php if ($qtd_indereco > 0): ?>
                     <div class="mb-3">
                         <div class="d-flex flex-wrap gap-2">
@@ -119,15 +130,15 @@ class postes extends process
     
                 <?php if ($reac): ?>
                     <div class="d-flex justify-content-between">
-                        <button class="btn btn-light" onclick="reagir(<?= $id_pbl ?>, 'gosto', 'poste')">
-                            <img src="/bibliotecas/bootstrap/icones/<?= $this->qtd_reacao($id_pbl, 'poste', $_SESSION['id_user']) > 0 ? 'heart-fill.svg' : 'heart.svg' ?>" alt="Gosto">
+                        <button id="reac_poste<?=$id_pbl?>" class="btn btn-light" onclick="reagir(<?= $id_pbl ?>, 'gosto', 'poste')">
+                            <img class="" src="/bibliotecas/bootstrap/icones/<?= $this->qtd_reacao($id_pbl, 'poste', $_SESSION['id_user']) > 0 ? 'heart-fill.svg' : 'heart.svg' ?>" alt="Gosto">
                             <?= $this->qtd_reacao($id_pbl, 'poste') ?>
                         </button>
                         <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>&cmt=true" class="btn btn-light">
                             <img src="/bibliotecas/bootstrap/icones/chat-dots.svg" alt="Comentários"> <?= qtd_de_cmt($id_pbl) ?>
                         </a>
-                        <?php if ($row['id_partilha'] <= 0): ?>
-                            <button class="btn btn-light" onclick="abrir_partilhar('pbl', <?= $id_pbl ?>)">
+                        <?php if ($row['id_partilhado'] <= 0): ?>
+                            <button class="btn btn-light" onclick="abrir_partilhar('poste', <?= $id_pbl ?>,'poste')">
                                 <img src="/bibliotecas/bootstrap/icones/reply.svg" alt="Partilhar">
                             </button>
                         <?php endif; ?>
@@ -149,10 +160,10 @@ class postes extends process
     private function procura_aleatoria()
     {
         if($this->oque == "poste") {
-            $sql = $this->pdo->prepare("SELECT pbl.*,id2 AS id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl 
+            $sql = $this->pdo->prepare("SELECT pbl.*, id_partilhado, COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl 
             LEFT JOIN contacto AS a ON ((a.id_user = pbl.id_user AND a.id_user_dest = :id) 
             OR (a.id_user_dest = pbl.id_user AND a.id_user = :id))
-            LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
+            LEFT JOIN $this->bdnome2.partilha AS p ON (p.id_partilha = pbl.id_pbl AND p.como = 'poste')
             LEFT JOIN $this->bdnome2.contacto_aceite AS aa ON (aa.id_contacto = a.id_contacto)
             LEFT JOIN $this->bdnome2.comunidade_integrante AS ci ON (ci.id_comunidade = pbl.id_comunidade AND ci.id_user = :id)
             LEFT JOIN comunidade as c ON (c.id_comunidade = pbl.id_comunidade)
@@ -164,8 +175,8 @@ class postes extends process
             $this->proveniente = "pbl_aleatorio";
 
         }elseif($this->oque > 0 && $this->para == "comunidade"){
-            $sql = $this->pdo->prepare("SELECT pbl.*,p.id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl
-            LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
+            $sql = $this->pdo->prepare("SELECT pbl.*,p.id_partilhado,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl
+            LEFT JOIN $this->bdnome2.partilha AS p ON (p.id_partilha = pbl.id_pbl AND p.como = 'poste')
             WHERE id_comunidade = :id ORDER BY RAND() DESC");   
             $sql->bindValue(":id", $this->oque);
 
@@ -183,12 +194,12 @@ class postes extends process
     {
         if ($this->oque == "poste") {
             if ($tipo != "global") {
-                $sql = $this->pdo->prepare("SELECT pbl.*, p.id_partilha, COALESCE(p.tipo, 'null') AS tipo_partilha 
+                $sql = $this->pdo->prepare("SELECT pbl.*, id_partilhado, COALESCE(p.tipo, 'null') AS tipo_partilha 
                 FROM pbl 
                 LEFT JOIN contacto AS a ON ((a.id_user = pbl.id_user AND a.id_user_dest = :user) 
                     OR (a.id_user_dest = pbl.id_user AND a.id_user = :user))
                 LEFT JOIN $this->bdnome2.visto AS v ON (v.id = pbl.id_pbl AND v.tipo = 'poste' AND v.id_user = :user)
-                LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
+                LEFT JOIN $this->bdnome2.partilha AS p ON (p.id_partilha = pbl.id_pbl AND p.como = 'poste')
                 LEFT JOIN $this->bdnome2.contacto_aceite AS aa ON (aa.id_contacto = a.id_contacto)
                 LEFT JOIN $this->bdnome2.comunidade_integrante AS ci ON (ci.id_comunidade = pbl.id_comunidade AND ci.id_user = :user)
                 LEFT JOIN comunidade AS c ON (c.id_comunidade = pbl.id_comunidade)
@@ -203,9 +214,9 @@ class postes extends process
 
                 $this->proveniente = "pbl_normal";
             }else {
-                $sql = $this->pdo->prepare("SELECT pbl.*,id2 AS id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl 
+                $sql = $this->pdo->prepare("SELECT pbl.*,id_partilhado,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl 
                 LEFT JOIN $this->bdnome2.visto as v ON (v.id = pbl.id_pbl AND v.tipo = 'poste' AND v.id_user = :user)
-                LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
+                LEFT JOIN $this->bdnome2.partilha AS p ON (p.id_partilha = pbl.id_pbl AND p.como = 'poste')
                 WHERE id_visto IS NULL AND pbl.id_user != :user
                 ORDER BY id_pbl DESC");  
 
@@ -213,8 +224,8 @@ class postes extends process
             }
             $sql->bindValue(":user", $_SESSION['id_user']);
         } elseif ($this->oque > 0 && $this->para == "comunidade") {
-            $sql = $this->pdo->prepare("SELECT pbl.*,id2 AS id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl
-            LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
+            $sql = $this->pdo->prepare("SELECT pbl.*,id_partilhado,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl
+            LEFT JOIN $this->bdnome2.partilha AS p ON (p.id_partilha = pbl.id_pbl AND p.como = 'poste')
             WHERE id_comunidade = :id
             ORDER BY id_pbl DESC");
             
@@ -222,8 +233,8 @@ class postes extends process
             
             $this->proveniente = "comunidade";
         } elseif ($this->oque > 0 && $this->para == "perfil"){
-            $sql = $this->pdo->prepare("SELECT pbl.*,id2 AS id_partilha,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl
-            LEFT JOIN $this->bdnome2.partilha AS p ON (p.id1 = pbl.id_pbl)
+            $sql = $this->pdo->prepare("SELECT pbl.*,id_partilhado,COALESCE(p.tipo,'null') AS tipo_partilha FROM pbl
+            LEFT JOIN $this->bdnome2.partilha AS p ON (p.id_partilha = pbl.id_pbl AND p.como = 'poste')
             WHERE id_user = :id AND id_comunidade = 0
             ORDER BY id_pbl DESC");  
             $sql->bindValue(":id", $this->oque);

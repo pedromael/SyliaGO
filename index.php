@@ -241,10 +241,11 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                                         <textarea name="descricao" id="" class="form-control descricao_partilha" placeholder="de uma descricao a sua partilha"></textarea>
                                     </div>
                                     <input type="text" name="id_pbl" id="id_pbl_da_partilha" class="remover">
-                                    <input type="text" name="tipo" id="tipo_da_partilha" class="remover">
+                                    <input type="text" name="tipo" id="tipo_de_conteudo_partilha" class="remover">
+                                    <input type="text" name="como" id="partilhado_em" class="remover">
                                 </div>
                                 <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
-                                    <input name="btn_img"  onclick="partilhar('pbl')" type="submit" class="btn bg-sec" value="partilhar"> 
+                                    <input name="btn_img"  onclick="partilhar()" type="submit" class="btn bg-sec" value="partilhar"> 
                                 </div>
                             </div>
                         </div>

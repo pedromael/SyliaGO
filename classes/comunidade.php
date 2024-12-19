@@ -44,7 +44,7 @@ class comunidade extends conexao
                                 </a>
                             </h5>
                             <div class="d-flex gap-3">
-                                <span class="text-muted">seguindo: <strong>1</strong></span>
+                                <span class="text-muted">membros: <strong><?=$this->membros_de_comunidade($id_comunidade)?></strong></span>
                                 <span class="text-muted">Gostos: <strong>1</strong></span>
                             </div>
                         </div>
@@ -81,7 +81,7 @@ class comunidade extends conexao
                                     </a>
                                 </h5>
                                 <div class="d-flex gap-3">
-                                    <span class="text-muted">seguindo: <strong>1</strong></span>
+                                    <span class="text-muted">membros: <strong><?=$this->membros_de_comunidade($id_comunidade)?></strong></span>
                                     <span class="text-muted">Gostos: <strong>1</strong></span>
                                 </div>
                             </div>
@@ -154,7 +154,7 @@ class comunidade extends conexao
                     $sql->bindValue(":c", $id_comunidade);
                     $sql->bindValue(":user", $_SESSION['id_user']);
                     if ($sql->execute()) {
-                        if ($this->process->inserir_historico("comfirmado", $id_comunidade, "comunidade")) {
+                        if ($this->process->inserir_historico("comfirmado", $id_comunidade, "comunidade", $dados['id_user'])) {
                             return true;
                         }else {
                             return  false;
