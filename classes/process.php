@@ -14,9 +14,8 @@ class process extends informacoes_usuario{
             $sql->bindValue(":id", $id);
             
             if (!$sql->execute()) {
-                return false;  // Retorna falso se a exclusão falhar
+                return false;
             }
-            return true;  // Retorna verdadeiro se a exclusão for bem-sucedida
         } else {
             // Inserir o histórico normalmente
             $sql = $this->pdo->prepare("INSERT INTO $this->bdnome2.historico(id_emissor, id_receptor, id, tipo, de, data) VALUES(:user, :receptor, :id, :t, :d, NOW())");

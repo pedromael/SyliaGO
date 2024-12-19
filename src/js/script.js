@@ -7,13 +7,13 @@ function actualizar_login() {
     xhr.open('POST', '/include/login.php', true)
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
-      if (xhr.status !== 200) {
-        alert(xhr.responseText)
-      }
+    //   if (xhr.status !== 200) {
+    //     alert(xhr.responseText)
+    //   }
     };
     xhr.send();
 }
-setInterval(actualizar_login, 3000);
+setInterval(actualizar_login, 4000);
 function publicar(param) {
     var div = document.querySelector(".conteiner_pbl");
     var btn = document.querySelector("#pbl_abrir");
