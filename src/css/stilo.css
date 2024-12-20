@@ -377,7 +377,7 @@ a{
     position: relative;
     background-color: var(--cor_pri);
     border-radius: var(--border);
-    width: calc(100% - 10px);
+    width: calc(100%);
     margin: auto;
     margin-top: 5px;
 }
@@ -402,7 +402,6 @@ a{
     width: calc(100%);
     margin: auto;
     height: auto;
-    padding: 3px;
 }
 .scroll::-webkit-scrollbar{
     width: 1px;
@@ -424,28 +423,60 @@ a{
     position: relative; 
     width: 200px;
     height: 140px;
-    border: 2px solid white;
     text-shadow: 1px 1px 4px black;
     border-radius: 15px;
     margin: 3px;
     flex-shrink: 0;
     white-space: nowrap;
+    z-index: 1;
+}
+.item_fundo{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
     background-size: cover;
+    background-position: center center;
+    filter: blur(5px);
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    z-index: 1;
+}
+.item_storie {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: contain;
     background-position: center;
-    transition: all 0.7s;
+    background-repeat: no-repeat;
+    border-radius: 15px;
+    transition: all 0.61s;
+    z-index: 2;
+}
+.item .borda_1{
+    top: 0;
+    left: 0;
+    position: absolute;
+    border: 2px solid green;
+    border-radius: 50%;
+    z-index: 5;
 }
 .item #img_user_storie{
-    border: 2px solid rgb(0, 17, 255);
+    border: 2px solid white;
     border-radius: 50%;
     width: 40px;
     height: 40px;
     background-size: cover;
-    background-position: center;
-    box-shadow: 2px 2px 4px black;
+    background-position: center center;
 }
-.item:hover{
-    box-shadow: 1px 1px 2px #373636;
-    opacity: 100%;
+.item_storie:hover{
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
 }
 .numero_de_storie{
     display: flex;
@@ -454,25 +485,29 @@ a{
     margin-top: 30px;
 }
 .numero_de_storie .content{
+    position: absolute;
+    top: 65px;
     width: max-content;
     opacity: 70%;
+    z-index: 50;
 }
 .numero_de_storie .content div{
     display: inline-block;
     width: 5px;
     height: 10px;
-    border-radius: 25%;
+    border-radius: 35%;
 }
 .numero_de_storie .visto{
     background-color: #ddd;
 }
 .numero_de_storie .n_visto{
-    background-color: rgb(0, 17, 255);
+    background-color: green;
     box-shadow: 1px 1px 4px black;
 }
 .item .usuario{
     width: max-content;
     height: max-content;
+    z-index: 5;
 }
 .item .usuario .nome{
     position: absolute;
@@ -481,12 +516,13 @@ a{
     left: 5px;
     font-weight: bold;
     font-size: 11pt;
+    z-index: 5;
 }
 .carregar_storie{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 170px;
+    width: 125px;
     height: 125px;
     margin-top: 10px;
 }

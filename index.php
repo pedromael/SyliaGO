@@ -107,43 +107,49 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                 }
             }
             ?>
-            <div id="prev" onload="alert('carregou')">
-                <div class="trans trans_dir"></div>
-                <div class="trans trans_esq"></div>
-                <div class="scroll overflow-y-auto">
-                    <div class="scroll_content">
-                        <div class="item carregar_storie" style="background: rgba(255,255,255,0.5) url(<?=pegar_foto_perfil('perfil',$id_user)?>) center center/cover;" onclick="aba_alert('.novo_storie')"><p>+</p></div>
-                        <?php
-                        $storie = new stories;
-                        foreach ($storie->stories as $row) {
-                            $dados = $storie->storie_info($row['id_user']);
-                            $capa_storie = '/src/userFile/'.(new informacoes_usuario())->usuario($row['id_user'])['code_nome'].'/img/'.$dados['bg_storie'];
-                            ?> 
-                            <div class="item" onclick="abrir_storie(<?=$row['id_user']?>)" style="background-image : url(<?=$capa_storie?>);">
-                                <div class="usuario">
-                                    <div class="d-flex align-items-center">
-                                        <div id="img_user_storie" class="m-1" style="background-image: url(<?=pegar_foto_perfil("perfil", $row['id_user'])?>);"></div>
-                                        <div class="nome">
-                                            <?=$dados['nome']?>
+            <div class="container p-0">
+                <div id="prev" class="p-2"onload="alert('carregou')">
+                    <div class="trans trans_dir"></div>
+                    <div class="trans trans_esq"></div>
+                    <div class="scroll overflow-y-auto">
+                        <div class="scroll_content">
+                            <div class="item carregar_storie" style="background: rgba(255,255,255,0.5) url(<?=pegar_foto_perfil('perfil',$id_user)?>) center center/cover;" onclick="aba_alert('.novo_storie')"><p>+</p></div>
+                            <?php
+                            $storie = new stories;
+                            foreach ($storie->stories as $row) {
+                                $dados = $storie->storie_info($row['id_user']);
+                                $capa_storie = '/src/userFile/'.(new informacoes_usuario())->usuario($row['id_user'])['code_nome'].'/img/'.$dados['bg_storie'];
+                                ?> 
+                                <div class="item" onclick="abrir_storie(<?=$row['id_user']?>)">
+                                    <div class="item_fundo" style="background-image : url(<?=$capa_storie?>);"></div>
+                                    <div class="item_storie" style="background-image : url(<?=$capa_storie?>);"></div>
+                                    <div class="usuario">
+                                        <div class="d-flex align-items-center">
+                                            <div class="borda_1 m-1">
+                                                <div id="img_user_storie" style="background-image: url(<?=pegar_foto_perfil("perfil", $row['id_user'])?>);"></div>
+                                            </div>
+                                            <div class="nome">
+                                                <?=$dados['nome']?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="numero_de_storie">
+                                        <div class="content">
+                                        <?php
+                                        foreach ($dados['contagem'] as $i) {
+                                            if ($i) {$i = "visto";}else {$i = "n_visto";}
+                                            ?>
+                                            <div class="<?=$i?>"></div>
+                                            <?php
+                                        }
+                                        ?>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="numero_de_storie">
-                                    <div class="content">
-                                    <?php
-                                    foreach ($dados['contagem'] as $i) {
-                                        if ($i) {$i = "visto";}else {$i = "n_visto";}
-                                        ?>
-                                        <div class="<?=$i?>"></div>
-                                        <?php
-                                    }
-                                    ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php
-                        }
-                        ?>
+                                <?php
+                            }
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
