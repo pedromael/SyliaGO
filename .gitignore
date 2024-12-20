@@ -2,3 +2,4 @@
 src/userFile/*
 vendor/
 ignorar/*
+composer.lock
