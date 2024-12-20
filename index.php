@@ -24,13 +24,8 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <link rel="icon" href="src/img/glou_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="src/css/temas/<?=pegar_tema()?>.css">
-    <link href="bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     
     <link rel="stylesheet" href="src/css/stilo.css">
     <link rel="stylesheet" href="src/css/coder.css">
@@ -38,7 +33,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
 </head>
 <body> 
     <script>var indereco="./";</script>
-    <script src="bibliotecas/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="src/js/script.js"></script>
     <script src="src/js/coder.js"></script>
     <?php
@@ -169,14 +164,18 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                         <textarea name="texto" 
                                 class="form-control border-0 shadow-none" 
                                 rows="3" 
-                                placeholder="No que você está pensando?"
+                                placeholder="No que está pensando?"
                                 style="resize: none;"></textarea>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <label for="input_file_pbl" class="btn btn-outline-secondary d-flex align-items-center">
                             <img src="bibliotecas/bootstrap/icones/file-earmark-image.svg" alt="Upload" class="me-2" style="width: 20px;"> 
                         </label>
+                        <label for="input_video_pbl" class="btn btn-outline-secondary d-flex align-items-center">
+                            <img src="bibliotecas/bootstrap/icones/file-earmark-video.svg" alt="Upload" class="me-2" style="width: 20px;"> 
+                        </label>
                         <input type="file" id="input_file_pbl" name="doc[]" accept="image/*" multiple hidden>
+                        <input type="file" id="input_video_pbl" name="video" accept="video/*" multiple hidden>
                         <button name="btn_pbl" class="btn btn-primary d-flex align-items-center">
                             <img src="bibliotecas/bootstrap/icones/send.svg" alt="Enviar" class="me-2" style="width: 20px;">
                             Publicar
@@ -297,7 +296,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
         require "include/footer.php";
         require "include/search.php";
     ?>
-    <script src="bibliotecas/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="src/js/fim_script.js"></script>
     <script src="src/js/coder.js"></script>
 </body>

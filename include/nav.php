@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/src/css/nav.css">
 <nav id="metade_da_nav" onclick="abri_fecha('#segunda_nav')">
-    <img src="/bibliotecas/bootstrap/icones/border-width.svg">
+    <i class="bi bi-border-width"></i>
 </nav>
 <nav class="px-1 py-2">
     <div class="container_nav">
@@ -8,12 +8,12 @@
             <ul class="nav col justify-content-center my-md-0 text-small">
             <li>
                 <a href="/./" class="nav-link text-secondary">
-                <img src="/bibliotecas/bootstrap/icones/house.svg">
+                    <i class="bi bi-house-door"></i>
                 </a>
             </li>
             <li>
                 <a href="/comunidade/" class="nav-link text-white">
-                <img src="/bibliotecas/bootstrap/icones/people.svg">
+                    <i class="bi bi-people"></i>
                 </a>
             </li>
             <li>
@@ -23,7 +23,7 @@
             </li>
             <li>
                 <a href="/mensagens/" class="nav-link text-white">
-                    <img src="/bibliotecas/bootstrap/icones/chat-left-dots.svg"/> 
+                    <i class="bi bi-chat-left-dots"></i>
                     <?php
                     if($c->verificar_qtd("chat",$_SESSION['id_user']) > 0){
                         ?>
@@ -39,7 +39,7 @@
             </li>
             <li>
                 <a href="/./notific.php" class="nav-link text-white">
-                    <img src="/bibliotecas/bootstrap/icones/bell.svg"/>
+                    <i class="bi bi-bell"></i>
                     <?php
                     if($c->verificar_qtd("notificacao",$_SESSION['id_user']) > 0){
                         ?>
@@ -94,7 +94,7 @@
         <ul class="list-unstyled mb-4">
             <li class="mb-2">
                 <a href="/contactos/" class="d-flex align-items-center text-decoration-none text-dark">
-                    <img src="/bibliotecas/bootstrap/icones/people.svg" alt="" class="me-2" style="width: 24px; height: 24px;">
+                    <i class="bi bi-person-lines-fill me-2"></i>
                     <span>Encontrar Amigos</span>
                     <?php if ($c->verificar_qtd("pdd", $user['id_user']) > 0) { ?>
                         <span class="badge bg-primary ms-auto"><?=$c->verificar_qtd("pdd", $user['id_user'])?></span>
@@ -103,7 +103,7 @@
             </li> 
             <li>
                 <a href="/salvos.php" class="d-flex align-items-center text-decoration-none text-dark">
-                    <img src="/bibliotecas/bootstrap/icones/bookmark.svg" alt="" class="me-2" style="width: 24px; height: 24px;">
+                    <i class="bi bi-bookmark-fill me-2"></i>
                     <span>Salvos</span>
                 </a>
             </li>
@@ -142,7 +142,7 @@
         <!-- Terminar Sessão -->
         <div class="mt-auto">
             <a href="/login/" class="btn btn-danger w-100">
-                <img src="/bibliotecas/bootstrap/icones/power.svg" alt="" class="me-2" style="width: 20px; height: 20px;">
+                <i class="bi bi-power me-2" style="width: 20px; height: 20px;"></i>
                 Terminar Sessão
             </a>
         </div>

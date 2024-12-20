@@ -286,4 +286,6 @@ function verificar_contactos_em_comum($id1,$id2): int {
         return count(array_intersect($users->lista_amigos($id1,true),$users->lista_amigos($id2,true)));
     }
 }
+
+require_once __DIR__."/../vendor/autoload.php";
 ?>

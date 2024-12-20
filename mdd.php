@@ -21,7 +21,8 @@ $areas_programacao = mysqli_query(conn(), "SELECT * FROM $bdnome2.areas_programa
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <link rel="icon" href="img/glou_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="css/temas/padrao.css">
-    <link href="bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="css/stilo.css">
     <title>Mais - PRO-Start</title>
     <style>
@@ -93,6 +94,6 @@ $areas_programacao = mysqli_query(conn(), "SELECT * FROM $bdnome2.areas_programa
     </div>   
     
     <script src="js/login.js"></script>
-    <script src="bibliotecas/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

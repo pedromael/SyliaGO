@@ -26,9 +26,10 @@ class process extends informacoes_usuario{
             $sql->bindValue(":id", $id);
             
             if (!$sql->execute()) {
-                return false;  // Retorna falso se a inserção falhar
+                return false;
             }
-            return true;  // Retorna verdadeiro se a inserção for bem-sucedida
+            
+            return true;
         }
     }
     
@@ -271,7 +272,7 @@ class process extends informacoes_usuario{
             array_push($ids_pbl,$id); 
         }
         foreach ($ids_pbl as $id_pbl) {
-            $sql = $this->pdo->prepare("DELETE FROM $this->bdnome2.gosto WHERE id = :pbl AND tipo = 'pbl'"); 
+            $sql = $this->pdo->prepare("DELETE FROM $this->bdnome2.reacao WHERE id = :pbl AND tipo = 'poste'"); 
             $sql->bindValue(":pbl", $id_pbl);
             if($sql->execute()){
                 $sql = $this->pdo->prepare("DELETE FROM cmt WHERE id = :pbl AND tipo=:tipo");

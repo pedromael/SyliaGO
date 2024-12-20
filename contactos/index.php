@@ -31,13 +31,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <link rel="icon" href="/src/img/glou_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="/src/css/temas/<?=pegar_tema()?>.css">
-    <link href="/bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">    
+    <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">    
     <link rel="stylesheet" href="/src/css/stilo.css">
     <title>Contactos</title>
 </head>
 <body>
     <script>var indereco = "../"</script>
-    <script src="/bibliotecas/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/src/js/script.js"></script>
     <?php
     require "../include/nav.php";

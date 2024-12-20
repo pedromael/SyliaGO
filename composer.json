@@ -3,6 +3,8 @@
         "fakerphp/faker": "^1.21",
         "symfony/mailer": "^6.0",
         "intervention/image": "^2.7",
-        "nikic/fast-route": "^1.3"
+        "nikic/fast-route": "^1.3",
+        "twbs/bootstrap": "^4.1.3",
+        "twbs/bootstrap-icons": "^1.10"
     }
 }
