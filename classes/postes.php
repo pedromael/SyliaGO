@@ -67,13 +67,18 @@ class postes extends process
     }
     public function mostrar($row, $visualizacao_unica = false, $reac = true, $partilha = false)
     {
-        if (empty($row['id_user'])) return false;
+        if (empty($row['id_user']) && $row['id_user'] > 0) return false;
 
         $usuario = $this->usuario($row['id_user']);
         $id_pbl = $row['id_pbl'];
         $id_user = $row['id_user'];
         $nome_usuario = $usuario['nome'];
-        $imagem_perfil = pegar_foto_perfil("perfil", $row['id_user']);
+        if ($row['id_comunidade'] > 0) {
+            $imagem_perfil = pegar_foto_perfil("comunidade", $row['id_comunidade']);
+        }else{
+            $imagem_perfil = pegar_foto_perfil("perfil", $row['id_user']);
+        }
+            
         $inderecos = array_map(function ($doc) use ($usuario) {
             return "/src/userFile/{$usuario['code_nome']}/img/{$doc['indereco']}";
         }, mysqli_fetch_all(mysqli_query($this->link, "SELECT * FROM doc WHERE id=$id_pbl AND (tipo='poste' OR tipo='video')"), MYSQLI_ASSOC));
