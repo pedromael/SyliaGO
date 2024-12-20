@@ -2,6 +2,7 @@
     "require": {
         "fakerphp/faker": "^1.21",
         "symfony/mailer": "^6.0",
-        "intervention/image": "^2.7"
+        "intervention/image": "^2.7",
+        "nikic/fast-route": "^1.3"
     }
 }
