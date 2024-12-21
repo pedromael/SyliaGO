@@ -24,8 +24,8 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <link rel="icon" href="src/img/glou_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="src/css/temas/<?=pegar_tema()?>.css">
-    <link href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     
     <link rel="stylesheet" href="src/css/stilo.css">
     <link rel="stylesheet" href="src/css/coder.css">
@@ -33,7 +33,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
 </head>
 <body> 
     <script>var indereco="./";</script>
-    <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="src/js/script.js"></script>
     <script src="src/js/coder.js"></script>
     <?php
@@ -106,7 +106,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                 <div id="prev" class="p-2"onload="alert('carregou')">
                     <div class="trans trans_dir"></div>
                     <div class="trans trans_esq"></div>
-                    <div class="scroll overflow-y-auto">
+                    <div class="scroll  rolagem_x">
                         <div class="scroll_content">
                             <div class="item carregar_storie" style="background: rgba(255,255,255,0.5) url(<?=pegar_foto_perfil('perfil',$id_user)?>) center center/cover;" onclick="aba_alert('.novo_storie')"><p>+</p></div>
                             <?php
@@ -156,10 +156,10 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                     width: 85%;
                 }
             </style>
-            <div class="container bg-white p-4 rounded shadow-sm fazer_poste">
-                <form action="" method="post" enctype="multipart/form-data">
-                    <div class="mb-3 d-flex align-items-start">
-                        <img src="<?=pegar_foto_perfil("perfil", $_SESSION['id_user'])?>" alt="Avatar" class="rounded-circle me-3" style="width: 50px; height: 50px;">
+            <div class="container bg-white p-2 rounded shadow-sm my-2">
+                <form action="" method="post" enctype="multipart/form-data" class="p-0 m-0">
+                    <div class="mb-1 d-flex align-items-start">
+                        <img src="<?=pegar_foto_perfil("perfil", $_SESSION['id_user'])?>" alt="Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;">
                         
                         <textarea name="texto" 
                                 class="form-control border-0 shadow-none" 
@@ -168,16 +168,16 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                                 style="resize: none;"></textarea>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <label for="input_file_pbl" class="btn btn-outline-secondary d-flex align-items-center">
-                            <img src="bibliotecas/bootstrap/icones/file-earmark-image.svg" alt="Upload" class="me-2" style="width: 20px;"> 
+                        <label for="input_file_pbl" class="btn btn-outline-secondary d-flex align-items-center my-auto">
+                            <i class="bi bi-file-earmark-image"></i> 
                         </label>
-                        <label for="input_video_pbl" class="btn btn-outline-secondary d-flex align-items-center">
-                            <img src="bibliotecas/bootstrap/icones/file-earmark-video.svg" alt="Upload" class="me-2" style="width: 20px;"> 
+                        <label for="input_video_pbl" class="btn btn-outline-secondary d-flex align-items-center my-auto">
+                            <i class="bi bi-file-earmark"></i>
                         </label>
-                        <input type="file" id="input_file_pbl" name="doc[]" accept="image/*" multiple hidden>
+                        <input type="file" id="input_file_pbl" name="imagens[]" accept="image/*" multiple hidden>
                         <input type="file" id="input_video_pbl" name="video" accept="video/*" multiple hidden>
                         <button name="btn_pbl" class="btn btn-primary d-flex align-items-center">
-                            <img src="bibliotecas/bootstrap/icones/send.svg" alt="Enviar" class="me-2" style="width: 20px;">
+                            <i class="bi bi-send pr-1"></i>
                             Publicar
                         </button>
                     </div>

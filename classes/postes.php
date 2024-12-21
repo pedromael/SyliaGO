@@ -88,27 +88,29 @@ class postes extends process
     
         $classPartilha = $partilha ? "pbl_partilhada" : "";
         ?>
-        <div id="pbl" class="<?= $classPartilha ?> card mb-3">
+        <div class="<?= $classPartilha ?> card mb-3">
             <div class="card-body">
-                <div class="d-flex align-items-center mb-3">
-                    <a href="/perfil/?user=<?= criptografar($id_user) ?>">
-                        <img src="<?= $imagem_perfil ?>" class="rounded-circle me-2" alt="Perfil" style="width: 50px; height: 50px;">
-                    </a>
-                    <div>
-                        <?php if ($comunidade && $this->oque == "poste"): ?>
-                            <span><a class="fw-bold" href="/comunidade/?cmndd=<?= criptografar($row['id_comunidade']) ?>"><?= $comunidade['nome'] ?></a></span><br>
-                        <?php endif; ?>
-                        <span><a href="/perfil/?user=<?= criptografar($id_user) ?>" class="text-decoration-none"><?= $nome_usuario ?></a></span>
-                        <?php if(!$partilha): ?>
-                            <div class="text-muted"><?= resumir_data($row['data']) ?></div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="ms-auto">
-                        <?php if(!$partilha): ?>
-                            <button class="btn btn-light" onclick="abrir_info_pbl(<?= $id_pbl ?>)">...</button>
-                        <?php else: ?>
-                            <div class="text-muted"><?= resumir_data($row['data']) ?></div>
-                        <?php endif; ?>
+                <div class="conatiner mb-3">
+                    <div class="row">
+                        <a href="/perfil/?user=<?= criptografar($id_user) ?>" class="col-auto pr-2 pl-3">
+                            <img src="<?= $imagem_perfil ?>" class="rounded-circle me-2" alt="Perfil" style="width: 50px; height: 50px;">
+                        </a>
+                        <div class="col p-0">
+                            <?php if ($comunidade && $this->oque == "poste"): ?>
+                                <span><a class="text-decoration-none bold" href="/comunidade/?cmndd=<?= criptografar($row['id_comunidade']) ?>"><?= $comunidade['nome'] ?></a></span><br>
+                            <?php endif; ?>
+                            <span><a href="/perfil/?user=<?= criptografar($id_user) ?>" class="text-decoration-none"><?= $nome_usuario ?></a></span>
+                            <?php if(!$partilha): ?>
+                                <div class="text-muted"><?= resumir_data($row['data']) ?></div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="col-auto">
+                            <?php if(!$partilha): ?>
+                                <button class="btn btn-light" onclick="abrir_info_pbl(<?= $id_pbl ?>)">...</button>
+                            <?php else: ?>
+                                <div class="text-muted"><?= resumir_data($row['data']) ?></div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
 
@@ -136,15 +138,15 @@ class postes extends process
                 <?php if ($reac): ?>
                     <div class="d-flex justify-content-between">
                         <button id="reac_poste<?=$id_pbl?>" class="btn btn-light" onclick="reagir(<?= $id_pbl ?>, 'gosto', 'poste')">
-                            <img class="" src="/bibliotecas/bootstrap/icones/<?= $this->qtd_reacao($id_pbl, 'poste', $_SESSION['id_user']) > 0 ? 'heart-fill.svg' : 'heart.svg' ?>" alt="Gosto">
+                            <i class="bi <?= $this->qtd_reacao($id_pbl, 'poste', $_SESSION['id_user']) > 0 ? 'bi-heart-fill' : 'bi-heart' ?>" style="color: red;"></i>
                             <?= $this->qtd_reacao($id_pbl, 'poste') ?>
                         </button>
                         <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>&cmt=true" class="btn btn-light">
-                            <img src="/bibliotecas/bootstrap/icones/chat-dots.svg" alt="Comentários"> <?= qtd_de_cmt($id_pbl) ?>
+                            <i class="bi bi-chat-dots"></i> <?= qtd_de_cmt($id_pbl) ?>
                         </a>
                         <?php if ($row['id_partilhado'] <= 0): ?>
                             <button class="btn btn-light" onclick="abrir_partilhar('poste', <?= $id_pbl ?>,'poste')">
-                                <img src="/bibliotecas/bootstrap/icones/reply.svg" alt="Partilhar">
+                                <i class="bi bi-reply"></i>
                             </button>
                         <?php endif; ?>
                     </div>

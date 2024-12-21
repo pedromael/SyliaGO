@@ -8,8 +8,7 @@ $tipo = $data['tipo'];
 $para = $data['para'];
 
 $c->reagir($id,$tipo, $para);
-
 ?>
 
-<img src="/bibliotecas/bootstrap/icones/<?= $c->qtd_reacao($id, 'poste', $_SESSION['id_user']) > 0 ? 'heart-fill.svg' : 'heart.svg' ?>" alt="Gosto">
+<i class="bi <?= $c->qtd_reacao($id, 'poste', $_SESSION['id_user']) > 0 ? 'bi-heart-fill' : 'bi-heart' ?>" style="color: red;"></i>
 <?= $c->qtd_reacao($id, 'poste') ?>

@@ -8,11 +8,11 @@ if (isset($_POST['btn_pbl'])) {
     $imagens = array();
 
     // Verificando se o formulário tem arquivos enviados
-    if (isset($_FILES['doc']) && $_FILES['doc']['name'][0] != NULL) {
-        $nome = $_FILES['doc']['name'];
-        $tmp = $_FILES['doc']['tmp_name'];
-        $type = $_FILES['doc']['type'];
-        $size = $_FILES['doc']['size'];
+    if (isset($_FILES['imagens']) && $_FILES['imagens']['name'][0] != NULL) {
+        $nome = $_FILES['imagens']['name'];
+        $tmp = $_FILES['imagens']['tmp_name'];
+        $type = $_FILES['imagens']['type'];
+        $size = $_FILES['imagens']['size'];
         $a = 0;
 
         // Loop para processar cada imagem enviada
@@ -41,53 +41,67 @@ if (isset($_POST['btn_pbl'])) {
     }
 
     if (!empty($texto) || $doc) {
-        if (true) {  // Este "if (true)" é redundante, pode ser removido
-            // Processamento do upload de imagens
-            if (isset($_FILES['doc']) && !empty($imagens)) {
-                foreach ($imagens as $imagen) {
-                    // Corrigido: Não precisa redefinir $_FILES['doc'], use diretamente $imagen
-                    if (!move_uploaded_file($imagen['tmp_name'], $dir . $imagen['indereco'])) {
+        $erro = null;
+        if (isset($_FILES['doc']) && !empty($imagens)) {
+            foreach ($imagens as $imagen) {
+                $imagemPath = $dir . $imagen['indereco'];
+                try {
+                    $image = \Intervention\Image\ImageManagerStatic::make($imagen['tmp_name']);
+                    $image->resize(1200, null, function ($constraint): void {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                    $image->save($imagemPath, 75);
+
+                } catch (Exception $e) {
+                    $erro = $e->getMessage();
+                    ?>
+                    <script>
+                        window.location.href="/./?pbl=erro_img?log=<?=$erro?>";
+                    </script>
+                    <?php
+                    exit;
+                }
+            }
+
+            if ($erro == null) {
+                // Publicando o texto e os arquivos
+                if ($id_pbl = $c->publicar($texto, $id_comunidade, $nome_img)) {
+                    if (isset($id_comunidade)) {
+                        if ($nome_img != NULL) {
+                            $tipo = "poste";
+                            // Carregar documentos após a publicação
+                            foreach ($imagens as $imagen) {
+                                if (!$c->carregar_documento($id_pbl, $tipo, $imagen['indereco'])) {
+                                    echo "Falha ao carregar documento.";
+                                }
+                            }
+                            unset($_FILES['doc']);
+                            unset($imagens);
+                        }
+    
                         ?>
                         <script>
-                            window.location.href="index.php?pbl=erro_img";
+                            window.location.href="index.php?cmndd=<?=$id_comunidade?>&pbl=<?=criptografar($id_pbl)?>";
+                        </script>
+                        <?php
+                    } else {
+                        ?>
+                        <script>
+                            window.location.href="index.php?pbl=<?=criptografar($id_pbl)?>";
                         </script>
                         <?php
                     }
-                }
-            }
-
-            // Publicando o texto e os arquivos
-            if ($id_pbl = $c->publicar($texto, $id_comunidade, $nome_img)) {
-                if (isset($id_comunidade)) {
-                    if ($nome_img != NULL) {
-                        $tipo = "poste";
-                        // Carregar documentos após a publicação
-                        foreach ($imagens as $imagen) {
-                            if ($c->carregar_documento($id_pbl, $tipo, $imagen['indereco'])) {
-                                // Documento carregado com sucesso
-                            } else {
-                                echo "Falha ao carregar documento.";
-                            }
-                        }
-                        unset($_FILES['doc']);
-                        unset($imagens);
-                    }
-
-                    ?>
-                    <script>
-                        window.location.href="index.php?cmndd=<?=$id_comunidade?>&pbl=<?=criptografar($id_pbl)?>";
-                    </script>
-                    <?php
                 } else {
-                    ?>
-                    <script>
-                        window.location.href="index.php?pbl=<?=criptografar($id_pbl)?>";
-                    </script>
-                    <?php
+                    echo "Ocorreu algum erro ao realizar publicação.";
                 }
-            } else {
-                echo "Ocorreu algum erro ao realizar publicação.";
-            }
+            }else{
+                ?>
+                <script>
+                    window.location.href="/./?pbl=erro_img?log=<?=$erro?>";
+                </script>
+                <?php
+            }    
         }
     }
 }

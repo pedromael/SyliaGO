@@ -42,9 +42,9 @@ body nav {
     height: 50px;
 }
 
-#metade_da_nav img {
-    width: 25px;
-    height: 35.5px;
+#metade_da_nav i {
+    color: var(--cor_sec);
+    font-size: 25px;
     border-radius: 0%;
 }
 
@@ -84,13 +84,14 @@ nav ul {
     }
 }
 
-nav ul li img {
-    width: 25px;
-    height: 25px;
+nav ul li i {
+    color: var(--cor_sec);
+    font-size: 24px;
     transition: transform 0.3s ease;
 }
 
-nav ul li:hover img {
+nav ul li:hover i {
+    font-size: 26px;
     transform: scale(1.2);
 }
 

@@ -192,7 +192,7 @@ function pegar_tema() {
 function resumir_data($data_p): bool|string
 {
     $data_atual = strtotime(date("Y-m-d H:i:s")); 
-    $data = $data_atual - strtotime($data_p) - 3600; // Remove 1 hora, pode ser removido se não necessário.
+    $data = $data_atual - strtotime($data_p) ;//- 3600; // Remove 1 hora, pode ser removido se não necessário.
     
     $segundo = $data;
     $minuto = $segundo / 60;
@@ -200,7 +200,6 @@ function resumir_data($data_p): bool|string
     $dias = $hora / 24;
     $meses = $dias / 30;
 
-    // Se foi criado agora (menos que 5 segundos)
     if ($segundo < 5) {
         return "agora";
     }

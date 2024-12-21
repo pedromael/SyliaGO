@@ -20,7 +20,8 @@ $user = mysqli_fetch_assoc($user);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <link rel="icon" href="../src/img/glou_icon.png" type="image/x-icon">
-    <link href="../bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> 
+    <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="/src/css/temas/branco.css">
     <link rel="stylesheet" href="/src/css/welcome.css">
     <script src="../src/js/welcome.js"></script>

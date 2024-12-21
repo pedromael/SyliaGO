@@ -39,7 +39,7 @@ class lista_mensagens extends conexao
         <a href="/mensagens/?user=<?=criptografar($id_dest)?>" class="text-decoration-none text-dark">
             <div class="d-flex align-items-center p-2 border-bottom">
                 <!-- Imagem do usuário -->
-                <div class="flex-shrink-0">
+                <div class="flex-shrink-0 px-1">
                     <img src="<?=$imagen?>" 
                         alt="Foto do usuári endifo" 
                         class="rounded-circle" 
@@ -50,7 +50,7 @@ class lista_mensagens extends conexao
                 <div class="ms-3 flex-grow-1">
                     <!-- Nome do usuário -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0">
+                        <h6 class="mb-0 fs-1">
                             <?=$sqll['nome']?>
                         </h6>
                         <!-- Quantidade de mensagens não lidas -->

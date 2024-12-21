@@ -38,7 +38,7 @@
 </head>
 <body>
     <script>var indereco = "../"</script>
-    <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/src/js/script.js"></script>
     <?php
     require "../include/nav.php";

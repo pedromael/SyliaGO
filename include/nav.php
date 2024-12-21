@@ -7,22 +7,22 @@
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <ul class="nav col justify-content-center my-md-0 text-small">
             <li>
-                <a href="/./" class="nav-link text-secondary">
-                    <i class="bi bi-house-door"></i>
+                <a href="/./" class="nav-link">
+                    <i class="bi bi-house-door" style="width: 50px; height: 50px;"></i>
                 </a>
             </li>
             <li>
-                <a href="/comunidade/" class="nav-link text-white">
+                <a href="/comunidade/" class="nav-link">
                     <i class="bi bi-people"></i>
                 </a>
             </li>
             <li>
-                <a href="/coder/" class="nav-link text-white p-1">
+                <a href="/coder/" class="nav-link p-1">
                     <button id="coder">GO</button>
                 </a>
             </li>
             <li>
-                <a href="/mensagens/" class="nav-link text-white">
+                <a href="/mensagens/" class="nav-link">
                     <i class="bi bi-chat-left-dots"></i>
                     <?php
                     if($c->verificar_qtd("chat",$_SESSION['id_user']) > 0){
@@ -38,7 +38,7 @@
                 </a>
             </li>
             <li>
-                <a href="/./notific.php" class="nav-link text-white">
+                <a href="/./notific.php" class="nav-link">
                     <i class="bi bi-bell"></i>
                     <?php
                     if($c->verificar_qtd("notificacao",$_SESSION['id_user']) > 0){
@@ -84,7 +84,7 @@
                 </a>
             </div>
             <div>
-                <a href="/perfil/?user=<?=criptografar($user['id_user'])?>" class="text-decoration-none fw-bold text-dark">
+                <a href="/perfil/?user=<?=criptografar($user['id_user'])?>" class="text-decoration-none fw-bold text-dark p-1">
                     <?=$user['code_nome']?>
                 </a>
             </div>
@@ -94,7 +94,7 @@
         <ul class="list-unstyled mb-4">
             <li class="mb-2">
                 <a href="/contactos/" class="d-flex align-items-center text-decoration-none text-dark">
-                    <i class="bi bi-person-lines-fill me-2"></i>
+                    <i class="bi bi-person-lines-fill mr-2"></i>
                     <span>Encontrar Amigos</span>
                     <?php if ($c->verificar_qtd("pdd", $user['id_user']) > 0) { ?>
                         <span class="badge bg-primary ms-auto"><?=$c->verificar_qtd("pdd", $user['id_user'])?></span>
@@ -103,7 +103,7 @@
             </li> 
             <li>
                 <a href="/salvos.php" class="d-flex align-items-center text-decoration-none text-dark">
-                    <i class="bi bi-bookmark-fill me-2"></i>
+                    <i class="bi bi-bookmark-fill mr-2"></i>
                     <span>Salvos</span>
                 </a>
             </li>
