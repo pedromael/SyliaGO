@@ -105,7 +105,6 @@ function carregar_img($doc,$tipo,$id) {
     }
 }
 function carregar_img_storie($imgs) {
-    global $bdhost,$bdnome,$bdpass,$bduser;
     $c = new process;
     if (!is_array($imgs)) {
         $doc = $imgs;
@@ -138,18 +137,18 @@ function carregar_img_storie($imgs) {
     }
     return true;
 }
-function pegar_foto_perfil($tipo,$id)
+function pegar_foto_perfil($para,$id)
 {
-    if ($tipo == "perfil") {
-        $img = mysqli_query(conn(), "SELECT * FROM doc WHERE id_user=$id AND tipo='$tipo' ORDER BY id_doc DESC");
+    if ($para == "perfil") {
+        $img = mysqli_query(conn(), "SELECT * FROM doc WHERE id_user=$id AND para='$para' ORDER BY id_doc DESC");
         $img = mysqli_fetch_assoc($img);
         if (isset($img['indereco'])) {
             return "/src/userFile/".(new informacoes_usuario())->usuario($id)['code_nome']."/img/".$img['indereco'];
         }else if (empty($imagen)) {   
             return "/src/img/sem_img_no_perfil.jpeg";
         }
-    }elseif($tipo == "comunidade") {
-        $img = mysqli_query(conn(), "SELECT * FROM doc WHERE id=$id AND tipo='$tipo' ORDER BY id_doc DESC");
+    }elseif($para == "comunidade") {
+        $img = mysqli_query(conn(), "SELECT * FROM doc WHERE id=$id AND para='$para' ORDER BY id_doc DESC");
         $img = mysqli_fetch_assoc($img);
         if (isset($img['indereco'])) {
             return "/src/userFile/".(new informacoes_usuario)->usuario((new comunidade())->comunidade($id)['id_user'])['code_nome']."/img/".$img['indereco'];

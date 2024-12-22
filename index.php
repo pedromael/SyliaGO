@@ -175,7 +175,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                             <i class="bi bi-file-earmark"></i>
                         </label>
                         <input type="file" id="input_file_pbl" name="imagens[]" accept="image/*" multiple hidden>
-                        <input type="file" id="input_video_pbl" name="video" accept="video/*" multiple hidden>
+                        <input type="file" id="input_video_pbl" name="video" accept="video/*" hidden>
                         <button name="btn_pbl" class="btn btn-primary d-flex align-items-center">
                             <i class="bi bi-send pr-1"></i>
                             Publicar
@@ -186,7 +186,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
             <?php require "sent.php"?>
             <?php
             if (isset($_GET['pbl'])) {
-                if ($_GET['pbl']) {
+                if (is_nan(descriptografar($_GET['pbl']))) {
                     $id_pbl = descriptografar($_GET['pbl']);
                     ?>
                         <div class="info_corrente">publicacao carregada com sucesso</div>

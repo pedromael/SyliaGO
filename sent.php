@@ -1,188 +1,118 @@
 <?php
+// Função para processar imagens
+function processarImagens(array $imagens, string $diretorio): array
+{
+    $erros = [];
+
+    foreach ($imagens as $imagem) {
+        $imagemPath = $diretorio . $imagem['indereco'];
+
+        try {
+            $image = \Intervention\Image\ImageManagerStatic::make($imagem['tmp_name']);
+            $image->resize(1920, null, function ($constraint): void {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            $image->save($imagemPath, 85, "png");
+        } catch (Exception $e) {
+            $erros[] = $e->getMessage();
+        }
+    }
+
+    return $erros;
+}
+
+
+use FFMpeg\FFMpeg;
+use FFMpeg\Format\Video\X264;
+
+function processarVideo(array $video, string $diretorio): ?string
+{
+    $videoPath = $diretorio . $video['nome'];
+
+    // Instancie o objeto FFMpeg
+    $ffmpeg = FFMpeg::create();
+
+    $videoFile = $ffmpeg->open($video['tmp_name']);
+
+    // Defina o formato de saída
+    $format = new X264('libmp3lame', 'libx264');
+    $format->setAudioCodec('libmp3lame')
+           ->setVideoCodec('libx264')
+           ->setKiloBitrate(800);
+
+    try {
+        $videoFile->save($format, $videoPath);
+    } catch (\FFMpeg\Exception\ExecutableNotFoundException $e) {
+        return "Erro: ffmpeg não encontrado.";
+    }
+
+    return null;
+}
+
+
 if (isset($_POST['btn_pbl'])) {
-    $texto = filtro($_POST['texto']);
-    if (!isset($id_comunidade)) {
-        $id_comunidade = 0;
-    }
-    $doc = false;
-    $imagens = array();
+    $texto = filtro(text: $_POST['texto']);
+    $id_comunidade = $id_comunidade ?? 0;
+    $imagens = [];
+    $nome_video = null;
+    $erro = null;
 
-    // Verificando se o formulário tem arquivos enviados
-    if (isset($_FILES['imagens']) && $_FILES['imagens']['name'][0] != NULL) {
-        $nome = $_FILES['imagens']['name'];
-        $tmp = $_FILES['imagens']['tmp_name'];
-        $type = $_FILES['imagens']['type'];
-        $size = $_FILES['imagens']['size'];
-        $a = 0;
+    // Processar imagens enviadas
+    if (isset($_FILES['imagens']) && $_FILES['imagens']['name'][0] != null) {
+        foreach ($_FILES['imagens']['name'] as $indice => $nome) {
+            $ext = strtolower(pathinfo($nome, PATHINFO_EXTENSION));
+            $nome_img = sprintf("IMG-%d-%d-pbl-%s.%s", $indice, $_SESSION['id_user'], date("Y.m.d-H.i.s"), $ext);
 
-        // Loop para processar cada imagem enviada
-        while ($a < count($nome)) {
-            $ext = strtolower(substr($nome[$a], -4));
-            if ($ext[0] != ".") {
-                $ext = "." . $ext;
-            }
-            $nome_img = "IMG-" . $a . "-" . $_SESSION['id_user'] . "-pbl-" . date("Y.m.d-H.i.s") . $ext;
-
-            array_push($imagens, array(
+            $imagens[] = [
                 "indereco" => $nome_img,
-                "name" => $nome[$a],
-                "tmp_name" => $tmp[$a],
-                "type" => $type[$a],
-                "size" => $size[$a]
-            ));
-
-            $a++;
+                "tmp_name" => $_FILES['imagens']['tmp_name'][$indice]
+            ];
         }
-
-        $dir = 'src/userFile/'.$user['code_nome'].'/img/';
-        $doc = true;
-    } else {
-        $nome_img = NULL;
+        $errosImagens = processarImagens($imagens, 'src/userFile/' . $user['code_nome'] . '/img/');
+        if ($errosImagens) {
+            $erro = implode("; ", $errosImagens);
+        }
     }
 
-    if (!empty($texto) || $doc) {
-        $erro = null;
-        if (isset($_FILES['doc']) && !empty($imagens)) {
-            foreach ($imagens as $imagen) {
-                $imagemPath = $dir . $imagen['indereco'];
-                try {
-                    $image = \Intervention\Image\ImageManagerStatic::make($imagen['tmp_name']);
-                    $image->resize(1200, null, function ($constraint): void {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-                    $image->save($imagemPath, 75);
+    // Processar vídeo enviado
+    if (isset($_FILES['video']) && $_FILES['video']['name'] != null && $erro == null) {
+        $ext = strtolower(pathinfo($_FILES['video']['name'], PATHINFO_EXTENSION));
+        $nome_video = sprintf("VIDEO-%d-poste-%s.%s", $_SESSION['id_user'], date("Y.m.d-H.i.s"), $ext);
 
-                } catch (Exception $e) {
-                    $erro = $e->getMessage();
-                    ?>
-                    <script>
-                        window.location.href="/./?pbl=erro_img?log=<?=$erro?>";
-                    </script>
-                    <?php
-                    exit;
-                }
+        $erro = processarVideo([
+            'tmp_name' => $_FILES['video']['tmp_name'],
+            'nome' => $nome_video
+        ], 'src/userFile/' . $user['code_nome'] . '/video/');
+    }
+
+    // Processar texto ou arquivos
+    if ((!empty($texto) || !empty($imagens) || $nome_video) && $erro == null) 
+    {
+        $id_pbl = $c->publicar($texto, $id_comunidade);
+
+        if ($id_pbl) {
+            foreach ($imagens as $imagem) {
+                $c->carregar_documento($id_pbl, 'poste', $imagem['indereco']);
             }
 
-            if ($erro == null) {
-                // Publicando o texto e os arquivos
-                if ($id_pbl = $c->publicar($texto, $id_comunidade, $nome_img)) {
-                    if (isset($id_comunidade)) {
-                        if ($nome_img != NULL) {
-                            $tipo = "poste";
-                            // Carregar documentos após a publicação
-                            foreach ($imagens as $imagen) {
-                                if (!$c->carregar_documento($id_pbl, $tipo, $imagen['indereco'])) {
-                                    echo "Falha ao carregar documento.";
-                                }
-                            }
-                            unset($_FILES['doc']);
-                            unset($imagens);
-                        }
-    
-                        ?>
-                        <script>
-                            window.location.href="index.php?cmndd=<?=$id_comunidade?>&pbl=<?=criptografar($id_pbl)?>";
-                        </script>
-                        <?php
-                    } else {
-                        ?>
-                        <script>
-                            window.location.href="index.php?pbl=<?=criptografar($id_pbl)?>";
-                        </script>
-                        <?php
-                    }
-                } else {
-                    echo "Ocorreu algum erro ao realizar publicação.";
-                }
-            }else{
-                ?>
-                <script>
-                    window.location.href="/./?pbl=erro_img?log=<?=$erro?>";
-                </script>
-                <?php
-            }    
+            if ($nome_video) {
+                $c->carregar_documento($id_pbl, 'poste', $nome_video, "video");
+            }
+
+            $redirectUrl = $id_comunidade > 0
+                ? "index.php?cmndd={$id_comunidade}&pbl=" . criptografar($id_pbl)
+                : "index.php?pbl=" . criptografar($id_pbl);
+            echo "<script>window.location.href='{$redirectUrl}';</script>";
+            exit;
+        } else {
+            echo "Ocorreu um erro ao realizar a publicação.";
         }
+    }else if ($erro != null) {
+        echo "<script>window.location.href='/./?pbl=erro_img?log=" . urlencode($erro) . "';</script>";
     }
 }
 
-if (isset($_POST['btn_pbl_comunidade'])) {
-    $texto = filtro($_POST['texto']);
-    if (!isset($id_comunidade)) {
-        $id_comunidade = 0;
-    }
-    if (isset($_FILES['doc']) && $_FILES['doc']['name'][0] != NULL) {
-        $nome = $_FILES['doc']['name'];
-        $tmp = $_FILES['doc']['tmp_name'];
-        $type = $_FILES['doc']['type'];
-        $size = $_FILES['doc']['size'];
-        $a =0;
-        $imagens = array();
-
-        while ($a < count($nome)) {
-            $ext = strtolower(substr($nome[$a], -4));
-            if ($ext[0] != ".") {
-                $ext = "." . $ext;
-            }
-            $nome_img = "IMG-".$a ."-". $_SESSION['id_user'] . "-pbl-" . date("Y.m.d-H.i.s") . $ext;
-            array_push($imagens,array("indereco"=>$nome_img,"name"=>$nome[$a],"tmp_name"=>$tmp[$a],"type"=>$type[$a],"size"=>$size[$a]));
-            $a++;
-        }
-        $dir = '../src/userFile/'.$user['code_nome'].'/img/';
-        $doc = true;
-    }else {
-        $nome_img = NULL;
-    }
-    if (!empty($texto) || $doc) {
-        if(true){
-            if (isset($_FILES['doc']) && $_FILES['doc']['name'][0] != NULL) {
-                foreach ($imagens as $imagen) {
-                    $_FILES['doc'] = $imagen;
-                    if (!move_uploaded_file($_FILES['doc']['tmp_name'], $dir . $_FILES['doc']['indereco'])) {
-                        ?>
-                        <script>
-                            window.location.href="index.php?pbl=erro_img";
-                        </script>
-                        <?php
-                    }
-                }
-                
-            }
-            if  ($id_pbl = $c->publicar($texto,$id_comunidade,$nome_img)) {
-                if (isset($id_comunidade)) {
-                    if ($nome_img != NULL) {
-                        $tipo = "poste";
-                        if ($nome_img != NULL) {
-                            $tipo = "poste";
-                            foreach ($imagens as $imagen) {
-                                if ($c->carregar_documento($id_pbl,$tipo,$imagen['indereco'])) {
-    
-                                }else {
-                                    echo "falha a carregar documento";
-                                }
-                            }
-                            unset($_FILES['doc']);
-                            unset($imagens);
-                        }
-                    }
-                    ?>
-                    <script>
-                        window.location.href="index.php?cmndd=<?=criptografar($id_comunidade)?>&pbl=true";
-                    </script>
-                    <?php
-                }else {
-                    ?>
-                    <script>
-                        window.location.href="index.php?pbl=true";
-                    </script>
-                    <?php
-                }
-            } else {
-                echo "ocorreu algum erro ao realizar publicacao";
-            }
-        }    
-    }
-}
 if (isset($_POST['texto_chat'])) {
     $texto = filtro($_POST['texto_chat']);
     $id_doc = 0;

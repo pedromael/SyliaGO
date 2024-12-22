@@ -67,7 +67,7 @@ class postes extends process
     }
     public function mostrar($row, $visualizacao_unica = false, $reac = true, $partilha = false)
     {
-        if (empty($row['id_user']) && $row['id_user'] > 0) return false;
+        if (empty($row['id_user']) || $row['id_user'] <= 0) return false;
 
         $usuario = $this->usuario($row['id_user']);
         $id_pbl = $row['id_pbl'];
@@ -80,8 +80,16 @@ class postes extends process
         }
             
         $inderecos = array_map(function ($doc) use ($usuario) {
-            return "/src/userFile/{$usuario['code_nome']}/img/{$doc['indereco']}";
-        }, mysqli_fetch_all(mysqli_query($this->link, "SELECT * FROM doc WHERE id=$id_pbl AND (tipo='poste' OR tipo='video')"), MYSQLI_ASSOC));
+            if ($doc['tipo'] == 'imagen') {
+                $arquivo = "img";
+            }else{
+                $arquivo = $doc['tipo'];
+            }
+            return [
+                "indereco" => "/src/userFile/{$usuario['code_nome']}/".$arquivo."/{$doc['indereco']}",
+                "tipo" => $doc['tipo']
+            ];
+        }, mysqli_fetch_all(mysqli_query($this->link, "SELECT * FROM doc WHERE id=$id_pbl AND para = 'poste' AND (tipo='imagen' OR tipo='video')"), MYSQLI_ASSOC));
     
         $qtd_indereco = count($inderecos);
         $comunidade = $row['id_comunidade'] ? $this->comunidade->comunidade($row['id_comunidade']) : null;
@@ -126,10 +134,19 @@ class postes extends process
                 <?php if ($qtd_indereco > 0): ?>
                     <div class="mb-3">
                         <div class="d-flex flex-wrap gap-2">
-                            <?php foreach (array_slice($inderecos, 0, 5) as $indereco): ?>
-                                <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                    <img src="<?= $indereco ?>" class="img-fluid" style="max-width: 100%; max-height: 400px; border-radius: 8px;" alt="imagen Poste">
-                                </a>
+                            <?php foreach ($inderecos as $indereco): ?>
+                                <?php if ($indereco['tipo'] == "imagen"): ?>
+                                    <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
+                                        <img src="<?= $indereco['indereco'] ?>" class="img-fluid" style="max-width: 100%; max-height: 400px; border-radius: 8px;" alt="Imagen do Poste">
+                                    </a>
+                                <?php elseif ($indereco['tipo'] == "video"): ?>
+                                    <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
+                                        <video class="img-fluid" style="max-width: 100%; max-height: 400px; border-radius: 8px;" controls>
+                                            <source src="<?= $indereco['indereco'] ?>" type="video/mp4">
+                                            Seu navegador não suporta o elemento de vídeo.
+                                        </video>
+                                    </a>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </div>
                     </div>

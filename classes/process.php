@@ -163,11 +163,12 @@ class process extends informacoes_usuario{
             return $n;
         }
     }
-    public function carregar_documento($id,$tipo,$indereco){
-        $sql = $this->pdo->prepare("INSERT INTO doc(id,id_user,tipo,indereco)
-        VALUES (:id,:user,:t,:i)");
+    public function carregar_documento($id,$para,$indereco,$tipo = 'imagen'){
+        $sql = $this->pdo->prepare("INSERT INTO doc(id,id_user,para,tipo,indereco)
+        VALUES (:id,:user,:p,:t,:i)");
         $sql->bindValue(":id", $id);
         $sql->bindValue(":user", $_SESSION['id_user']);
+        $sql->bindValue(":p", $para);
         $sql->bindValue(":t", $tipo);
         $sql->bindValue(":i", $indereco);
         if ($sql->execute()) {
@@ -176,7 +177,7 @@ class process extends informacoes_usuario{
             return false;
         }
     }
-    public function publicar($texto,$id_comunidade,$null){
+    public function publicar($texto,$id_comunidade){
         $sql = $this->pdo->prepare("INSERT INTO pbl(texto,id_user,id_comunidade,data)
         VAlUES(:t,:user,:c,NOW())");
         $sql->bindValue(":t", nl2br($texto));
