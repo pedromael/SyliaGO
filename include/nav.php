@@ -75,7 +75,7 @@
 
 </style>
 <div id="segunda_nav" class="remover bg-light position-fixed shadow-lg" style="width: 280px; z-index: 1050;">
-    <div class="container py-3 d-flex flex-column h-100">
+    <div class="container py-0 d-flex flex-column h-100">
         <!-- Perfil -->
         <div class="d-flex align-items-center mb-4">
             <div class="me-3">
@@ -94,8 +94,8 @@
         <ul class="list-unstyled mb-4">
             <li class="mb-2">
                 <a href="/contactos/" class="d-flex align-items-center text-decoration-none text-dark">
-                    <i class="bi bi-person-lines-fill mr-2"></i>
-                    <span>Encontrar Amigos</span>
+                    <i class="bi bi-person-lines-fill pr-2"></i>
+                    <span class="px-1">Encontrar Amigos</span>
                     <?php if ($c->verificar_qtd("pdd", $user['id_user']) > 0) { ?>
                         <span class="badge bg-primary ms-auto"><?=$c->verificar_qtd("pdd", $user['id_user'])?></span>
                     <?php } ?>
@@ -103,8 +103,8 @@
             </li> 
             <li>
                 <a href="/salvos.php" class="d-flex align-items-center text-decoration-none text-dark">
-                    <i class="bi bi-bookmark-fill mr-2"></i>
-                    <span>Salvos</span>
+                    <i class="bi bi-bookmark-fill"></i>
+                    <span class="px-1">Salvos</span>
                 </a>
             </li>
         </ul>

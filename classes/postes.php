@@ -39,8 +39,8 @@ class postes extends process
         $sql->execute();
         return $sql->fetch();
     }
-    public function relacao_poste_usuario($poste,$id_user): int {
-        global $bdnome2;
+    public function relacao_poste_usuario($poste,$id_user): int 
+    {
         $id_pbl = $poste['id_pbl'];
         $pontuacao = 0;
     
@@ -48,9 +48,9 @@ class postes extends process
     
         $pontuacao = $pontuacao + 2 * verificar_contactos_em_comum($id_user,$poste['id_user']);
     
-        $vistos = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.visto WHERE id = $id_pbl AND tipo='poste'");
+        $vistos = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $this->bdnome2.visto WHERE id = $id_pbl AND tipo='poste'");
         $qtd_vistos = mysqli_fetch_assoc($vistos);
-        $reacao = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $bdnome2.reacao WHERE id = $id_pbl AND tipo='poste'");
+        $reacao = mysqli_query(conn(), "SELECT COUNT(*) AS qtd FROM $this->bdnome2.reacao WHERE id = $id_pbl AND tipo='poste'");
         $qtd_reacao = mysqli_fetch_assoc($reacao);
     
         if ($qtd_reacao['qtd'] <= 0) {
@@ -69,21 +69,30 @@ class postes extends process
     public function pegarMidiaCarroceu($inderecos, $id_pbl): void
     {
         ?>
-            <div id="carouselMidia<?=$id_pbl?>" class="carousel slide" data-bs-ride="carousel">
+            <style>
+                .container-img-carrocel{
+                    width: 100%;
+                    height: 600px;
+                    background-color: var(--cor_sec);
+                }
+            </style>
+            <div id="carouselMidia<?=$id_pbl?>" class="carousel slide pb-1" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <?php foreach ($inderecos as $index => $indereco): ?>
                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                            <div class="container-img-carrocel container p-0 m-0 d-flex justify-content-center align-items-center">  
                             <?php if ($indereco['tipo'] == 'imagen'): ?>
-                                <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                    <img src="<?= $indereco['indereco'] ?>" class="d-block w-100 img-fluid" style="max-height: 700px; border-radius: 8px;" alt="Imagen do Poste">
-                                </a>
-                            <?php elseif ($indereco['tipo'] == 'video'): ?>
-                                <video class="d-block w-100 img-fluid" style="max-height: 700px; border-radius: 8px;" controls>
-                                    <source src="<?= $indereco['indereco'] ?>" type="video/mp4">
-                                    Seu navegador não suporta o elemento de vídeo.
-                                </video>
-                            <?php endif; ?>
-                        </div>
+                                    <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
+                                        <img src="<?= $indereco['indereco'] ?>" class="d-block w-100 img-fluid" style="max-height: 700px;" alt="Imagen do Poste">
+                                    </a>
+                                <?php elseif ($indereco['tipo'] == 'video'): ?>
+                                    <video class="d-block w-100 img-fluid" style="max-height: 700px;" controls>
+                                        <source src="<?= $indereco['indereco'] ?>" type="video/mp4">
+                                        Seu navegador não suporta o elemento de vídeo.
+                                    </video>
+                                <?php endif; ?>
+                            </div>
+                        </div>  
                     <?php endforeach; ?>
                 </div>
                 <!-- Controles -->
@@ -139,18 +148,31 @@ class postes extends process
         ?>
         <div class="<?= $classPartilha ?> card mb-3">
             <div class="card-body p-0">
-                <div class="conatiner mb-3">
-                    <div class="row p-2">
+                <div class="conatiner mb-2">
+                    <div class="row p-2 pb-0">
                         <a href="/perfil/?user=<?= criptografar($id_user) ?>" class="col-auto pr-2 pl-3">
-                            <img src="<?= $imagem_perfil ?>" class="rounded-circle me-2" alt="Perfil" style="width: 50px; height: 50px;">
+                            <img src="<?= $imagem_perfil ?>" class="rounded-circle me-2" alt="Perfil" style="width: 40px; height: 40px;">
                         </a>
                         <div class="col p-0">
+                            <style>
+                                .text_desf{
+                                    font-size: 15px;
+                                }
+                                .data{
+                                    font-size: 14px;
+                                }
+                                .texto{
+                                    text-indent: 10px;
+                                }
+                            </style>
                             <?php if ($comunidade && $this->oque == "poste"): ?>
-                                <span><a class="text-decoration-none bold" href="/comunidade/?cmndd=<?= criptografar($row['id_comunidade']) ?>"><?= $comunidade['nome'] ?></a></span><br>
-                            <?php endif; ?>
-                            <span><a href="/perfil/?user=<?= criptografar($id_user) ?>" class="text-decoration-none"><?= $nome_usuario ?></a></span>
+                                    <span><a class="text-decoration-none fw-bold fs-6" href="/comunidade/?cmndd=<?= criptografar($row['id_comunidade']) ?>"><?= $comunidade['nome'] ?></a></span><br>
+                                    <span><a href="/perfil/?user=<?= criptografar($id_user) ?>" class="text-decoration-none text_desf"><?= $nome_usuario ?></a></span>
+                                <?php else: ?>
+                                    <span><a href="/perfil/?user=<?= criptografar($id_user) ?>" class="text-decoration-none fw-bold fs-6"><?= $nome_usuario ?></a></span>
+                                <?php endif; ?>
                             <?php if(!$partilha): ?>
-                                <div class="text-muted"><?= resumir_data($row['data']) ?></div>
+                                <div class="text-muted data"><?= resumir_data($row['data']) ?></div>
                             <?php endif; ?>
                         </div>
                         <div class="col-auto">
@@ -163,25 +185,29 @@ class postes extends process
                     </div>
                 </div>
 
-                <?php if ($row['id_partilhado'] <= 0): ?>
-                    <p class="text-muted mb-3 p-2"><?=htmlspecialchars_decode($row['texto']) ?></p>
-                <?php else: ?>
-                    <div class="container m-0 p-2">
-                        <p class="text-muted mb-3"><?=htmlspecialchars_decode($row['texto']) ?></p>
+                <p class="texto text-muted mb-1"><?=htmlspecialchars_decode($row['texto']) ?></p>
+                <?php if ($row['id_partilhado'] > 0): ?>
+                    <div class="container m-0 p-1">
                         <?php $this->mostrar($this->poste($row['id_partilhado']),false,false,true);?>
                     </div>
                 <?php endif; ?>
 
+                    <style>
+                        .container-img{
+                            background-color: var(--cor_sec);
+                            backdrop-filter: blur(5px);
+                        }
+                    </style>
                 <?php if ($qtd_indereco == 1): ?>
                     <div class="mb-3">
-                        <div class="d-flex flex-wrap gap-2">
+                        <div class="container-img d-flex flex-wrap gap-2 justify-content-center align-items-center">
                             <?php if ($inderecos[0]['tipo'] == "imagen"): ?>
                                 <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                    <img src="<?= $inderecos[0]['indereco'] ?>" class="img-fluid" style="max-width: 100%; max-height: 700px; border-radius: 8px;" alt="Imagen do Poste">
+                                    <img src="<?= $inderecos[0]['indereco'] ?>" class="img-fluid" style="max-width: 100%; max-height: 650px;" alt="Imagen do Poste">
                                 </a>
                             <?php elseif ($inderecos[0]['tipo'] == "video"): ?>
                                 <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                    <video class="img-fluid" style="max-width: 100%; max-height: 700px; border-radius: 8px;" controls>
+                                    <video class="img-fluid" style="max-width: 100%; max-height: 700px;" controls>
                                         <source src="<?= $inderecos[0]['indereco'] ?>" type="video/mp4">
                                         Seu navegador não suporta o elemento de vídeo.
                                     </video>
@@ -191,10 +217,10 @@ class postes extends process
                     </div>
                 <?php elseif ($qtd_indereco > 1): 
                     $this->pegarMidiaCarroceu($inderecos, $id_pbl);
-                    endif; ?>
+                      endif; ?>
     
                 <?php if ($reac): ?>
-                    <div class="d-flex justify-content-between p-2">
+                    <div class="d-flex justify-content-between p-2 pt-0">
                         <button id="reac_poste<?=$id_pbl?>" class="btn btn-light" onclick="reagir(<?= $id_pbl ?>, 'gosto', 'poste')">
                             <i class="bi <?= $this->qtd_reacao($id_pbl, 'poste', $_SESSION['id_user']) > 0 ? 'bi-heart-fill' : 'bi-heart' ?>" style="color: red;"></i>
                             <?php $reacoes = $this->qtd_reacao($id_pbl, 'poste'); ?>

@@ -45,18 +45,19 @@ if (isset($_FILES['img']) && $_SESSION['id_user'] == $sql['id_user']) {
 ?>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=0.9">
-    <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> 
-    <link rel="icon" href="../img/glou_icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="/src/css/temas/<?=pegar_tema()?>.css">
-    <link rel="stylesheet" href="/src/css/stilo.css">
-    <link rel="stylesheet" href="/src/css/comunidade.css">
-    <link rel="stylesheet" href="/src/css/coder.css">
-    <script src="/src/js/script.js"></script>
-    <title><?=$sql['nome']?></title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=0.9">
+  <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> 
+  <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="icon" href="../img/glou_icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="/src/css/temas/<?=pegar_tema()?>.css">
+  <link rel="stylesheet" href="/src/css/stilo.css">
+  <link rel="stylesheet" href="/src/css/comunidade.css">
+  <link rel="stylesheet" href="/src/css/coder.css">
+  <script src="/src/js/script.js"></script>
+  <title><?=$sql['nome']?></title>
 </head>
 <body>
   <script>var indereco = "../"</script>
