@@ -65,6 +65,47 @@ class postes extends process
         
         return $pontuacao;
     }
+
+    public function pegarMidiaCarroceu($inderecos, $id_pbl): void
+    {
+        ?>
+            <div id="carouselMidia<?=$id_pbl?>" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <?php foreach ($inderecos as $index => $indereco): ?>
+                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                            <?php if ($indereco['tipo'] == 'imagen'): ?>
+                                <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
+                                    <img src="<?= $indereco['indereco'] ?>" class="d-block w-100 img-fluid" style="max-height: 700px; border-radius: 8px;" alt="Imagen do Poste">
+                                </a>
+                            <?php elseif ($indereco['tipo'] == 'video'): ?>
+                                <video class="d-block w-100 img-fluid" style="max-height: 700px; border-radius: 8px;" controls>
+                                    <source src="<?= $indereco['indereco'] ?>" type="video/mp4">
+                                    Seu navegador não suporta o elemento de vídeo.
+                                </video>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <!-- Controles -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselMidia<?=$id_pbl?>" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselMidia<?=$id_pbl?>" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+                <!-- Indicadores -->
+                <div class="carousel-indicators">
+                    <?php foreach ($inderecos as $index => $indereco): ?>
+                        <button type="button" data-bs-target="#carouselMidia<?=$id_pbl?>" data-bs-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>" aria-current="<?= $index === 0 ? 'true' : 'false' ?>"></button>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php
+    }
+
+
     public function mostrar($row, $visualizacao_unica = false, $reac = true, $partilha = false)
     {
         if (empty($row['id_user']) || $row['id_user'] <= 0) return false;
@@ -97,9 +138,9 @@ class postes extends process
         $classPartilha = $partilha ? "pbl_partilhada" : "";
         ?>
         <div class="<?= $classPartilha ?> card mb-3">
-            <div class="card-body">
+            <div class="card-body p-0">
                 <div class="conatiner mb-3">
-                    <div class="row">
+                    <div class="row p-2">
                         <a href="/perfil/?user=<?= criptografar($id_user) ?>" class="col-auto pr-2 pl-3">
                             <img src="<?= $imagem_perfil ?>" class="rounded-circle me-2" alt="Perfil" style="width: 50px; height: 50px;">
                         </a>
@@ -123,43 +164,46 @@ class postes extends process
                 </div>
 
                 <?php if ($row['id_partilhado'] <= 0): ?>
-                    <p class="text-muted mb-3"><?=htmlspecialchars_decode($row['texto']) ?></p>
+                    <p class="text-muted mb-3 p-2"><?=htmlspecialchars_decode($row['texto']) ?></p>
                 <?php else: ?>
-                    <div class="container m-0 p-0">
+                    <div class="container m-0 p-2">
                         <p class="text-muted mb-3"><?=htmlspecialchars_decode($row['texto']) ?></p>
                         <?php $this->mostrar($this->poste($row['id_partilhado']),false,false,true);?>
                     </div>
                 <?php endif; ?>
 
-                <?php if ($qtd_indereco > 0): ?>
+                <?php if ($qtd_indereco == 1): ?>
                     <div class="mb-3">
                         <div class="d-flex flex-wrap gap-2">
-                            <?php foreach ($inderecos as $indereco): ?>
-                                <?php if ($indereco['tipo'] == "imagen"): ?>
-                                    <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                        <img src="<?= $indereco['indereco'] ?>" class="img-fluid" style="max-width: 100%; max-height: 400px; border-radius: 8px;" alt="Imagen do Poste">
-                                    </a>
-                                <?php elseif ($indereco['tipo'] == "video"): ?>
-                                    <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                        <video class="img-fluid" style="max-width: 100%; max-height: 400px; border-radius: 8px;" controls>
-                                            <source src="<?= $indereco['indereco'] ?>" type="video/mp4">
-                                            Seu navegador não suporta o elemento de vídeo.
-                                        </video>
-                                    </a>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
+                            <?php if ($inderecos[0]['tipo'] == "imagen"): ?>
+                                <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
+                                    <img src="<?= $inderecos[0]['indereco'] ?>" class="img-fluid" style="max-width: 100%; max-height: 700px; border-radius: 8px;" alt="Imagen do Poste">
+                                </a>
+                            <?php elseif ($inderecos[0]['tipo'] == "video"): ?>
+                                <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
+                                    <video class="img-fluid" style="max-width: 100%; max-height: 700px; border-radius: 8px;" controls>
+                                        <source src="<?= $inderecos[0]['indereco'] ?>" type="video/mp4">
+                                        Seu navegador não suporta o elemento de vídeo.
+                                    </video>
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </div>
-                <?php endif; ?>
+                <?php elseif ($qtd_indereco > 1): 
+                    $this->pegarMidiaCarroceu($inderecos, $id_pbl);
+                    endif; ?>
     
                 <?php if ($reac): ?>
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between p-2">
                         <button id="reac_poste<?=$id_pbl?>" class="btn btn-light" onclick="reagir(<?= $id_pbl ?>, 'gosto', 'poste')">
                             <i class="bi <?= $this->qtd_reacao($id_pbl, 'poste', $_SESSION['id_user']) > 0 ? 'bi-heart-fill' : 'bi-heart' ?>" style="color: red;"></i>
-                            <?= $this->qtd_reacao($id_pbl, 'poste') ?>
+                            <?php $reacoes = $this->qtd_reacao($id_pbl, 'poste'); ?>
+                            <?= $reacoes > 0 ? $reacoes : "" ?>
                         </button>
                         <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>&cmt=true" class="btn btn-light">
-                            <i class="bi bi-chat-dots"></i> <?= qtd_de_cmt($id_pbl) ?>
+                            <i class="bi bi-chat-dots"></i> 
+                            <?php $comentarios = qtd_de_cmt($id_pbl)?>
+                            <?= $comentarios > 0 ? $comentarios : "" ?>
                         </a>
                         <?php if ($row['id_partilhado'] <= 0): ?>
                             <button class="btn btn-light" onclick="abrir_partilhar('poste', <?= $id_pbl ?>,'poste')">

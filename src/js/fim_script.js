@@ -120,7 +120,7 @@ function actualizar() {
     };
     xhr.send();
 }
-setInterval(actualizar, 500)
+setInterval(actualizar, 1500)
 
 const corpo_principal = document.querySelector("#corpo");
 let scrollTimer;

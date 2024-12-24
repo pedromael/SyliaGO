@@ -50,7 +50,7 @@ class lista_mensagens extends conexao
                 <div class="ms-3 flex-grow-1">
                     <!-- Nome do usuário -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 fs-1">
+                        <h6 class="mb-0">
                             <?=$sqll['nome']?>
                         </h6>
                         <!-- Quantidade de mensagens não lidas -->

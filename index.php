@@ -34,6 +34,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
 <body> 
     <script>var indereco="./";</script>
     <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script src="src/js/script.js"></script>
     <script src="src/js/coder.js"></script>
     <?php
@@ -156,44 +157,18 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                     width: 85%;
                 }
             </style>
-            <div class="container bg-white p-2 rounded shadow-sm my-2">
-                <form action="" method="post" enctype="multipart/form-data" class="p-0 m-0">
-                    <div class="mb-1 d-flex align-items-start">
-                        <img src="<?=pegar_foto_perfil("perfil", $_SESSION['id_user'])?>" alt="Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;">
-                        
-                        <textarea name="texto" 
-                                class="form-control border-0 shadow-none" 
-                                rows="3" 
-                                placeholder="No que está pensando?"
-                                style="resize: none;"></textarea>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <label for="input_file_pbl" class="btn btn-outline-secondary d-flex align-items-center my-auto">
-                            <i class="bi bi-file-earmark-image"></i> 
-                        </label>
-                        <label for="input_video_pbl" class="btn btn-outline-secondary d-flex align-items-center my-auto">
-                            <i class="bi bi-file-earmark"></i>
-                        </label>
-                        <input type="file" id="input_file_pbl" name="imagens[]" accept="image/*" multiple hidden>
-                        <input type="file" id="input_video_pbl" name="video" accept="video/*" hidden>
-                        <button name="btn_pbl" class="btn btn-primary d-flex align-items-center">
-                            <i class="bi bi-send pr-1"></i>
-                            Publicar
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <?php require "sent.php"?>
-            <?php
+            <?php 
+            require "include/formulario_de_poste.php";
+            require "sent.php";
+
             if (isset($_GET['pbl'])) {
-                if (is_nan(descriptografar($_GET['pbl']))) {
-                    $id_pbl = descriptografar($_GET['pbl']);
+                if ($id_pbl = descriptografar($_GET['pbl'])) {
                     ?>
                         <div class="info_corrente">publicacao carregada com sucesso</div>
                     <?php
                 }else {
                     ?>
-                        <div class="info_corrente">erro ao carregar imagen</div>
+                        <div class="info_corrente">erro ao carregar poste</div>
                     <?php
                 }
             }

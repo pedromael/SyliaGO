@@ -35,6 +35,8 @@ function resumir_texto($string,$tamanho)
     if ($n > $tamanho) {
         $n = $tamanho;
         $tres_pontos = "...";
+    }else {
+        return $string;
     }
     $texto = "";
     $nn = 0;
