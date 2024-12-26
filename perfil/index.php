@@ -100,56 +100,56 @@
                 <div class="row">
                     <!-- Coluna esquerda: Perfil e Dados do Usuário -->
                     <div class="col-md-4 d-flex flex-column align-items-center">
-                    <div class="position-relative">
-                        <div class="perfil_img" style="background-image: url(<?=$imagen_perfil?>); width: 100px; height: 100px; border-radius: 50%; background-size: cover; background-position: center;" onmouseover="perfil_img(<?=$parametro?>,1)" onmouseout="perfil_img(<?=$parametro?>,11)">
-                        <?php if ($id_user == $_SESSION['id_user']): ?>
-                            <?php if ($imagen_perfil != "sem_img_no_perfil.jpeg"): ?>
-                            <a href="visualizar.php?image=<?=criptografar($imagen)?>">
-                                <div class="position-absolute top-0 end-0 m-2">
-                                <!-- <div class="btn btn-outline-light btn-sm">Remover</div> -->
+                        <div class="position-relative">
+                            <div class="perfil_img" style="background-image: url(<?=$imagen_perfil?>); width: 100px; height: 100px; border-radius: 50%; background-size: cover; background-position: center;" onmouseover="perfil_img(<?=$parametro?>,1)" onmouseout="perfil_img(<?=$parametro?>,11)">
+                            <?php if ($id_user == $_SESSION['id_user']): ?>
+                                <?php if ($imagen_perfil != "sem_img_no_perfil.jpeg"): ?>
+                                <a href="visualizar.php?image=<?=criptografar($imagen)?>">
+                                    <div class="position-absolute top-0 end-0 m-2">
+                                    <!-- <div class="btn btn-outline-light btn-sm">Remover</div> -->
+                                    </div>
+                                </a>
+                                <?php endif; ?>
+                                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2">
+                                <button class="btn btn-outline-light btn-sm" onclick="aba_carregar_foto()">Alterar foto</button>
                                 </div>
-                            </a>
+                            <?php elseif ($imagen_perfil != "sem_img_no_perfil.jpeg"): ?>
+                                <a href="visualizar.php?image=<?=criptografar($imagen)?>">
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <!-- <div class="btn btn-outline-light btn-sm">Visualizar</div> -->
+                                </div>
+                                </a>
                             <?php endif; ?>
-                            <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2">
-                            <button class="btn btn-outline-light btn-sm" onclick="aba_carregar_foto()">Alterar foto</button>
                             </div>
-                        <?php elseif ($imagen_perfil != "sem_img_no_perfil.jpeg"): ?>
-                            <a href="visualizar.php?image=<?=criptografar($imagen)?>">
-                            <div class="position-absolute top-0 end-0 m-2">
-                                <!-- <div class="btn btn-outline-light btn-sm">Visualizar</div> -->
-                            </div>
-                            </a>
-                        <?php endif; ?>
                         </div>
-                    </div>
-                    <p class="mt-2  fs-5 fw-bold"><?=$sql['nome']?></p>
-                    <?php
-                        $a_seguir = $seguidores = 0;
-                        $sql = mysqli_query($link, "SELECT * FROM contacto WHERE id_user= $id_user OR id_user_dest=$id_user");
-                        while ($row = mysqli_fetch_assoc($sql)) {
-                            $id_contacto = $row['id_contacto'];
-                            $aceite = mysqli_query($link, "SELECT count(*) AS valor FROM $bdnome2.contacto_aceite WHERE id_contacto =$id_contacto");
-                            $aceite = mysqli_fetch_assoc($aceite);
-                            if ($id_user == $row['id_user']) {
-                                if ($aceite['valor'] > 0) {
-                                    $a_seguir++;
-                                    $seguidores++;
+                        <p class="mt-2  fs-5 fw-bold"><?=$sql['nome']?></p>
+                        <?php
+                            $a_seguir = $seguidores = 0;
+                            $sql = mysqli_query($link, "SELECT * FROM contacto WHERE id_user= $id_user OR id_user_dest=$id_user");
+                            while ($row = mysqli_fetch_assoc($sql)) {
+                                $id_contacto = $row['id_contacto'];
+                                $aceite = mysqli_query($link, "SELECT count(*) AS valor FROM $bdnome2.contacto_aceite WHERE id_contacto =$id_contacto");
+                                $aceite = mysqli_fetch_assoc($aceite);
+                                if ($id_user == $row['id_user']) {
+                                    if ($aceite['valor'] > 0) {
+                                        $a_seguir++;
+                                        $seguidores++;
+                                    } else {
+                                        $a_seguir++;
+                                    }
                                 } else {
-                                    $a_seguir++;
-                                }
-                            } else {
-                                if ($aceite['valor'] > 0) {
-                                    $a_seguir++;
-                                    $seguidores++;
-                                } else {
-                                    $seguidores++;
+                                    if ($aceite['valor'] > 0) {
+                                        $a_seguir++;
+                                        $seguidores++;
+                                    } else {
+                                        $seguidores++;
+                                    }
                                 }
                             }
-                        }
-                    ?>
-                    <div class="mt-2 text-muted text-center">
-                        <span>Seguidores: <?=$seguidores?> </span>/<span> A seguir: <?=$a_seguir?></span>
-                    </div>
+                        ?>
+                        <div class="mt-2 text-muted text-center fs-6">
+                            <span>Seguidores: <?=$seguidores?> </span>/<span> A seguir: <?=$a_seguir?></span>
+                        </div>
                     </div>
 
                     <!-- Coluna direita: Estatísticas -->
@@ -159,7 +159,7 @@
                         <tr>
                             <th scope="col" class="text-center">Média de Interação</th>
                             <th scope="col" class="text-center">Postagens</th>
-                            <th scope="col" class="text-center">Projetos Realizados</th>
+                            <th scope="col" class="text-center">Repositorios</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -178,12 +178,12 @@
                         <?php if ($id_user == $_SESSION['id_user']): ?>
                         <a href="" class="btn btn-primary btn-sm">Mais detalhes</a>
                         <?php else: ?>
+                        <a href="/mensagens/?user=<?=criptografar($id_user)?>" class="btn btn-outline-info btn-sm ms-2">Mensagem</a>
+                        <?php endif; ?>
                         <?php if (true): // varificar amizade?>
                             <button class="btn btn-outline-primary btn-sm">Opções</button>
                         <?php else: ?>
                             <button class="btn btn-outline-success btn-sm">Adicionar</button>
-                        <?php endif; ?>
-                        <a href="/mensagens/?user=<?=criptografar($id_user)?>" class="btn btn-outline-info btn-sm ms-2">Mensagem</a>
                         <?php endif; ?>
                     </div>
                     </div>

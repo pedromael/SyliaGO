@@ -54,17 +54,11 @@
                 font-size: 11pt;
                 color: #d3d3ddff;
                 text-shadow: 1px 1px 2px #ddd;
-                <?php
-                  if($info_login["ativo"]){
-                    ?>
-                    border-bottom: 2px solid green;
-                    <?php
-                  }else{
-                    ?>
-                    border-bottom: 2px solid #d3d3ddff;
-                    <?php
-                  }
-                ?>
+                <?php if($info_login["ativo"]):?>
+                  border-bottom: 2px solid green;
+                <?php else:?>
+                  border-bottom: 2px solid #d3d3ddff;
+                <?php endif;?>
               }
             </style>
             <div class="card mb-2 p-1">
@@ -115,17 +109,24 @@
       <?php
       if($id_dest != NULL){
         ?>
-          <footer class="footer_chat">
-              <div class="formulario_normal_de_envio">
-                  <textarea name="texto_cmt" id="" placeholder="manda um oi!"></textarea>
-                  <div class="carregar"  style="background-image: url(../bibliotecas/bootstrap/icones/file-earmark-image.svg);"></div>
-                  <button name="btn_cmt" style="background-image: url(../bibliotecas/bootstrap/icones/send.svg);" class="form-control" onclick="enviar_mensagem('<?=criptografar($id_dest)?>')"></button>
-              </div>
-            <?php
-            require "../sent.php";
-            ?>
+          <footer class="formulario_mensagem d-flex align-items-center justify-content-center bg-transparent w-100 position-absolute bottom-0 mb-2">
+            <div class="d-flex align-items-center position-relative w-100 border rounded-pill shadow" style="height: 50px;">
+                <button class="btn d-flex align-items-center justify-content-center rounded-circle p-0 position-absolute start-0" style="width: 40px; height: 40px;">
+                    <i class="bi bi-file-earmark-image"></i>
+                </button>
+                <textarea class="form-control border-0 shadow-none mx-5 px-0 bg-transparent text-secondary" 
+                            placeholder="A tua opinião é importante" 
+                            style="resize: none; height: 100%;"></textarea>
+                <button name="btn_cmt" 
+                        class="btn d-flex align-items-center justify-content-center rounded-circle p-0 position-absolute end-0" 
+                        style="width: 40px; height: 40px;" 
+                        onclick="enviar_mensagem('<?=criptografar($id_dest)?>')">
+                    <i class="bi bi-send"></i>
+                </button>
+            </div>
           </footer>
         <?php
+        require "../sent.php";
       }
       ?>
     </div> 

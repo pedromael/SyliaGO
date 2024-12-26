@@ -109,8 +109,10 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                     <div class="trans trans_esq"></div>
                     <div class="scroll  rolagem_x">
                         <div class="scroll_content">
-                            <div class="item carregar_storie" style="background: rgba(255,255,255,0.5) url(<?=pegar_foto_perfil('perfil',$id_user)?>) center center/cover;" onclick="aba_alert('.novo_storie')"><p>+</p></div>
-                            <?php
+                        <div class="item carregar_storie d-flex align-items-center justify-content-center bg-light text-secondary rounded-circle" style="background: rgba(255,255,255,0.5) url(<?=pegar_foto_perfil('perfil',$id_user)?>) center center/cover;" onclick="aba_alert('.novo_storie')">
+                            <p class="fs-1">+</p>
+                        </div>
+                        <?php
                             $storie = new stories;
                             foreach ($storie->stories as $row) {
                                 $dados = $storie->storie_info($row['id_user']);

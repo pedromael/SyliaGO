@@ -31,7 +31,7 @@ function publicar(param) {
 
 function comentar(id,tipo) 
 {
-    var texto = document.querySelector(".footer_chat textarea");
+    var texto = document.querySelector(".formulario-comentario textarea");
     if (texto.value.length <= 0) {
         return false
     }
@@ -59,7 +59,7 @@ function comentar(id,tipo)
 }
 
 function enviar_mensagem(id_dest) {
-    var texto = document.querySelector(".footer_chat textarea");
+    var texto = document.querySelector(".formulario_mensagem textarea");
     if (texto.value.length <= 0) {
         return false
     }

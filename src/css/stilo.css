@@ -385,14 +385,6 @@ a{
     height:  calc(100% - 54px);
     margin: auto;
 }
-#prev{
-    position: relative;
-    background-color: var(--cor_pri);
-    border-radius: var(--border);
-    width: calc(100%);
-    margin: auto;
-    margin-top: 5px;
-}
 #pbl_abrir{
     background-color: var(--cor_pri);
     width: max-content;
@@ -410,6 +402,16 @@ a{
     color: var(--cor_sec);
     font-weight: bold;
 }
+
+#prev{
+    position: relative;
+    background-color: var(--cor_pri);
+    border-radius: var(--border);
+    width: calc(100%);
+    margin: auto;
+    margin-top: 5px;
+}
+
 .scroll{
     width: calc(100%);
     margin: auto;
@@ -755,64 +757,14 @@ a{
     }
 }
 
-/*chat*/
-
-.footer_chat{
-    position: absolute;
-    width: 100%;
-    margin: auto;
-    margin-bottom: 4px;
-    height: 50px;
-    bottom: 0;
-    left: 0;
-    white-space: nowrap;
-    background-color: transparent;
-}
-.formulario_normal_de_envio{
-    position: relative;
-    width: 100%;
-    border: 1px solid var(--cor_sec);
-    height: 50px;
-    border-radius: 30px;
-}
 .max{
     height: 80px;
     border-width: 3px;
     border-radius: 40px;
 }
-.formulario_normal_de_envio textarea{
-    width: calc(100% - 80px);
-    border: 1px solid transparent;
-    margin-left: 40px;
-    background-color: transparent;
-    color: var(--char_pri);
-    height: 100%;
-}
-.formulario_normal_de_envio .carregar{
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 40px;
-    background-repeat: no-repeat;
-    background-size: 60%;
-    background-position: center center;
-}
-.formulario_normal_de_envio button{
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 40px;
-    height: 100%;
-    border: none;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-size: 60%;
-    background-position: center center;
-}
-.formulario_normal_de_envio textarea:focus{
-    border-color: rgba(0, 0, 0, 0.0);
-}
+/*chat*/
+
+
 #corpo_chat{
     top: 150px;
     bottom: 150px;

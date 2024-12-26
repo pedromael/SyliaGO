@@ -83,7 +83,7 @@ class postes extends process
                             <div class="container-img-carrocel container p-0 m-0 d-flex justify-content-center align-items-center">  
                             <?php if ($indereco['tipo'] == 'imagen'): ?>
                                     <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                        <img src="<?= $indereco['indereco'] ?>" class="d-block w-100 img-fluid" style="max-height: 700px;" alt="Imagen do Poste">
+                                        <img src="<?= $indereco['indereco'] ?>" class="d-block w-100 img-fluid" style="max-height: 600px;" alt="Imagen do Poste">
                                     </a>
                                 <?php elseif ($indereco['tipo'] == 'video'): ?>
                                     <video class="d-block w-100 img-fluid" style="max-height: 700px;" controls>
@@ -203,11 +203,11 @@ class postes extends process
                         <div class="container-img d-flex flex-wrap gap-2 justify-content-center align-items-center">
                             <?php if ($inderecos[0]['tipo'] == "imagen"): ?>
                                 <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                    <img src="<?= $inderecos[0]['indereco'] ?>" class="img-fluid" style="max-width: 100%; max-height: 650px;" alt="Imagen do Poste">
+                                    <img src="<?= $inderecos[0]['indereco'] ?>" class="img-fluid" style="max-width: 100%; max-height: 600px;" alt="Imagen do Poste">
                                 </a>
                             <?php elseif ($inderecos[0]['tipo'] == "video"): ?>
                                 <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                    <video class="img-fluid" style="max-width: 100%; max-height: 700px;" controls>
+                                    <video class="img-fluid" style="max-width: 100%; max-height: 650px;" controls>
                                         <source src="<?= $inderecos[0]['indereco'] ?>" type="video/mp4">
                                         Seu navegador não suporta o elemento de vídeo.
                                     </video>
