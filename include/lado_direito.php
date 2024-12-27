@@ -58,8 +58,11 @@ require "../algoritimos/seguranca.php";
     </div>
     <div id="corpo_lista_sms" class="rolagem_y">
         <?php
-        $listagem = new lista_mensagens();
-        $numero_de_sms_encontradas = $listagem->getListaAmigos();
+        $listagem = new lista_mensagens(); 
+        $retorno = $listagem->getListaAmigos();
+        $numero_de_sms_encontradas = $retorno['tamanho'];
+        $hash = $retorno['hash'];
+
         if ($numero_de_sms_encontradas < 1) 
         {
             ?>
@@ -89,3 +92,11 @@ require "../algoritimos/seguranca.php";
         ?>
     </div>
 </div>
+<?php
+    $resposta = array(
+        'status' => "sucess",
+        'hash' => $hash
+    );
+
+    echo json_encode($resposta);
+?>

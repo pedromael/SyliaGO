@@ -59,7 +59,7 @@ function comentar(id,tipo)
 }
 
 function enviar_mensagem(id_dest) {
-    var texto = document.querySelector(".formulario_mensagem textarea");
+    var texto = document.querySelector(".  textarea");
     if (texto.value.length <= 0) {
         return false
     }

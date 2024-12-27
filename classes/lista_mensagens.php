@@ -9,10 +9,7 @@ class lista_mensagens extends conexao
     public function __construct()
     {   
         parent::__construct();
-        global $bdnome2;
-        $this->bdnome2 = $bdnome2; 
         $this->process = new process;
-        $this->conn = conn();
         $this->id_user = $_SESSION['id_user'];
     }
     private function mostrar($sqll,$id_dest,$sms)
@@ -60,8 +57,6 @@ class lista_mensagens extends conexao
                             </span>
                         <?php } ?>
                     </div>
-
-                    <!-- Última mensagem -->
                     <small class="text-muted">
                         <?php
                             if (isset($sms['texto'])) {
@@ -83,52 +78,51 @@ class lista_mensagens extends conexao
     public function getListaAmigos()
     {
         $id_user = $this->id_user;
-        $sql = "SELECT DISTINCT u.id_user, u.nome FROM usuarios u
-        LEFT JOIN contacto a ON ((a.id_user = u.id_user AND a.id_user_dest = $id_user) 
-            OR (a.id_user_dest = u.id_user AND a.id_user = $id_user))
-        LEFT JOIN $this->bdnome2.contacto_aceite aa ON (aa.id_contacto = a.id_contacto)
-        LEFT JOIN chat c ON ((c.id_user = u.id_user AND c.id_user_dest = $id_user) 
-            OR (c.id_user_dest = u.id_user AND c.id_user = $id_user))
-        
-        WHERE u.id_user != $id_user AND ((aa.id_contacto = a.id_contacto OR (u.id_user = c.id_user OR u.id_user = c.id_user_dest))
-        AND ((a.id_user = u.id_user AND a.id_user_dest = $id_user) OR (a.id_user_dest = u.id_user AND a.id_user = $id_user))) OR (c.id_chat > 0)
-        
-        GROUP BY u.id_user, u.nome
-        ORDER BY MAX(c.id_chat) DESC";
 
-        $sql = mysqli_query($this->conn, $sql);
+        $sql = "SELECT DISTINCT u.id_user, u.nome, 
+                    (SELECT texto FROM chat 
+                        WHERE (id_user = :id_user AND id_user_dest = u.id_user) 
+                        OR (id_user = u.id_user AND id_user_dest = :id_user) 
+                        ORDER BY id_chat DESC LIMIT 1) AS ultima_mensagem
+                FROM usuarios u
+                LEFT JOIN contacto a ON ((a.id_user = u.id_user AND a.id_user_dest = :id_user) 
+                    OR (a.id_user_dest = u.id_user AND a.id_user = :id_user))
+                LEFT JOIN $this->bdnome2.contacto_aceite aa ON (aa.id_contacto = a.id_contacto)
+                LEFT JOIN chat c ON ((c.id_user = u.id_user AND c.id_user_dest = :id_user) 
+                    OR (c.id_user_dest = u.id_user AND c.id_user = :id_user))
+                WHERE u.id_user != :id_user 
+                AND ((aa.id_contacto = a.id_contacto 
+                OR (u.id_user = c.id_user OR u.id_user = c.id_user_dest))
+                OR (c.id_chat > 0))
+                GROUP BY u.id_user, u.nome
+                ORDER BY MAX(c.id_chat) DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+        $stmt->execute(); 
 
         $numero_de_contactos = 0;
 
-        if ($sql) {
-            $sqll = array();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $numero_de_contactos++;
 
-            while ($row = mysqli_fetch_assoc($sql)) {
-                $numero_de_contactos++;
-                
-                $sqll = array(
-                    'id_user' => $row['id_user'],
-                    'nome' => $row['nome']
-                );
+            // Prepara os dados para exibição
+            $sqll = ['id_user' => $row['id_user'], 'nome' => $row['nome']];
+            $sms = ['texto' => $row['ultima_mensagem'], 'id_user' => $row['id_user']];
 
-                $id_dest = $row['id_user'];
-                $sms = mysqli_query($this->conn, "SELECT texto,id_user FROM chat WHERE 
-                (id_user=$id_user AND id_user_dest=$id_dest) OR 
-                (id_user=$id_dest AND id_user_dest=$id_user) 
-                ORDER BY id_chat DESC LIMIT 1");
-                $sms = mysqli_fetch_assoc($sms);
-
-                $this->mostrar($sqll,$row['id_user'],$sms);
-            }
-
-            $this->conn->close();
-
-        } else {
-
-            $this->conn->close();
-            return array();
+            // Mostra os dados do amigo e última mensagem
+            $this->mostrar($sqll, $row['id_user'], $sms);
+            $resultados[] = $row;
         }
-        return $numero_de_contactos;
+
+        if(!isset($resultados) || !isset($numero_de_contactos)){
+            $resultados = $numero_de_contactos = 0;
+        }
+
+        return ["hash" => md5(json_encode($resultados)),
+                "tamanho" => $numero_de_contactos
+                ]; // Retorna o hash da consulta e o número de contatos encontrados
     }
 }
 ?>

@@ -44,14 +44,17 @@ class selecionar_feed
             $this->postes->oque = "poste";
             while ($a < $this->quantidade_de_postes) {
                 if (($this->numero_postes_globais > 0) && (($a + 1) % ceil($this->quantidade_de_postes / $this->numero_postes_globais) == 0)) {
-                    $this->postes->procurar("global");
-                    $this->numero_postes_globais--;
                     $a++; 
                     continue;
                 }
 
-                if ($this->postes->procurar(null) === false) {
-                    break;
+                if ($this->postes->procurar(null) == false) {
+                    if($this->numero_postes_globais <= 0){
+                        $this->postes->procurar("global");
+                        $this->numero_postes_globais--;
+                    }else{
+                        break;
+                    }
                 }
 
                 $a++;

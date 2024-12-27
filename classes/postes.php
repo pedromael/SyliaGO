@@ -185,7 +185,7 @@ class postes extends process
                     </div>
                 </div>
 
-                <p class="texto text-muted mb-1"><?=htmlspecialchars_decode($row['texto']) ?></p>
+                <p class="m-2 text-muted mb-1"><?=htmlspecialchars_decode($row['texto']) ?></p>
                 <?php if ($row['id_partilhado'] > 0): ?>
                     <div class="container m-0 p-1">
                         <?php $this->mostrar($this->poste($row['id_partilhado']),false,false,true);?>

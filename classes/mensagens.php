@@ -21,39 +21,40 @@ class mensagens extends process
             return false;
         }
     }
-    public function mostrar($dados,$anterior = false){
-        if ($this->receptor == $dados['id_user']) {
-            $classe = "esquerda";
-        }else {$classe = "direita";}
+    public function mostrar($dados, $anterior = false)
+    {
+        // Determina se é uma mensagem do receptor ou do emissor
+        $isReceptor = ($this->receptor == $dados['id_user']);
+        $classe_flex = $isReceptor ? "justify-content-start" : "justify-content-end";
+        $posicao_img = $isReceptor ? "me-2" : "ms-2";
+        $bg_cor = $isReceptor ? "bg-light" : "bg-primary";
+        $texto_cor = $isReceptor ? "text-dark" : "text-white";
+
         ?>
-        <div class="<?=$classe?>">
-            <div class="container">
-                <div class="row">
-                    <?php
-                    if ($this->receptor == $dados['id_user']) {
-                        ?>
-                        <div class="d-inline-block img_msg">
-                            <?php
-                            if ($anterior) {
-                                ?><img id="img_msg" src="<?=pegar_foto_perfil("perfil",$dados['id_user'])?>" alt=""><?php
-                            }
-                            ?>
-                        </div>
-                        <?php
-                    }
-                    ?>
-                    <div class="d-inline-block text">
-                        <p class="stilo "><span><?=$dados['texto']?></span></p>
-                        <p id="data_chat" class="<?=$classe?>"><?=resumir_data($dados['data'])?></p>
+        <div class="d-flex <?=$classe_flex?> mb-2">
+            <?php if ($isReceptor && $anterior): ?>
+                <div class="<?=$posicao_img?>">
+                    <div class="rounded-circle" 
+                        style="width: 45px; height: 45px; 
+                        background-image: url('<?=pegar_foto_perfil('perfil', $dados['id_user'])?>'); 
+                        background-size: cover; 
+                        background-position: center 10%;">
                     </div>
                 </div>
+            <?php endif; ?>
+
+            <!-- Mensagem -->
+            <div class="d-flex flex-column">
+                <div class="p-2 <?=$bg_cor?> border rounded <?=$texto_cor?>">
+                    <p class="mb-0"><?=$dados['texto']?></p>
+                </div>
+                <small class="text-muted mt-1"><?=resumir_data($dados['data'])?></small>
             </div>
         </div>
-        <p class="divisao"></p>
-        <?php
-        $this->marcar_visto($dados['id_chat'],"chat");
-
+        <?php 
+        $this->marcar_visto($dados['id_chat'], "chat");
     }
+
     public function selecionar(){
         $sql = $this->pdo->prepare("SELECT * FROM (SELECT * FROM chat WHERE (id_user = :r
         AND id_user_dest = :t) OR (id_user = :t AND id_user_dest = :r) ORDER BY id_chat DESC LIMIT 10)
