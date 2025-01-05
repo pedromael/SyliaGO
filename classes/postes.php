@@ -113,8 +113,7 @@ class postes extends process
             </div>
         <?php
     }
-
-
+    
     public function mostrar($row, $visualizacao_unica = false, $reac = true, $partilha = false)
     {
         if (empty($row['id_user']) || $row['id_user'] <= 0) return false;

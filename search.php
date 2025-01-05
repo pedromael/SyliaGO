@@ -26,6 +26,7 @@ if (isset($_GET['valor'])) {
     <link rel="stylesheet" href="/src/css/temas/<?=pegar_tema()?>.css">
     <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/src/css/stilo.css">
     <title><?=$valor?></title>
 </head>
@@ -50,7 +51,7 @@ if (isset($_GET['valor'])) {
     <div class="corpos overflow-y-auto">
         <div id="corpo">
             <div class="filtro"></div>
-            <div class="pesquisas">
+            <div class="container">
                 <?php
                 $s = new search($valor,"tudo");
                 $s->procurar();

@@ -32,7 +32,8 @@
     <link rel="icon" href="/src/img/glou_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="/src/css/temas/<?=pegar_tema()?>.css">
     <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">    
+    <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">    
     <link rel="stylesheet" href="/src/css/stilo.css">
     <title>Contactos</title>
 </head>

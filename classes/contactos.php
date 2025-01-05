@@ -1,6 +1,10 @@
 <?php
 class contactos extends informacoes_usuario
 {
+    public function pegar_contacto($id_user){
+        
+    }
+
     public function pegar_amigos($id_user,$so_id = false): array{
         $lista = [];
         $sql = $this->pdo->prepare("SELECT u.* FROM usuarios AS u
@@ -42,7 +46,6 @@ class contactos extends informacoes_usuario
                 usort($pessoas_sugeridas,'comparar_peso');
             }
         }
-
         return $pessoas_sugeridas;
     }
 
@@ -51,7 +54,7 @@ class contactos extends informacoes_usuario
         
     }
 
-    public function HTML($id_user,$id_contacto,$nome,$imagen)                                                                                  : string
+    public function HTML($id_user,$id_contacto,$nome,$imagen,$caso)                                                                                  : string
     {
         $id_contacto_criptografado = criptografar($id_contacto);
         $nome_criptografado = criptografar($nome);

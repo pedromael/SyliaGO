@@ -22,6 +22,7 @@ $user = mysqli_fetch_assoc($user);
     <link rel="icon" href="../src/img/glou_icon.png" type="image/x-icon">
     <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/src/css/temas/branco.css">
     <link rel="stylesheet" href="/src/css/welcome.css">
     <script src="../src/js/welcome.js"></script>
