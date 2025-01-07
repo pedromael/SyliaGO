@@ -14,6 +14,7 @@ body nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-left: 25px;
 }
 
 .nw-100 {
@@ -23,10 +24,10 @@ body nav {
 
 #metade_da_nav {
     position: fixed;
-    left: 0;
+    left: -15px;
     width: 40px;
-    height: 60px;
-    top: 0;
+    height: 40px;
+    top: 10px;
     background: var(--cor_pri);
     border: none;
     z-index: 6;
@@ -136,6 +137,10 @@ nav .pesquisar{
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-left: 0;
+    }
+    #metade_da_nav{
+        left: 0;
     }
 }
 

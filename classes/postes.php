@@ -76,7 +76,7 @@ class postes extends process
                     background-color: var(--cor_sec);
                 }
             </style>
-            <div id="carouselMidia<?=$id_pbl?>" class="carousel slide pb-1" data-bs-ride="carousel">
+            <div id="carouselMidia<?=$id_pbl?>" class="carousel slide pb-1" data-bs-ride="false">
                 <div class="carousel-inner">
                     <?php foreach ($inderecos as $index => $indereco): ?>
                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
@@ -86,7 +86,7 @@ class postes extends process
                                         <img src="<?= $indereco['indereco'] ?>" class="d-block w-100 img-fluid" style="max-height: 600px;" alt="Imagen do Poste">
                                     </a>
                                 <?php elseif ($indereco['tipo'] == 'video'): ?>
-                                    <video class="d-block w-100 img-fluid" style="max-height: 700px;" controls>
+                                    <video class="d-block w-100 img-fluid embed-responsive" style="max-height: 700px;" controls>
                                         <source src="<?= $indereco['indereco'] ?>" type="video/mp4">
                                         Seu navegador não suporta o elemento de vídeo.
                                     </video>
@@ -124,14 +124,14 @@ class postes extends process
         $nome_usuario = $usuario['nome'];
         if ($row['id_comunidade'] > 0) {
             $imagem_perfil = pegar_foto_perfil("comunidade", $row['id_comunidade']);
-        }else{
+        } else {
             $imagem_perfil = pegar_foto_perfil("perfil", $row['id_user']);
         }
             
         $inderecos = array_map(function ($doc) use ($usuario) {
             if ($doc['tipo'] == 'imagen') {
                 $arquivo = "img";
-            }else{
+            } else {
                 $arquivo = $doc['tipo'];
             }
             return [
@@ -139,10 +139,10 @@ class postes extends process
                 "tipo" => $doc['tipo']
             ];
         }, mysqli_fetch_all(mysqli_query($this->link, "SELECT * FROM doc WHERE id=$id_pbl AND para = 'poste' AND (tipo='imagen' OR tipo='video')"), MYSQLI_ASSOC));
-    
+
         $qtd_indereco = count($inderecos);
         $comunidade = $row['id_comunidade'] ? $this->comunidade->comunidade($row['id_comunidade']) : null;
-    
+
         $classPartilha = $partilha ? "pbl_partilhada" : "";
         ?>
         <div class="<?= $classPartilha ?> card mb-3">
@@ -184,19 +184,34 @@ class postes extends process
                     </div>
                 </div>
 
-                <p class="m-2 text-muted mb-1"><?=htmlspecialchars_decode($row['texto']) ?></p>
+                <?php 
+                $texto = htmlspecialchars_decode($row['texto']);
+                if (strlen($texto) > 500): 
+                    $texto_resumido = substr($texto, 0, 500) . '...';
+                ?>
+                    <p class="m-2 text-muted mb-1 texto" id="texto_<?= $id_pbl ?>">
+                        <?= $texto_resumido ?>
+                        <a href="javascript:void(0)" onclick="mostrarTextoCompleto(<?= $id_pbl ?>)">ver mais</a>
+                    </p>
+                    <p id="texto_completo_<?= $id_pbl ?>" class="m-2 text-muted mb-1 texto" style="display:none;">
+                        <?= $texto ?>
+                    </p>
+                <?php else: ?>
+                    <p class="m-2 text-muted mb-1 texto"><?= $texto ?></p>
+                <?php endif; ?>
+
                 <?php if ($row['id_partilhado'] > 0): ?>
                     <div class="container m-0 p-1">
                         <?php $this->mostrar($this->poste($row['id_partilhado']),false,false,true);?>
                     </div>
                 <?php endif; ?>
 
-                    <style>
-                        .container-img{
-                            background-color: var(--cor_sec);
-                            backdrop-filter: blur(5px);
-                        }
-                    </style>
+                <style>
+                    .container-img{
+                        background-color: var(--cor_sec);
+                        backdrop-filter: blur(5px);
+                    }
+                </style>
                 <?php if ($qtd_indereco == 1): ?>
                     <div class="mb-3">
                         <div class="container-img d-flex flex-wrap gap-2 justify-content-center align-items-center">
@@ -205,19 +220,17 @@ class postes extends process
                                     <img src="<?= $inderecos[0]['indereco'] ?>" class="img-fluid" style="max-width: 100%; max-height: 600px;" alt="Imagen do Poste">
                                 </a>
                             <?php elseif ($inderecos[0]['tipo'] == "video"): ?>
-                                <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>">
-                                    <video class="img-fluid" style="max-width: 100%; max-height: 650px;" controls>
-                                        <source src="<?= $inderecos[0]['indereco'] ?>" type="video/mp4">
-                                        Seu navegador não suporta o elemento de vídeo.
-                                    </video>
-                                </a>
+                                <video class="" style="max-width: 100%; max-height: 650px;" controls>
+                                    <source src="<?= $inderecos[0]['indereco'] ?>" type="video/mp4">
+                                    Seu navegador não suporta o elemento de vídeo.
+                                </video>
                             <?php endif; ?>
                         </div>
                     </div>
                 <?php elseif ($qtd_indereco > 1): 
                     $this->pegarMidiaCarroceu($inderecos, $id_pbl);
-                      endif; ?>
-    
+                endif; ?>
+
                 <?php if ($reac): ?>
                     <div class="d-flex justify-content-between p-2 pt-0">
                         <button id="reac_poste<?=$id_pbl?>" class="btn btn-light" onclick="reagir(<?= $id_pbl ?>, 'gosto', 'poste')">
@@ -226,13 +239,13 @@ class postes extends process
                             <?= $reacoes > 0 ? $reacoes : "" ?>
                         </button>
                         <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>&cmt=true" class="btn btn-light">
-                            <i class="bi bi-chat-dots"></i> 
+                            <i class="fa fa-comment"></i> 
                             <?php $comentarios = qtd_de_cmt($id_pbl)?>
                             <?= $comentarios > 0 ? $comentarios : "" ?>
                         </a>
                         <?php if ($row['id_partilhado'] <= 0): ?>
                             <button class="btn btn-light" onclick="abrir_partilhar('poste', <?= $id_pbl ?>,'poste')">
-                                <i class="bi bi-reply"></i>
+                                <i class="fa fa-reply"></i>
                             </button>
                         <?php endif; ?>
                     </div>
@@ -240,7 +253,7 @@ class postes extends process
             </div>
         </div>
         <?php
-    
+
         $this->marcar_visto($id_pbl, "poste");
         if ($visualizacao_unica) {
             $this->marcar_lido($id_pbl, "poste");

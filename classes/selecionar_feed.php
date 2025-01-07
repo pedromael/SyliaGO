@@ -4,7 +4,7 @@ class selecionar_feed
     private $postes;
     public $id;
     public $postes_encontrados;
-    public $quantidade_de_postes = 10;
+    public $quantidade_de_postes = 6;
     public $numero_postes_globais = 3;
 
     public function __construct(){

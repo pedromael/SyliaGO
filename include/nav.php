@@ -1,29 +1,29 @@
 <link rel="stylesheet" href="/src/css/nav.css">
 <nav id="metade_da_nav" onclick="abri_fecha('#segunda_nav')">
-    <i class="bi bi-border-width"></i>
+    <i class="fa fa-bars" style="font-size: 24px;"></i>
 </nav>
 <nav class="px-1 py-2">
     <div class="container_nav">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <ul class="nav col justify-content-center my-md-0 text-small">
-            <li>
+            <li class="nav-item p-2">
                 <a href="/./" class="nav-link">
-                    <i class="bi bi-house-door" style="width: 50px; height: 50px;"></i>
+                    <i class="fa fa-home" style="font-size: 28px;"></i>
                 </a>
             </li>
-            <li>
+            <li class="nav-item p-2">
                 <a href="/comunidade/" class="nav-link">
-                    <i class="bi bi-people"></i>
+                    <i class="fa fa-users" style="font-size: 28px;"></i>
                 </a>
             </li>
-            <li>
+            <li class="nav-item p-2">
                 <a href="/coder/" class="nav-link p-1">
                     <button id="coder">GO</button>
                 </a>
             </li>
-            <li>
+            <li class="nav-item p-2">
                 <a href="/mensagens/" class="nav-link">
-                    <i class="bi bi-chat-left-dots"></i>
+                    <i class="fa fa-comment-dots" style="font-size: 28px;"></i>
                     <?php
                     if($c->verificar_qtd("chat",$_SESSION['id_user']) > 0){
                         ?>
@@ -37,9 +37,9 @@
                     ?>          
                 </a>
             </li>
-            <li>
+            <li class="nav-item p-2">
                 <a href="/./notific.php" class="nav-link">
-                    <i class="bi bi-bell"></i>
+                    <i class="fa fa-bell" style="font-size: 28px;"></i> <!-- Ajustado o tamanho do ícone -->
                     <?php
                     if($c->verificar_qtd("notificacao",$_SESSION['id_user']) > 0){
                         ?>
@@ -63,17 +63,50 @@
         </div>
     </div>
 </nav>
+
 <style>
     #segunda_nav {
-    z-index: 1050;
-    overflow-y: auto; /* Permitir rolagem vertical */
+        z-index: 1050;
+        overflow-y: auto;
     }
 
     ul.list-unstyled {
         padding-left: 0;
     }
 
+    .nav-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        height: 100%;
+        padding: 0;
+    }
+
+    .nav-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Ajustes para os ícones */
+    .nav-link i {
+        font-size: 26px;
+        vertical-align: middle;
+    }
+
+    .info_qtd_c, .info_qtd_n {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 12px;
+        background-color: red;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 50%;
+    }
 </style>
+
 <div id="segunda_nav" class="remover bg-light position-fixed shadow-lg" style="width: 280px; z-index: 1050;">
     <div class="container py-0 d-flex flex-column h-100">
         <!-- Perfil -->
@@ -142,7 +175,7 @@
         <!-- Terminar Sessão -->
         <div class="mt-auto">
             <a href="/login/" class="btn btn-danger w-100">
-                <i class="bi bi-power me-2" style="width: 20px; height: 20px;"></i>
+                <i class="fa fa-power-off me-2" style="font-size: 20px;"></i> <!-- Ajustado o tamanho do ícone -->
                 Terminar Sessão
             </a>
         </div>

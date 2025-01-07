@@ -34,7 +34,7 @@ if (isset($_GET['abrir'])) {
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css"> 
+<link rel="stylesheet" href="/vendor/fortawesome/font-awesome/css/all.min.css"> 
     <link rel="icon" href="/src/img/glou_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="/src/css/temas/<?=pegar_tema()?>.css">
     <link rel="stylesheet" href="/src/css/stilo.css">
@@ -153,7 +153,7 @@ if (isset($_GET['abrir'])) {
                 }
             ?> 
         </div>
-        <div class="corpo_metade2 rolagem_vertical"></div>
+        <div class="corpo_metade2 overflow-y-auto"></div>
     </div>
     <?php
     include "../include/footer.php";

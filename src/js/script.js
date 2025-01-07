@@ -365,3 +365,10 @@ function abrir_storie(id_user) {
     var jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 }
+
+function mostrarTextoCompleto(id) {
+    var texto_resumido = document.getElementById('texto_' + id);
+    var texto_completo = document.getElementById('texto_completo_' + id);
+    texto_resumido.style.display = 'none';
+    texto_completo.style.display = 'block';
+}

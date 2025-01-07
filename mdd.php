@@ -23,7 +23,7 @@ $areas_programacao = mysqli_query(conn(), "SELECT * FROM $bdnome2.areas_programa
     <link rel="stylesheet" href="css/temas/padrao.css">
     <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/vendor/fortawesome/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="css/stilo.css">
     <title>Mais - PRO-Start</title>
     <style>
