@@ -106,28 +106,17 @@ nav .pesquisar{
     height: 43px;
     margin-bottom: 6px;
     border-width: 2px;
-    border-style: solid;
-    border-radius: 20px;
-    border-color: var(--cor_terc);
 }
-.pesquisar input{
+/* .pesquisar input{
     width: calc(100% - 50px);
     height: 100%;
     border-radius: 20px;
     border: none;
     text-indent: 10px;
-}
+} */
 .pesquisar button{
-    width: 45px;
-    height: calc(100%);
-    border-radius: 20px;
-    background-color: transparent;
-    border: none;
-    position: absolute;
-    right: 0;
-    background-size: 60%;
-    background-position: center center;
-    background-repeat: no-repeat;
+    color: white;
+    background-color: var(--cor_sec);
 }
 @media (max-width: 750px) {
     .pesquisar{

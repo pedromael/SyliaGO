@@ -55,9 +55,9 @@
             </li>
             </ul>
             <div class="pesquisar">
-                <form action="/./search.php" method="GET">
-                    <input type="search" name="valor" placeholder="em que esta pensando">
-                    <button name="btn" style="background-image: url(/bibliotecas/bootstrap/icones/search.svg);"></button>
+                <form class="d-flex" role="search" action="/./search.php">
+                    <input name="valor" class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Buscar</button>
                 </form>
             </div>
         </div>

@@ -1,7 +1,7 @@
 <?php
 require "algoritimos/atalho.php";
 require "algoritimos/seguranca.php";
-
+$c = new process;
 if (isset($_SESSION['id_user'])) {
     $id_user = $_SESSION['id_user'];
 }else {
@@ -33,21 +33,9 @@ if (isset($_GET['valor'])) {
 <body>
     <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/src/js/script.js"></script>
-    <script>var indereco = "./"</script>
-    <nav id="metade_da_nav">
-        <a href="./">
-            <img src="/bibliotecas/bootstrap/icones/house.svg">
-        </a>
-    </nav>
-    
-    <nav class="">
-      <div class="">
-        <form action="" method="get" id="pesquisar">
-            <input type="search" name="valor" placeholder="<?=$valor?>" required>
-            <button>pesquisar</button>
-        </form>
-      </div>
-    </nav>
+    <?php
+    require "include/nav.php";
+    ?>
     <div class="corpos overflow-y-auto">
         <div id="corpo">
             <div class="filtro"></div>
