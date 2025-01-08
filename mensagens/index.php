@@ -55,11 +55,11 @@
                 font-size: 11pt;
                 color: #d3d3ddff;
                 text-shadow: 1px 1px 2px #ddd;
-                <?php if($info_login["ativo"]):?>
-                  border-bottom: 2px solid green;
-                <?php else:?>
-                  border-bottom: 2px solid #d3d3ddff;
-                <?php endif;?>
+                <?php if($info_login["ativo"]){
+                  echo "border-bottom: 2px solid green;";
+                }else{
+                  echo "border-bottom: 2px solid #d3d3ddff;";
+                }?>
               }
             </style>
             <div class="card mb-2 p-1">
