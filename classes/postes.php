@@ -146,13 +146,13 @@ class postes extends process
         $classPartilha = $partilha ? "pbl_partilhada" : "";
         ?>
         <div class="<?= $classPartilha ?> card mb-3">
-            <div class="card-body p-0">
-                <div class="conatiner mb-2">
-                    <div class="row p-2 pb-0">
-                        <a href="/perfil/?user=<?= criptografar($id_user) ?>" class="col-auto pr-2 pl-3">
-                            <img src="<?= $imagem_perfil ?>" class="rounded-circle me-2" alt="Perfil" style="width: 40px; height: 40px;">
+            <div class="card-body p-0 m-0">
+                <div class="container mb-2">
+                    <div class="row p-1">
+                        <a href="/perfil/?user=<?= criptografar($id_user) ?>" class="col-auto p-0">
+                            <img src="<?= $imagem_perfil ?>" class="rounded-circle m-0" alt="Perfil" style="width: 40px; height: 40px;">
                         </a>
-                        <div class="col p-0">
+                        <div class="col px-1">
                             <style>
                                 .text_desf{
                                     font-size: 15px;
@@ -174,7 +174,7 @@ class postes extends process
                                 <div class="text-muted data"><?= resumir_data($row['data']) ?></div>
                             <?php endif; ?>
                         </div>
-                        <div class="col-auto">
+                        <div class="col-auto p-0">
                             <?php if(!$partilha): ?>
                                 <button class="btn btn-light" onclick="abrir_info_pbl(<?= $id_pbl ?>)">...</button>
                             <?php else: ?>
@@ -239,13 +239,13 @@ class postes extends process
                             <?= $reacoes > 0 ? $reacoes : "" ?>
                         </button>
                         <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>&cmt=true" class="btn btn-light">
-                            <i class="fa fa-comment"></i> 
+                            <i class="fa fa-comment" style="color: var(--cor_sec);"></i> 
                             <?php $comentarios = qtd_de_cmt($id_pbl)?>
                             <?= $comentarios > 0 ? $comentarios : "" ?>
                         </a>
                         <?php if ($row['id_partilhado'] <= 0): ?>
                             <button class="btn btn-light" onclick="abrir_partilhar('poste', <?= $id_pbl ?>,'poste')">
-                                <i class="fa fa-reply"></i>
+                                <i class="fa fa-reply" style="color: var(--cor_sec);"></i>
                             </button>
                         <?php endif; ?>
                     </div>

@@ -41,8 +41,8 @@
     require "../include/nav.php";
     ?>
 <div class="corpos">
-    <div class="corpo3 crp"></div>
-    <div id="corpo" class="crp">
+    <div class="corpo3 overflow-y-auto"></div>
+    <div id="corpo" class="overflow-y-auto">
       <div class="corpo_diminuido overflow-y-auto"> 
         <div class="container p-2 m-1">
           <?php
@@ -91,7 +91,7 @@
           }
           ?>
         </div>
-        <div class="msg">
+        <div class="msg container">
           <?php
           if($id_dest != NULL){
             $msg = new mensagens;
@@ -131,7 +131,7 @@
       }
       ?>
     </div> 
-  <div class="corpo2 crp"></div>
+  <div class="corpo2 overflow-y-auto"></div>
 </div>
 
 <?php require "../include/footer.php"; ?>

@@ -39,8 +39,8 @@
         require "../include/nav.php";
     ?>
     <div class="corpos">
-        <div class="corpo3 crp"></div>
-        <div id="corpo" class="crp">
+        <div class="corpo3 overflow-y-auto"></div>
+        <div id="corpo" class="overflow-y-auto">
             <div class="corpo_diminuido">
                 <div class="ver_info">
                     <a href="./?pbl=<?=criptografar($sql['id'])?>">ver publicacao</a>
@@ -67,7 +67,7 @@
                 </div>
             </footer>
         </div>
-        <div class="corpo2 crp"></div>
+        <div class="corpo2 overflow-y-auto"></div>
     </div> 
     <?php require "../include/footer.php"; ?>
     <script src="/src/js/fim_script.js"></script>

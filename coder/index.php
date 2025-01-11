@@ -45,8 +45,8 @@ $user = mysqli_fetch_assoc($user);
     require "../include/nav.php";
     ?>
     <div class="corpos">
-      <div class="corpo3 crp"></div>
-      <div id="corpo" class="crp">
+      <div class="corpo3 overflow-y-auto"></div>
+      <div id="corpo" class="overflow-y-auto">
           <div id="pbl_abrir" onmouseover="personalizar('#pbl_abrir')" onclick="publicar('novo repositorio')">
               <button>novo repositorio</button>
           </div>
@@ -87,7 +87,7 @@ $user = mysqli_fetch_assoc($user);
             ?>
         </div>
       </div>
-      <div class="corpo2 crp"></div>
+      <div class="corpo2 overflow-y-auto"></div>
     </div>
     <?php include "../include/footer.php"; ?>
     <?php mysqli_close($link);?>

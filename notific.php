@@ -35,7 +35,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
     require "include/nav.php";
     ?>
     <div class="corpos">
-      <div id="corpo" class="crp overflow-y-auto">
+      <div id="corpo" class="overflow-y-auto overflow-y-auto">
           <div class="container d-flex justify-content-center w-100">
               <button class="btn btn-link text-decoration-none">
                   Marcar todas como lidas
@@ -46,7 +46,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
           $n->procurar();
           ?>
       </div>
-      <div class="corpo2 crp"></div>
+      <div class="corpo2 overflow-y-auto"></div>
     </div>
     <div id="mais_pbl"><a href="./">Ver Mais</a></div>      
     <?php require "include/footer.php"; ?>

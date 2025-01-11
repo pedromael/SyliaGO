@@ -96,7 +96,7 @@ if (isset($_FILES['img']) && $_SESSION['id_user'] == $sql['id_user']) {
     }
     ?>
     <div class="corpos">
-      <div class="corpo3 crp">
+      <div class="corpo3 overflow-y-auto">
           <div id="container" class="overflow-y-auto">
               <div> 
                   <div class="texto_interativo">
@@ -114,7 +114,7 @@ if (isset($_FILES['img']) && $_SESSION['id_user'] == $sql['id_user']) {
               </div>
           </div>
       </div>
-      <div id="corpo" class="crp">
+      <div id="corpo" class="overflow-y-auto">
         <?php
         $imagen = pegar_foto_perfil("comunidade",$id_comunidade);
         ?>
@@ -186,7 +186,7 @@ if (isset($_FILES['img']) && $_SESSION['id_user'] == $sql['id_user']) {
           $s->selecionar_poste("comunidade");
           ?>
       </div>
-      <div class="corpo2 crp"></div>
+      <div class="corpo2 overflow-y-auto"></div>
     </div>
     <?php include "../include/footer.php"; ?>
     <script src="/src/js/fim_script.js"></script>

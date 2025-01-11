@@ -258,14 +258,6 @@ a{
     height:  calc(100% - 56px - 35px);
     background-color: transparent;
 }
-.corpos .crp{
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-.corpo2.crp{
-    overflow-y: hidden;
-    overflow-x: hidden;
-}
 .corpo_metade1,.corpo_metade2{
     position: absolute;
     width: 50%;
@@ -330,7 +322,7 @@ a{
     border-radius: var(--border);
 }
 @media (min-width: 750px){
-    .corpos .crp{
+    .corpos .overflow-y-auto{
         display: inline-block;
     }
     .corpos .corpo3{
@@ -355,7 +347,7 @@ a{
     }
 }
 @media (min-width: 1050px){
-    .corpos .crp{
+    .corpos .overflow-y-auto{
         display: inline-block;
     }
     #corpo{

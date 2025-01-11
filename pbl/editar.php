@@ -59,7 +59,7 @@ $c = new process;
 <body>
     <nav id="nav_simples"><a href="./?pbl=<?=criptografar($id_pbl)?>">cancelar</a></nav>
     <div class="corpos">
-        <div id="corpo" class="crp">
+        <div id="corpo" class="overflow-y-auto">
         <div id="corpo_pbl">
             <h3 class="text-center">pagina de edicao</h3>
             <div id="pbl_insert" class="conteiner_pbl">

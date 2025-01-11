@@ -86,8 +86,8 @@
     }
     ?>
     <div class="corpos">
-        <div class="corpo3 crp"></div>
-        <div id="corpo" class="crp">
+        <div class="corpo3 overflow-y-auto"></div>
+        <div id="corpo" class="overflow-y-auto">
             <?php
             if ($_SESSION['id_user'] == $sql['id_user']) {
                 ?>
@@ -231,7 +231,7 @@ if ($id_user == $_SESSION['id_user']) {
                 <p></p>
             </div>
         </div>
-        <div class="corpo2 crp"></div>
+        <div class="corpo2 overflow-y-auto"></div>
     </div>
     <?php
         include "../include/footer.php";

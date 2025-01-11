@@ -45,7 +45,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
         <div class="container overflow-y-auto"></div>
     </div>
     <div class="corpos">
-        <div class="corpo3 crp">
+        <div class="corpo3 overflow-y-auto">
             <div id="container" class="overflow-y-auto">
                 <div> 
                     <div class="texto_interativo">
@@ -63,7 +63,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
                 </div>
             </div>
         </div>
-        <div id="corpo" class="crp">
+        <div id="corpo" class="overflow-y-auto">
             <div id="alerta" class="novo_storie remover">
                 <div class="modal modal-sheet d-block p-4 py-md-5" tabindex="-1" role="dialog" id="modalSheet">
                     <div class="modal-dialog" role="document">
@@ -267,7 +267,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
             }
             ?>
         </div>    
-        <div class="corpo2 crp"></div> 
+        <div class="corpo2 overflow-y-auto"></div> 
     </div>   
     <?php 
         require "include/footer.php";

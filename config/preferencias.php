@@ -53,7 +53,9 @@ if (isset($sql['nome'])) {
     <title>preferencias</title>
     <link rel="icon" href="../img/glou_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/temas/<?=$nome_tema?>.css">
-    <link href="../bibliotecas/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="/vendor/fortawesome/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="../css/stilo.css">
 </head>
 <body>
