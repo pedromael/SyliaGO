@@ -24,18 +24,16 @@ class sig_in extends conexao{
 
     private function diretorios_pessoal($code_nome): bool
     {
-        $dir_img = "../src/userFile/".$code_nome."/img/";
-        if (!is_dir($dir_img)) {
-            if (!mkdir($dir_img, 0755, true)) {
+        $base_path = "../src/userFile/" . $code_nome . "/";
+        $subdirs = ["img", "video", "repositorio", "thumbnail"];
+
+        foreach ($subdirs as $subdir) {
+            $path = $base_path . $subdir . "/";
+            if (!is_dir($path) && !mkdir($path, 0755, true)) {
                 return false;
             }
         }
-        $dir_repositorio = "../src/userFile/".$code_nome."/repositorio/";
-        if (!is_dir($dir_repositorio)) {
-            if (!mkdir($dir_repositorio, 0755, true)) {
-                return false;
-            }
-        }
+
         return true;
     }
 
