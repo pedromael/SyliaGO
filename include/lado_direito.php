@@ -50,13 +50,13 @@ require "../algoritimos/seguranca.php";
 
 </style>
 <div class="prev_logados_e_sms">
-    <div class="prev_logados_chat rolagem_x">
+    <div class="prev_logados_chat overflow-x-auto">
         <?php
         $listagem = new verificar_logados();
         $listagem->logados();
         ?>
     </div>
-    <div id="corpo_lista_sms" class="rolagem_y">
+    <div id="corpo_lista_sms" class="overflow-y-auto">
         <?php
         $listagem = new lista_mensagens(); 
         $retorno = $listagem->getListaAmigos();

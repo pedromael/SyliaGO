@@ -12,6 +12,15 @@ function verificar_tela() {
     xhr_sms.open('POST', '/include/lado_direito.php', true);
     xhr_sms.setRequestHeader('Content-Type', 'application/json');
 
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    
+    if (urlParams.has('msg_open')) {
+        const valor = urlParams.get('msg_open');
+        if (valor == 'true') {
+          return false;
+        }
+    }
     xhr_sms.onload = function() {
       if (xhr_sms.status === 200) {
         corpo2.innerHTML = xhr_sms.responseText;

@@ -33,7 +33,14 @@ class lista_mensagens extends conexao
             $texto = $texto." ".$tres_pontos;
         }
         ?>
-        <a href="/mensagens/?user=<?=criptografar($id_dest)?>" class="text-decoration-none text-dark">
+        <?php
+            if(false): 
+                $action = "href='/mensagens/?user=<?=criptografar($id_dest)?>'";
+            else:  
+                $action = "href='javascript:void(0)' onclick='abrir_mensagen(".$id_dest.")'";
+            endif;
+        ?>
+        <a <?=$action?> class="text-decoration-none text-dark">
             <div class="d-flex align-items-center p-2 border-bottom">
                 <!-- Imagem do usuário -->
                 <div class="flex-shrink-0 px-1">

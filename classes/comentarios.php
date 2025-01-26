@@ -8,7 +8,7 @@ class comentarios extends process
     public function mostrar($dados) {
         $user = $this->usuario($dados['id_user']);
         ?>
-        <div class="d-flex border p-3 rounded mb-3">
+        <div class="d-flex p-3 rounded mb-3">
             <div class="me-3">
                 <a href="">
                     <img src="<?= pegar_foto_perfil("perfil", $dados['id_user']) ?>" alt="Foto de perfil" class="rounded-circle" style="width: 50px; height: 50px;">
@@ -95,6 +95,11 @@ class comentarios extends process
         $sql->execute();
         $dados = $sql->fetchALL();
         $a = 0;
+
+        if (!isset($_SESSION['cmt_visualizado'])) {
+            $_SESSION['cmt_visualizado'] = [];
+        }
+
         foreach ($dados as $dado) {
             if (!in_array($dado['id_cmt'],$_SESSION['cmt_visualizado'])) {
                 if ($a == $numero_max) {return true;}

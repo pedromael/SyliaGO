@@ -251,6 +251,18 @@ class postes extends process
                     </div>
                 <?php endif; ?>
             </div>
+            <?php
+            if (!isset($comentarios)) {
+                $comentarios = 0;
+            }
+
+            // verificar se existe apenas numero X de comentarios para mostrar logo abaixo do post
+            if($comentarios <= 1 && !$visualizacao_unica){
+                $cmt = new comentarios();
+                $cmt->id = $id_pbl;
+                $cmt->pegar("poste", $comentarios);
+            }
+            ?>
         </div>
         <?php
 

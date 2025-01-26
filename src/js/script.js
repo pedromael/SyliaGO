@@ -59,46 +59,25 @@ function comentar(id,tipo)
 }
 
 function enviar_mensagem(id_dest) {
-    var texto = document.querySelector(".  textarea");
+    var texto = document.querySelector(".formulario_mensagem textarea");
     if (texto.value.length <= 0) {
         return false
     }
     var xhr = new XMLHttpRequest();
     xhr.open('POST', indereco+'include/enviar_mensagem.php', true)
     xhr.setRequestHeader('Content-Type', 'application/json');
-    var comentarios = document.querySelector('.corpo_diminuido .msg');
+    var comentarios = document.querySelector('.sms_screen .msg');
     xhr.onload = function() {
       if (xhr.status === 200) {
         comentarios.innerHTML += xhr.responseText;
         texto.value = "";
-        var div = document.querySelector(".corpo_diminuido");
+        var div = document.querySelector(".sms_screen");
         div.scrollTop = div.scrollHeight;
       }else{return false}
     };
     var data = {
         id_dest: id_dest,
         texto: texto.value
-    }
-    var jsonData = JSON.stringify(data);
-    xhr.send(jsonData);
-}
-function mostrar_lista_amigos(id_user) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', indereco+'include/pegar_lista_amigos.php', true)
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    var container = document.querySelector('.container_amigos');
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        if(container.innerHTML == ""){
-            container.innerHTML = xhr.responseText;
-        }else{
-            container.innerHTML = "";
-        }
-      }else{return false}
-    };
-    var data = {
-        id_user: id_user,
-        indereco: indereco
     }
     var jsonData = JSON.stringify(data);
     xhr.send(jsonData);
@@ -238,6 +217,65 @@ function abrir_info_pbl(id_pbl) {
     info_pbl.classList.add("remover")
     return true;
 }
+
+// receber dados por via de requisicoes
+
+function mostrar_lista_amigos(id_user) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/include/pegar_lista_amigos.php', true)
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    var container = document.querySelector('.container_amigos');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        if(container.innerHTML == ""){
+            container.innerHTML = xhr.responseText;
+        }else{
+            container.innerHTML = "";
+        }
+      }else{return false}
+    };
+    var data = {
+        id_user: id_user,
+        indereco: indereco
+    }
+    var jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
+}
+
+function abrir_mensagen(id_user) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/mensagens/include/mensagen.php', true)
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    var container = document.querySelector('.corpo2');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        container.innerHTML = xhr.responseText;
+        
+        // Adicionar o parâmetro msg_open=true à URL
+        var url = new URL(window.location);
+        url.searchParams.set('msg_open', 'true');
+        url.searchParams.set('msg_user', id_user);
+        window.history.pushState({}, '', url);
+      }else{return false}
+    };
+    var data = {
+        id_user: id_user
+    }
+    var jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
+}
+
+function fechar_mensagen() {
+    // Remover o parâmetro msg_open da URL
+    var url = new URL(window.location);
+    url.searchParams.delete('msg_open');
+    url.searchParams.delete('msg_user');
+    window.history.pushState({}, '', url);
+
+    //adicionar a lista de mensagens
+    verificar_tela();
+}
+
 function abrir_denuncia_pbl(id_pbl) {
     var pbl = document.querySelector(".pbl_denuncia")
 

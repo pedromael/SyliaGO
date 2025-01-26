@@ -26,8 +26,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
     <link rel="stylesheet" href="src/css/temas/<?=pegar_tema()?>.css">
     <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="/vendor/fortawesome/font-awesome/css/all.min.css">
-    
+    <link rel="stylesheet" href="/vendor/fortawesome/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="src/css/stilo.css">
     <link rel="stylesheet" href="src/css/coder.css">
     <title>SyliaGO</title>
