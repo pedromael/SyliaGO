@@ -71,30 +71,16 @@ function maisPbl() {
         if (xhr.responseText == "") {
           return true;
         }
-        const corpo_principal = document.querySelector(".pbls");
-        corpo_principal.style.overflowY = "hidden"
+        const seccao_postes = document.querySelector(".pbls");
+        seccao_postes.style.overflowY = "hidden"
         event.preventDefault()
         event.stopPropagation()
         p = document.createElement('div');
         classe = "novo"+Date.now();
         p.classList.add(classe);
         p.textContent = xhr.responseText;
-        corpo_principal.innerHTML += "<div class="+classe+">"+xhr.responseText+"</div>";
-        corpo_principal.style.overflowY = "scroll"
-        var textareas = document.querySelectorAll("."+classe+" .ver_code");
-        textareas.forEach(function(textarea) {
-            CodeMirror.fromTextArea(textarea, {
-            lineNumbers: true,
-            extraKeys: {"Ctrl-Space": "autocomplete"},
-            autoCloseBrackets: true,
-            matchBrackets: true,
-            showCursorWhenSelecting: true,
-            mode: "javascript",
-            theme: "dracula",
-            scrollbars: "none",
-            readOnly: true
-          });
-        });
+        seccao_postes.innerHTML += "<div class="+classe+">"+xhr.responseText+"</div>";
+        seccao_postes.style.overflowY = "scroll"
       }
     };
     xhr.send();

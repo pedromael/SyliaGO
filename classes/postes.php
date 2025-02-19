@@ -238,11 +238,11 @@ class postes extends process
                             <?php $reacoes = $this->qtd_reacao($id_pbl, 'poste'); ?>
                             <?= $reacoes > 0 ? $reacoes : "" ?>
                         </button>
-                        <a href="/pbl/?pbl=<?= criptografar($id_pbl) ?>&cmt=true" class="btn btn-light">
+                        <div class="btn btn-light" onclick="abrir_poste(<?=$id_pbl?>)">
                             <i class="fa fa-comment" style="color: var(--cor_sec);"></i> 
                             <?php $comentarios = qtd_de_cmt($id_pbl)?>
                             <?= $comentarios > 0 ? $comentarios : "" ?>
-                        </a>
+                        </div>
                         <?php if ($row['id_partilhado'] <= 0): ?>
                             <button class="btn btn-light" onclick="abrir_partilhar('poste', <?= $id_pbl ?>,'poste')">
                                 <i class="fa fa-reply" style="color: var(--cor_sec);"></i>
@@ -257,7 +257,7 @@ class postes extends process
             }
 
             // verificar se existe apenas numero X de comentarios para mostrar logo abaixo do post
-            if($comentarios <= 1 && !$visualizacao_unica){
+            if($comentarios == 1 && !$visualizacao_unica){
                 $cmt = new comentarios();
                 $cmt->id = $id_pbl;
                 $cmt->pegar("poste", $comentarios);

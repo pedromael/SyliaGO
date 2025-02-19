@@ -83,7 +83,7 @@ class comentarios extends process
             return false;
         }
     }
-    public function pegar($tipo = "poste",$numero_max = 1) 
+    public function pegar($tipo = "poste",$numero_max = 1, $requisito = false) 
     {
         $sql = $this->pdo->prepare("SELECT * FROM cmt WHERE tipo = :t AND id = :id  ORDER BY id_cmt DESC");
         $sql->bindValue(":t", $tipo);
@@ -96,9 +96,8 @@ class comentarios extends process
         $dados = $sql->fetchALL();
         $a = 0;
 
-        if (!isset($_SESSION['cmt_visualizado'])) {
-            $_SESSION['cmt_visualizado'] = [];
-        }
+        //temporario para teste
+        $_SESSION['cmt_visualizado'] = [];
 
         foreach ($dados as $dado) {
             if (!in_array($dado['id_cmt'],$_SESSION['cmt_visualizado'])) {

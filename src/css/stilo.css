@@ -1021,3 +1021,25 @@ a{
 .on_off .caso.off{
     background-color: #6d6a6a;
 }
+
+.container_poste {
+    position: fixed;
+    top: 0;
+    bottom: 35px;
+    width: 100%;
+    max-width: 650px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    background-color: var(--cor_terc);
+}
+
+#postes_view{
+    position: fixed;
+    top: 0;
+    display: 150;
+    bottom: 35px;
+    width: 100%;
+    z-index: 150;
+    background-color: #eff0f3;
+}

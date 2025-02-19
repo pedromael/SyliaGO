@@ -14,20 +14,6 @@ function actualizar_login() {
     xhr.send();
 }
 setInterval(actualizar_login, 4000);
-function publicar(param) {
-    var div = document.querySelector(".conteiner_pbl");
-    var btn = document.querySelector("#pbl_abrir");
-    if (div.classList.contains('remover')) {
-        div.classList.remove('remover')
-    }else{
-        div.classList.add('remover')
-    }
-    if (btn.innerHTML == "<button>fechar</button>") {
-        btn.innerHTML = "<button>"+param+"</button>";
-    }else{
-        btn.innerHTML = "<button>fechar</button>"
-    }
-}
 
 function comentar(id,tipo) 
 {
@@ -274,6 +260,47 @@ function fechar_mensagen() {
 
     //adicionar a lista de mensagens
     verificar_tela();
+}
+
+function abrir_poste(id_poste){
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/pbl/index.php', true)
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    var container = document.querySelector('.container_poste_'+id_poste);
+    if (container == null) {
+        document.querySelector('#postes_view').innerHTML += '<div class="container_poste container_poste_'+id_poste+'"></div>';  
+        container = document.querySelector('.container_poste_'+id_poste); 
+    }else{
+        container.classList.remove('remover');
+    }
+
+    var poste = document.querySelector('#postes_view');
+    if (poste.classList.contains('d-none')) {
+        poste.classList.remove('d-none');
+    }
+
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        container.innerHTML = xhr.responseText;
+        
+      }else{return false}
+    };
+    var data = {
+        id_poste: id_poste
+    }
+    var jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
+}
+
+function fechar_poste(id_poste) {
+    var poste = document.querySelector('.container_poste_'+id_poste);
+    if (!poste.classList.contains('remover')) {
+        poste.classList.add('remover');
+    }
+    var poste = document.querySelector('#postes_view');
+    if (!poste.classList.contains('d-none')) {
+        poste.classList.add('d-none');
+    }
 }
 
 function abrir_denuncia_pbl(id_pbl) {

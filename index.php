@@ -268,6 +268,7 @@ $imagen = pegar_foto_perfil("perfil",$_SESSION['id_user']);
         </div>    
         <div class="corpo2 overflow-y-auto"></div> 
     </div>   
+    <div id="postes_view" class="d-none"></div>
     <?php 
         require "include/footer.php";
         require "include/search.php";

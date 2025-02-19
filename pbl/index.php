@@ -1,6 +1,16 @@
 <?php
  require "../algoritimos/atalho.php";
  require "../algoritimos/seguranca.php";
+ $data = json_decode(file_get_contents('php://input'), true);
+ 
+ $is_requeste = false;
+ if(isset($data['id_poste'])){
+    if ($data['id_poste'] > 0) {
+        $id_poste = $data['id_poste'];
+        $id_pbl = $id_poste;
+        $is_requeste = true;
+    }
+ }
 
  $c = new process;
 
@@ -38,11 +48,28 @@
     <script src="/bibliotecas/jquery.js"></script>
     <script src="/src/js/script.js"></script>
     <?php
+    if ($is_requeste) {
+        ?>
+        <nav class="px-1 py-2">
+            <div class="container_nav"></div>
+        </nav>
+        <nav id="metade_da_nav" onclick="fechar_poste(<?=$id_poste?>)">
+            <i class="fa fa-times" style="font-size: 28px;"></i>
+        </nav>
+        <?php
+    }else{
         require "../include/nav.php";
+    }
     ?>
     <div class="corpos">
-        <div class="corpo3 overflow-y-auto"></div>
-        <div id="corpo" class="overflow-y-auto">
+        <style>
+        .request_poste{
+                height: 100% !important;
+                width: 100% !important;
+                position: absolute !important;
+            }
+        </style>
+        <div id="corpo" class="request_poste overflow-y-auto">
             <div class="corpo_diminuido overflow-y-auto">
                 <?php
                 $poste = new postes;
@@ -85,9 +112,18 @@
                 </div>
             </footer>
         </div>
-        <div class="corpo2 overflow-y-auto"></div>
+        <?php if(!$is_requeste):?>
+            <div class="corpo3 overflow-y-auto"></div>
+            <div class="corpo2 overflow-y-auto"></div>
+        <?php endif;?>
     </div> 
-    <?php require "../include/footer.php"; ?>
+    <?php
+    if($is_requeste){
+
+    } else {
+        require "../include/footer.php"; 
+    }
+    ?>
     <script src="/src/js/fim_script.js"></script>
     <script src="/src/js/coder.js"></script>
     <?php
