@@ -6,11 +6,7 @@ function actualizar_login() {
 
     xhr.open('POST', '/include/login.php', true)
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function() {
-    //   if (xhr.status !== 200) {
-    //     alert(xhr.responseText)
-    //   }
-    };
+    xhr.onload = function() {};
     xhr.send();
 }
 setInterval(actualizar_login, 4000);
@@ -262,7 +258,18 @@ function fechar_mensagen() {
     verificar_tela();
 }
 
-function abrir_poste(id_poste){
+function abrir_poste(id_poste, abrir_formulario_comentario_apenas) {
+    
+    if (abrir_formulario_comentario_apenas) {
+        var container = document.querySelector('.poste_' + id_poste + ' .formulario_comentario');
+        if (container && container.classList.contains('remover')) {
+            container.classList.remove('remover');
+        }else{
+            container.classList.add('remover');
+        }
+        return true;
+    }    
+    
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/pbl/index.php', true)
     xhr.setRequestHeader('Content-Type', 'application/json');

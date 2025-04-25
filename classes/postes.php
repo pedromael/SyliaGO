@@ -20,7 +20,6 @@ function verificar_peso($a,$b){
 
 class postes extends process
 { 
-    private $link;
     public $oque;
     public $para;
     private $comunidade;
@@ -28,7 +27,6 @@ class postes extends process
     function __construct()
     {
         parent::__construct();
-        $this->link = conn();
         $this->comunidade = new comunidade;
     }
     public function poste($id){
@@ -128,24 +126,24 @@ class postes extends process
             $imagem_perfil = pegar_foto_perfil("perfil", $row['id_user']);
         }
             
+        $stmt = $this->pdo->prepare("SELECT * FROM doc WHERE id = :id_pbl AND para = 'poste' AND (tipo = 'imagen' OR tipo = 'video')");
+        $stmt->execute(['id_pbl' => $id_pbl]);
+
         $inderecos = array_map(function ($doc) use ($usuario) {
-            if ($doc['tipo'] == 'imagen') {
-                $arquivo = "img";
-            } else {
-                $arquivo = $doc['tipo'];
-            }
+            $arquivo = ($doc['tipo'] === 'imagen') ? 'img' : $doc['tipo'];
             return [
-                "indereco" => "/src/userFile/{$usuario['code_nome']}/".$arquivo."/{$doc['indereco']}",
+                "indereco" => "/src/userFile/{$usuario['code_nome']}/{$arquivo}/{$doc['indereco']}",
                 "tipo" => $doc['tipo']
             ];
-        }, mysqli_fetch_all(mysqli_query($this->link, "SELECT * FROM doc WHERE id=$id_pbl AND para = 'poste' AND (tipo='imagen' OR tipo='video')"), MYSQLI_ASSOC));
+        }, $stmt->fetchAll(PDO::FETCH_ASSOC));
+
 
         $qtd_indereco = count($inderecos);
         $comunidade = $row['id_comunidade'] ? $this->comunidade->comunidade($row['id_comunidade']) : null;
 
         $classPartilha = $partilha ? "pbl_partilhada" : "";
         ?>
-        <div class="<?= $classPartilha ?> card mb-3">
+        <div class="<?= $classPartilha ?> card mb-3 poste_<?=$id_pbl?>">
             <div class="card-body p-0 m-0">
                 <div class="container mb-2">
                     <div class="row p-1">
@@ -231,6 +229,8 @@ class postes extends process
                     $this->pegarMidiaCarroceu($inderecos, $id_pbl);
                 endif; ?>
 
+                <?php $comentarios = qtd_de_cmt($id_pbl)?>
+                
                 <?php if ($reac): ?>
                     <div class="d-flex justify-content-between p-2 pt-0">
                         <button id="reac_poste<?=$id_pbl?>" class="btn btn-light" onclick="reagir(<?= $id_pbl ?>, 'gosto', 'poste')">
@@ -238,9 +238,8 @@ class postes extends process
                             <?php $reacoes = $this->qtd_reacao($id_pbl, 'poste'); ?>
                             <?= $reacoes > 0 ? $reacoes : "" ?>
                         </button>
-                        <div class="btn btn-light" onclick="abrir_poste(<?=$id_pbl?>)">
+                        <div class="btn btn-light" onclick="abrir_poste('<?=$id_pbl?>',<?= $comentarios <= 1 ? 1 : 0?>)">
                             <i class="fa fa-comment" style="color: var(--cor_sec);"></i> 
-                            <?php $comentarios = qtd_de_cmt($id_pbl)?>
                             <?= $comentarios > 0 ? $comentarios : "" ?>
                         </div>
                         <?php if ($row['id_partilhado'] <= 0): ?>
@@ -255,13 +254,32 @@ class postes extends process
             if (!isset($comentarios)) {
                 $comentarios = 0;
             }
-
+    
             // verificar se existe apenas numero X de comentarios para mostrar logo abaixo do post
             if($comentarios == 1 && !$visualizacao_unica){
                 $cmt = new comentarios();
                 $cmt->id = $id_pbl;
                 $cmt->pegar("poste", $comentarios);
             }
+
+            // se poste tem menos de 2 comentarios, cria um formulario de comentario logo abaixo
+            if ($comentarios <= 1) {
+                ?>
+                <div class="formulario_comentario d-flex p-2 remover pb-0 border-top">
+                    <input type="hidden" name="id_pbl" value="<?= $id_pbl ?>">
+                    <input type="hidden" name="tipo" value="poste">
+                    <input 
+                        type="text" 
+                        name="comentario" 
+                        class="form-control me-2" 
+                        placeholder="Escreva um comentário..." 
+                        required 
+                    >
+                    <button type="submit" class="btn btn-primary" onclick="comentar(<?= $id_pbl ?>, 'poste')">Comentar</button>
+            </div>
+                <?php
+            }
+
             ?>
         </div>
         <?php
