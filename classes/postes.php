@@ -256,7 +256,7 @@ class postes extends process
             }
     
             // verificar se existe apenas numero X de comentarios para mostrar logo abaixo do post
-            if($comentarios == 1 && !$visualizacao_unica){
+            if($comentarios == 1 && !$visualizacao_unica && !$partilha) {
                 $cmt = new comentarios();
                 $cmt->id = $id_pbl;
                 $cmt->pegar("poste", $comentarios);
@@ -265,7 +265,7 @@ class postes extends process
             // se poste tem menos de 2 comentarios, cria um formulario de comentario logo abaixo
             if ($comentarios <= 1) {
                 ?>
-                <div class="formulario_comentario d-flex p-2 remover pb-0 border-top">
+                <div class="formulario_comentario d-flex p-1 remover border-top">
                     <input type="hidden" name="id_pbl" value="<?= $id_pbl ?>">
                     <input type="hidden" name="tipo" value="poste">
                     <input 
@@ -275,7 +275,7 @@ class postes extends process
                         placeholder="Escreva um comentário..." 
                         required 
                     >
-                    <button type="submit" class="btn btn-primary" onclick="comentar(<?= $id_pbl ?>, 'poste')">Comentar</button>
+                    <button type="submit" class="btn btn-primary" onclick="comentar(<?= criptografar($id_pbl) ?>, 'poste')">Comentar</button>
             </div>
                 <?php
             }
